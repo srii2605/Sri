@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recital 2025</title>
+
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 { margin-bottom: 0; }
+    h3 { margin-top: 5px; font-weight: normal; font-size: 1rem; }
+    input#searchInput { width: 60%; padding: 10px; margin: 20px 0; text-align: center; }
+    .table-wrap { max-height: 72vh; overflow: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; vertical-align: top; }
+    th { background-color: #f2f2f2; position: sticky; top: 0; z-index: 1; }
+    .bold { font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Recital 2025</h1>
+  <h3>LOCATION:<br>
+    Recital <br>
+    Mediacorp Theatre<br>
+    1 Stars Ave, Singapore 138507
+  </h3>
+
+  <input type="text" id="searchInput" placeholder="Search..." />
+
+  <div class="table-wrap">
+    <table id="data-table">
+      <thead>
+        <tr id="header-row"></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      // Map your Google Sheet column keys to table labels.
+      // Keys MUST match your JSON exactly (including spaces/case).
+      const COLUMNS = [
+        { key: "Event Type",         label: "Event Type" },
+        { key: "Event Day & Date",   label: "Event Day & Date", bold: true },
+        { key: "Student Name",       label: "Student Name" },
+        { key: "Event Location",     label: "Event Location" },
+        { key: "Reporting Time",     label: "Reporting Time", bold: true },
+        { key: "Event Time",         label: "Event Time" },
+        { key: "Dismissal Time",     label: "Dismissal Time" },
+        { key: "Costume",            label: "Costume" },
+        { key: "Footwear",           label: "Footwear" },
+        { key: "Makeup",             label: "Makeup" },
+        { key: "Hair",               label: "Hair" },
+        { key: "Dance Routine",      label: "Dance Routine", bold: true },
+        { key: "i12 Katong",         label: "Class (as listed)" },  // display name only
+        { key: "Remarks",            label: "Remarks" }
+      ];
+
+      function normalize(str) {
+        return String(str || "").toLowerCase().trim();
+      }
+
+      function buildHeader() {
+        const headerRow = $("#header-row");
+        headerRow.empty();
+        COLUMNS.forEach(col => headerRow.append(`<th>${col.label}</th>`));
+      }
+
+      function renderTable(data) {
+        const tbody = $("#data-table tbody");
+        tbody.empty();
+
+        data.forEach(row => {
+          const tr = $("<tr>");
+          COLUMNS.forEach(col => {
+            const val = (row[col.key] !== undefined && row[col.key] !== null && row[col.key] !== "") ? row[col.key] : "N/A";
+            tr.append(`<td class="${col.bold ? "bold" : ""}">${val}</td>`);
+          });
+          tbody.append(tr);
+        });
+      }
+
+      function filterTable(data, query) {
+        if (!query) return data;
+        return data.filter(row =>
+          COLUMNS.some(col => normalize(row[col.key]).includes(query))
+        );
+      }
+
+      // Build header immediately
+      buildHeader();
+
+      // Fetch your data (array of objects) from your backend
+      $.getJSON("/data", function (data) {
+        const fullData = Array.isArray(data) ? data : [];
+        renderTable(fullData);
+
+        $("#searchInput").on("input", function () {
+          const query = normalize($(this).val());
+          renderTable(filterTable(fullData, query));
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
