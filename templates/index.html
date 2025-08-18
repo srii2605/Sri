@@ -3,26 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Recital 2025</title>
+  <title>UDO-APAC X ATJ 2025</title>
 
-  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-    }
+    body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; }
     h1 { margin-bottom: 0; }
     h3 { margin-top: 5px; font-weight: normal; font-size: 1rem; }
-    input#searchInput { width: 60%; padding: 10px; margin: 20px 0; text-align: center; }
+    #searchInput { width: 60%; max-width: 640px; padding: 10px; margin: 20px 0; text-align: center; }
     .table-wrap { max-height: 72vh; overflow: auto; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: center; vertical-align: top; }
     th { background-color: #f2f2f2; position: sticky; top: 0; z-index: 1; }
     .bold { font-weight: bold; }
+    .muted { color: #777; }
   </style>
 </head>
 <body>
@@ -45,10 +40,12 @@
     </table>
   </div>
 
+  <p id="status" class="muted"></p>
+
   <script>
-    $(document).ready(function () {
-      // Map your Google Sheet column keys to table labels.
-      // Keys MUST match your JSON exactly (including spaces/case).
+    $(function () {
+      // Map Google Sheet column headers (keys) to table labels.
+      // Keys MUST match your CSV/JSON header row exactly.
       const COLUMNS = [
         { key: "Event Type",         label: "Event Type" },
         { key: "Event Day & Date",   label: "Event Day & Date", bold: true },
@@ -62,54 +59,78 @@
         { key: "Makeup",             label: "Makeup" },
         { key: "Hair",               label: "Hair" },
         { key: "Dance Routine",      label: "Dance Routine", bold: true },
-        { key: "i12 Katong",         label: "Class (as listed)" },  // display name only
+        { key: "Class Name",         label: "Class Name" },
         { key: "Remarks",            label: "Remarks" }
       ];
 
-      function normalize(str) {
-        return String(str || "").toLowerCase().trim();
+      const $status = $("#status");
+
+      function normalize(v) {
+        return String(v == null ? "" : v).toLowerCase().trim();
       }
 
       function buildHeader() {
-        const headerRow = $("#header-row");
-        headerRow.empty();
-        COLUMNS.forEach(col => headerRow.append(`<th>${col.label}</th>`));
+        const $row = $("#header-row").empty();
+        COLUMNS.forEach(col => $row.append(`<th>${col.label}</th>`));
       }
 
-      function renderTable(data) {
-        const tbody = $("#data-table tbody");
-        tbody.empty();
+      function renderTable(rows) {
+        const $tbody = $("#data-table tbody").empty();
 
-        data.forEach(row => {
-          const tr = $("<tr>");
+        if (!rows || rows.length === 0) {
+          $tbody.append(
+            `<tr><td colspan="${COLUMNS.length}" class="muted">No rows to display.</td></tr>`
+          );
+          return;
+        }
+
+        rows.forEach(row => {
+          const $tr = $("<tr>");
           COLUMNS.forEach(col => {
-            const val = (row[col.key] !== undefined && row[col.key] !== null && row[col.key] !== "") ? row[col.key] : "N/A";
-            tr.append(`<td class="${col.bold ? "bold" : ""}">${val}</td>`);
+            const val = row[col.key];
+            const safe = (val !== undefined && val !== null && String(val).trim() !== "") ? val : "N/A";
+            $tr.append(`<td class="${col.bold ? "bold" : ""}">${safe}</td>`);
           });
-          tbody.append(tr);
+          $tbody.append($tr);
         });
       }
 
-      function filterTable(data, query) {
-        if (!query) return data;
-        return data.filter(row =>
+      function filterRows(rows, query) {
+        if (!query) return rows;
+        return rows.filter(row =>
           COLUMNS.some(col => normalize(row[col.key]).includes(query))
         );
       }
 
-      // Build header immediately
+      // Build the header immediately
       buildHeader();
 
-      // Fetch your data (array of objects) from your backend
-      $.getJSON("/data", function (data) {
-        const fullData = Array.isArray(data) ? data : [];
-        renderTable(fullData);
+      // Fetch data from your Flask backend
+      $.getJSON("/data")
+        .done(function (rows) {
+          if (!Array.isArray(rows)) {
+            $status.text("Unexpected data format from server.");
+            renderTable([]);
+            return;
+          }
+          renderTable(rows);
 
-        $("#searchInput").on("input", function () {
-          const query = normalize($(this).val());
-          renderTable(filterTable(fullData, query));
+          $("#searchInput").on("input", function () {
+            const q = normalize($(this).val());
+            renderTable(filterRows(rows, q));
+          });
+
+          $status.text(""); // clear any message
+        })
+        .fail(function (xhr) {
+          let msg = "Failed to load data.";
+          try {
+            const err = JSON.parse(xhr.responseText || "{}");
+            if (err.error) msg += ` ${err.error}`;
+          } catch (_) {}
+          $status.text(msg);
+          renderTable([]);
         });
-      });
     });
   </script>
 
