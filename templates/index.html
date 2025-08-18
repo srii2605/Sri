@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UDO-APAC X ATJ 2025</title>
 
+  <!-- No favicon link to avoid 404 -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
@@ -18,6 +19,7 @@
     th { background-color: #f2f2f2; position: sticky; top: 0; z-index: 1; }
     .bold { font-weight: bold; }
     .muted { color: #777; }
+    a { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -44,8 +46,7 @@
 
   <script>
     $(function () {
-      // Map Google Sheet column headers (keys) to table labels.
-      // Keys MUST match your CSV/JSON header row exactly.
+      // Keys MUST match your CSV headers exactly
       const COLUMNS = [
         { key: "Event Type",         label: "Event Type" },
         { key: "Event Day & Date",   label: "Event Day & Date", bold: true },
@@ -54,14 +55,24 @@
         { key: "Reporting Time",     label: "Reporting Time", bold: true },
         { key: "Event Time",         label: "Event Time" },
         { key: "Dismissal Time",     label: "Dismissal Time" },
-        { key: "Costume",            label: "Costume" },
+        { key: "Costume",            label: "Costume" },            // url -> "Costume Link"
         { key: "Footwear",           label: "Footwear" },
-        { key: "Makeup",             label: "Makeup" },
-        { key: "Hair",               label: "Hair" },
+        { key: "Makeup",             label: "Makeup" },             // url -> "Makeup Tutorial"
+        { key: "Hair",               label: "Hair" },               // url -> "Hair Tutorial"
         { key: "Dance Routine",      label: "Dance Routine", bold: true },
         { key: "Class Name",         label: "Class Name" },
         { key: "Remarks",            label: "Remarks" }
       ];
+
+      // Columns that should render as a fixed-label link if a URL is present
+      const LINK_LABELS = {
+        "Costume": "Costume Link",
+        "Makeup": "Makeup Tutorial",
+        "Hair": "Hair Tutorial"
+      };
+      const LINK_COLUMNS = new Set(Object.keys(LINK_LABELS));
+
+      const URL_RE = /https?:\/\/[^\s<>"')]+/i;
 
       const $status = $("#status");
 
@@ -69,9 +80,42 @@
         return String(v == null ? "" : v).toLowerCase().trim();
       }
 
+      function escHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function escAttr(s) {
+        return escHtml(s);
+      }
+
+      function firstUrl(text) {
+        const m = URL_RE.exec(String(text || ""));
+        return m ? m[0] : null;
+      }
+
       function buildHeader() {
         const $row = $("#header-row").empty();
         COLUMNS.forEach(col => $row.append(`<th>${col.label}</th>`));
+      }
+
+      function renderCell(colKey, raw) {
+        const val = raw == null ? "" : String(raw).trim();
+        if (!val) return "N/A";
+
+        if (LINK_COLUMNS.has(colKey)) {
+          const url = firstUrl(val);
+          if (url) {
+            const label = LINK_LABELS[colKey] || "Link";
+            return `<a href="${escAttr(url)}" target="_blank" rel="noopener noreferrer" title="${escAttr(url)}">${escHtml(label)}</a>`;
+          }
+        }
+        // default plain text (preserve newlines)
+        return escHtml(val).replace(/\n/g, "<br>");
       }
 
       function renderTable(rows) {
@@ -87,9 +131,8 @@
         rows.forEach(row => {
           const $tr = $("<tr>");
           COLUMNS.forEach(col => {
-            const val = row[col.key];
-            const safe = (val !== undefined && val !== null && String(val).trim() !== "") ? val : "N/A";
-            $tr.append(`<td class="${col.bold ? "bold" : ""}">${safe}</td>`);
+            const html = renderCell(col.key, row[col.key]);
+            $tr.append(`<td class="${col.bold ? "bold" : ""}">${html}</td>`);
           });
           $tbody.append($tr);
         });
@@ -102,10 +145,9 @@
         );
       }
 
-      // Build the header immediately
+      // Build header and fetch data
       buildHeader();
 
-      // Fetch data from your Flask backend
       $.getJSON("/data")
         .done(function (rows) {
           if (!Array.isArray(rows)) {
@@ -114,13 +156,11 @@
             return;
           }
           renderTable(rows);
-
           $("#searchInput").on("input", function () {
             const q = normalize($(this).val());
             renderTable(filterRows(rows, q));
           });
-
-          $status.text(""); // clear any message
+          $status.text("");
         })
         .fail(function (xhr) {
           let msg = "Failed to load data.";
