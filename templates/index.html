@@ -5,18 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UDO-APAC X ATJ 2025</title>
 
-  <!-- No favicon link to avoid 404 -->
+  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; }
-    h1 { margin-bottom: 0; }
-    h3 { margin-top: 5px; font-weight: normal; font-size: 1rem; }
-    #searchInput { width: 60%; max-width: 640px; padding: 10px; margin: 20px 0; text-align: center; }
-    .table-wrap { max-height: 72vh; overflow: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; vertical-align: top; }
-    th { background-color: #f2f2f2; position: sticky; top: 0; z-index: 1; }
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      margin: 0; 
+      padding: 20px; 
+    }
+    h1 { 
+      margin-bottom: 5px; 
+      font-size: 2rem; 
+    }
+    .header-info {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .header-info .subtitle {
+      font-weight: bold;
+      margin: 5px 0;
+    }
+    .header-info p {
+      margin: 5px 0;
+    }
+    .header-info strong {
+      font-weight: bold;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 20px auto;
+      width: 80%;
+    }
+    #searchInput { 
+      width: 60%; 
+      max-width: 640px; 
+      padding: 10px; 
+      margin: 20px 0; 
+      text-align: center; 
+    }
+    .table-wrap { 
+      max-height: 72vh; 
+      overflow: auto; 
+    }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      margin-top: 20px; 
+    }
+    th, td { 
+      border: 1px solid #ddd; 
+      padding: 8px; 
+      text-align: center; 
+      vertical-align: top; 
+    }
+    th { 
+      background-color: #f2f2f2; 
+      position: sticky; 
+      top: 0; 
+      z-index: 1; 
+    }
     .bold { font-weight: bold; }
     .muted { color: #777; }
     a { text-decoration: underline; }
@@ -25,13 +77,20 @@
 <body>
 
   <h1>ATJ ANNUAL RECITAL 2025</h1>
-  <h3>REHEARSAL & PERFORMANCE SCHEDULE:<br>
-    Combined Rehearsals - at ATJ outlets <br>
-   In-Studio Tech Rehearsals: Performance & Training Centre, 36 Prinsep St, 04-01, S188638
-<br>
-   Mediacorp Tech & Show Days: The Theatre at Mediacorp, 1 Stars Avenue, S138507
-<br>
-  </h3>
+  <div class="header-info">
+    <p class="subtitle">REHEARSAL & PERFORMANCE SCHEDULE:</p>
+    <p>Combined Rehearsals – at ATJ outlets</p>
+    <p>
+      <strong>In-Studio Tech Rehearsals:</strong><br>
+      Performance & Training Centre, 36 Prinsep St, 04-01, S188638
+    </p>
+    <p>
+      <strong>Mediacorp Tech & Show Days:</strong><br>
+      The Theatre at Mediacorp, 1 Stars Avenue, S138507
+    </p>
+  </div>
+
+  <hr>
 
   <input type="text" id="searchInput" placeholder="Search..." />
 
@@ -57,10 +116,10 @@
         { key: "Reporting Time",     label: "Reporting Time", bold: true },
         { key: "Event Time",         label: "Event Time" },
         { key: "Dismissal Time",     label: "Dismissal Time" },
-        { key: "Costume",            label: "Costume" },            // url -> "Costume Link"
+        { key: "Costume",            label: "Costume" },            
         { key: "Footwear",           label: "Footwear" },
-        { key: "Makeup",             label: "Makeup" },             // url -> "Makeup Tutorial"
-        { key: "Hair",               label: "Hair" },               // url -> "Hair Tutorial"
+        { key: "Makeup",             label: "Makeup" },             
+        { key: "Hair",               label: "Hair" },               
         { key: "Dance Routine",      label: "Dance Routine", bold: true },
         { key: "Class Name",         label: "Class Name" },
         { key: "Remarks",            label: "Remarks" }
@@ -75,7 +134,6 @@
       const LINK_COLUMNS = new Set(Object.keys(LINK_LABELS));
 
       const URL_RE = /https?:\/\/[^\s<>"')]+/i;
-
       const $status = $("#status");
 
       function normalize(v) {
