@@ -50,4 +50,174 @@
     .tag--is   { background:#f0eaff; border-color:#d4c7ff; }   /* In‑Studio Tech */
     .tag--show { background:#e9f1ff; border-color:#c6dafc; }   /* Show Day */
 
-    /
+    /* Small screens */
+    @media (max-width: 720px) {
+      .info-grid { grid-template-columns:1fr; }
+      .info-grid::before { display:none; }
+      .info-col { padding:0; }
+      thead th, tbody td { white-space:normal; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ATJ ANNUAL RECITAL 2025</h1>
+    <div class="subtitle">REHEARSAL &amp; PERFORMANCE SCHEDULE:</div>
+
+    <div class="info-grid">
+      <!-- LEFT: Combined Rehearsals -->
+      <div class="info-col">
+        <h3><strong>Combined Rehearsals – at ATJ outlets:</strong></h3>
+        <ul>
+          <li><strong>Forum The Shopping Mall:</strong><br/>583 Orchard Road, #02-05/06/07, Singapore 238884</li>
+          <li><strong>I12 Katong:</strong><br/>112 East Coast Road, #03-14/15, Singapore 428802</li>
+          <li><strong>10 Winstedt Road:</strong><br/>#01-05/06/07/08, Singapore 227977</li>
+          <li><strong>Prinsep:</strong><br/>36 Prinsep St, Level 4, Singapore 188648</li>
+        </ul>
+      </div>
+
+      <!-- RIGHT: In‑Studio + Mediacorp -->
+      <div class="info-col">
+        <h3><strong>In‑Studio Tech Rehearsals:</strong></h3>
+        <p>Performance &amp; Training Centre, 36 Prinsep St, 04‑01, S188638</p>
+
+        <h3 style="margin-top:14px;"><strong>Mediacorp Tech &amp; Show Days:</strong></h3>
+        <p>The Theatre at Mediacorp, 1 Stars Avenue, S138507</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <input type="search" id="searchInput" placeholder="Search all columns…" />
+  </div>
+
+  <main>
+    <div class="table-wrap">
+      <table id="data-table">
+        <thead><tr id="header-row"></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="status" class="empty" style="text-align:center;margin-top:8px;"></p>
+  </main>
+
+  <script>
+    $(function () {
+      // Columns must match your CSV headers
+      const COLUMNS = [
+        { key: "Event Type",         label: "Event Type" },
+        { key: "Event Day & Date",   label: "Event Day & Date", bold: true },
+        { key: "Student Name",       label: "Student Name" },
+        { key: "Event Location",     label: "Event Location" },
+        { key: "Reporting Time",     label: "Reporting Time", bold: true },
+        { key: "Event Time",         label: "Event Time" },
+        { key: "Dismissal Time",     label: "Dismissal Time" },
+        { key: "Costume",            label: "Costume" },
+        { key: "Footwear",           label: "Footwear" },
+        { key: "Makeup",             label: "Makeup" },
+        { key: "Hair",               label: "Hair" },
+        { key: "Dance Routine",      label: "Dance Routine", bold: true },
+        { key: "Class Name",         label: "Class Name" },
+        { key: "Remarks",            label: "Remarks" }
+      ];
+
+      // Named links for specific columns when a URL is present
+      const LINK_LABELS = { Costume: "Costume Link", Makeup: "Makeup Tutorial", Hair: "Hair Tutorial" };
+      const LINK_COLUMNS = new Set(Object.keys(LINK_LABELS));
+      const URL_RE = /https?:\/\/[^\s<>"')]+/i;
+
+      const $status = $("#status");
+
+      const normalize = (v) => String(v == null ? "" : v).toLowerCase().trim();
+      const escHtml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+      const firstUrl = (t) => { const m = URL_RE.exec(String(t || "")); return m ? m[0] : null; };
+
+      /* Choose tag class based on Event Type text */
+      function eventTypeClass(text) {
+        if (!text) return 'tag';
+        const s = String(text).toLowerCase();
+        if (s.includes("combined rehearsal")) return 'tag tag--cr';                         // green
+        if (s.includes("in-studio") || s.includes("in studio") || s.includes("is tech")) return 'tag tag--is'; // purple
+        if (s.includes("show day")) return 'tag tag--show';                                  // blue
+        return 'tag';
+      }
+
+      function buildHeader() {
+        const $row = $("#header-row").empty();
+        COLUMNS.forEach(col => $row.append(`<th>${col.label}</th>`));
+      }
+
+      function renderCell(key, raw) {
+        const val = raw == null ? "" : String(raw).trim();
+        if (!val) return '<span class="empty">—</span>';
+
+        if (key === "Event Type") {
+          return `<span class="${eventTypeClass(val)}">${escHtml(val)}</span>`;
+        }
+
+        if (LINK_COLUMNS.has(key)) {
+          const url = firstUrl(val);
+          if (url) {
+            return `<a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" title="${escHtml(url)}">${escHtml(LINK_LABELS[key])}</a>`;
+          }
+        }
+
+        return escHtml(val).replace(/\n/g, "<br>");
+      }
+
+      function renderTable(rows) {
+        const $tbody = $("#data-table tbody").empty();
+
+        if (!rows || rows.length === 0) {
+          $tbody.append(`<tr><td colspan="${COLUMNS.length}" class="empty" style="text-align:center;">No results</td></tr>`);
+          return;
+        }
+
+        rows.forEach(row => {
+          const $tr = $("<tr>");
+          COLUMNS.forEach(col => {
+            const html = renderCell(col.key, row[col.key]);
+            $tr.append(`<td class="${col.bold ? "bold" : ""}">${html}</td>`);
+          });
+          $tbody.append($tr);
+        });
+      }
+
+      function filterRows(rows, query) {
+        if (!query) return rows;
+        return rows.filter(row =>
+          COLUMNS.some(col => normalize(row[col.key]).includes(query))
+        );
+      }
+
+      // Init
+      buildHeader();
+
+      $.getJSON("/data")
+        .done(function (rows) {
+          if (!Array.isArray(rows)) {
+            $status.text("Unexpected data format from server.");
+            renderTable([]);
+            return;
+          }
+          renderTable(rows);
+
+          $("#searchInput").on("input", function () {
+            const q = normalize($(this).val());
+            renderTable(filterRows(rows, q));
+          });
+
+          $status.text("");
+        })
+        .fail(function (xhr) {
+          let msg = "Failed to load data.";
+          try { const err = JSON.parse(xhr.responseText || "{}"); if (err.error) msg += ` ${err.error}`; } catch (_) {}
+          $status.text(msg);
+          renderTable([]);
+        });
+    });
+  </script>
+
+</body>
+</html>
