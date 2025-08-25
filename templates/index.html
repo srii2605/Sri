@@ -3,249 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ANNUAL RECITAL 2025</title>
+  <title>UDO‑APAC × ATJ 2025</title>
   <link rel="icon" href="/favicon.ico" />
-
-  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
-    :root {
-      --bg:#fafafa; --card:#fff; --text:#222; --muted:#666; --bd:#e6e6e6;
-      --th:#f7f7f7;
-      --cr-bg:#eaffea; --cr-bd:#bde3bd;     /* Combined Rehearsal */
-      --is-bg:#f0eaff; --is-bd:#d4c7ff;     /* In‑Studio Tech */
-      --show-bg:#e9f1ff; --show-bd:#c6dafc; /* Show Day */
-    }
+    /* Base */
     * { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#fff; color:#222; }
 
     /* Header */
     header { padding: 28px 16px 8px; text-align: center; }
     h1 { margin:0; font-size: 28px; letter-spacing:.5px; }
-    .subtitle { font-weight: 700; text-decoration: underline; margin: 12px 0 18px; }
+    .subtitle { font-weight:700; text-decoration: underline; margin: 12px 0 18px; }
 
     /* Two‑column info block */
     .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      max-width: 1000px;
-      margin: 0 auto;
-      text-align: left;
-      align-items: start;
-      position: relative;
+      display:grid; grid-template-columns:1fr 1fr; gap:24px;
+      max-width: 1100px; margin:0 auto; text-align:left; align-items:start; position:relative;
     }
-    .info-grid::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background: var(--bd);
-    }
-    .info-col { padding: 0 18px; }
-    .info-col h3 { margin: 0 0 8px; font-size: 16px; }
-    .info-col p, .info-col li { color: var(--muted); font-size: 14px; line-height: 1.6; margin:0; }
-    .info-col ul { list-style: none; padding: 0; margin: 0; }
-    .info-col li + li { margin-top: 10px; }
+    .info-grid::before { content:""; position:absolute; left:50%; top:0; bottom:0; width:1px; background:#e6e6e6; }
+    .info-col { padding:0 18px; }
+    .info-col h3 { margin:0 0 8px; font-size:16px; }
+    .info-col p, .info-col li { color:#555; font-size:14px; line-height:1.6; margin:0; }
+    .info-col ul { list-style:none; padding:0; margin:0; }
+    .info-col li + li { margin-top:10px; }
 
     /* Toolbar */
-    .toolbar { display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap; padding: 16px; }
-    #searchInput { width: 60%; max-width: 640px; padding: 10px 12px; border:1px solid var(--bd); border-radius: 10px; text-align: center; }
-    #count { color: var(--muted); font-size: 13px; }
+    .toolbar { display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap; padding:16px; }
+    #searchInput { width: min(900px, 92%); padding:10px 12px; border:1px solid #e1e1e1; border-radius:8px; text-align:center; }
 
-    /* Table */
-    main { padding: 0 16px 32px; max-width: 1200px; margin: 0 auto; }
-    .table-wrap { background: var(--card); border:1px solid var(--bd); border-radius: 14px; overflow:auto; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
-    table { width:100%; border-collapse: collapse; font-size: 14px; }
-    thead th { position: sticky; top:0; background: var(--th); text-align:left; font-weight:600; padding:12px; border-bottom:1px solid var(--bd); white-space:nowrap; }
-    tbody td { padding:10px 12px; border-bottom:1px solid var(--bd); vertical-align: top; text-align: left; }
-    tbody tr:hover { background:#fcfcfc; }
+    /* Table – full width */
+    main { padding: 0 12px 28px; }
+    .table-wrap { overflow:auto; max-height:72vh; }
+    table { width:100%; border-collapse: collapse; font-size:14px; }
+    thead th { position: sticky; top:0; background:#f7f7f7; text-align:left; font-weight:600; padding:12px; border-bottom:1px solid #e6e6e6; white-space:nowrap; }
+    tbody td { padding:10px 12px; border-bottom:1px solid #ededed; vertical-align: top; text-align:left; }
+    tbody tr:hover { background:#fafafa; }
     .bold { font-weight:700; }
-    .empty { color: var(--muted); font-style: italic; }
+    .empty { color:#777; font-style: italic; }
     a { text-decoration: underline; }
 
-    /* Event type tags */
-    .tag { display:inline-block; padding:2px 10px; border-radius:999px; background:#f7f7f7; border:1px solid #e7e7e7; font-size: .85rem; white-space: nowrap; }
-    .tag--cr   { background: var(--cr-bg); border-color: var(--cr-bd); }   /* green */
-    .tag--is   { background: var(--is-bg); border-color: var(--is-bd); }   /* purple */
-    .tag--show { background: var(--show-bg); border-color: var(--show-bd); }/* blue */
+    /* Event Type tags */
+    .tag { display:inline-block; padding:2px 10px; border-radius:999px; background:#f7f7f7; border:1px solid #e7e7e7; font-size:.85rem; white-space:nowrap; }
+    .tag--cr   { background:#eaffea; border-color:#bde3bd; }   /* Combined Rehearsal */
+    .tag--is   { background:#f0eaff; border-color:#d4c7ff; }   /* In‑Studio Tech */
+    .tag--show { background:#e9f1ff; border-color:#c6dafc; }   /* Show Day */
 
-    /* Small screens */
-    @media (max-width: 720px) {
-      .info-grid { grid-template-columns: 1fr; }
-      .info-grid::before { display: none; }
-      .info-col { padding: 0; }
-      #searchInput { width:100%; }
-      thead th, tbody td { white-space: normal; }
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <h1>ATJ ANNUAL RECITAL 2025</h1>
-    <div class="subtitle">REHEARSAL &amp; PERFORMANCE SCHEDULE:</div>
-
-    <div class="info-grid">
-      <!-- LEFT: Combined Rehearsals -->
-      <div class="info-col">
-        <h3><strong>Combined Rehearsals – at ATJ outlets:</strong></h3>
-        <ul>
-          <li><strong>Forum The Shopping Mall:</strong><br/>583 Orchard Road, #02-05/06/07, Singapore 238884</li>
-          <li><strong>I12 Katong:</strong><br/>112 East Coast Road, #03-14/15, Singapore 428802</li>
-          <li><strong>10 Winstedt Road:</strong><br/>#01-05/06/07/08, Singapore 227977</li>
-          <li><strong>Prinsep:</strong><br/>36 Prinsep St, Level 4, Singapore 188648</li>
-        </ul>
-      </div>
-
-      <!-- RIGHT: In‑Studio + Mediacorp -->
-      <div class="info-col">
-        <h3><strong>In‑Studio Tech Rehearsals:</strong></h3>
-        <p>Performance &amp; Training Centre, 36 Prinsep St, 04‑01, S188638</p>
-
-        <h3 style="margin-top:14px;"><strong>Mediacorp Tech &amp; Show Days:</strong></h3>
-        <p>The Theatre at Mediacorp, 1 Stars Avenue, S138507</p>
-      </div>
-    </div>
-  </header>
-
-  <div class="toolbar">
-    <input type="search" id="searchInput" placeholder="Search all columns…" />
-    <span id="count"></span>
-  </div>
-
-  <main>
-    <div class="table-wrap">
-      <table id="data-table">
-        <thead><tr id="header-row"></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <p id="status" class="empty" style="text-align:center;margin-top:8px;"></p>
-  </main>
-
-  <script>
-    $(function () {
-      // Columns must match your CSV headers
-      const COLUMNS = [
-        { key: "Event Type",         label: "Event Type" },
-        { key: "Event Day & Date",   label: "Event Day & Date", bold: true },
-        { key: "Student Name",       label: "Student Name" },
-        { key: "Event Location",     label: "Event Location" },
-        { key: "Reporting Time",     label: "Reporting Time", bold: true },
-        { key: "Event Time",         label: "Event Time" },
-        { key: "Dismissal Time",     label: "Dismissal Time" },
-        { key: "Costume",            label: "Costume" },
-        { key: "Footwear",           label: "Footwear" },
-        { key: "Makeup",             label: "Makeup" },
-        { key: "Hair",               label: "Hair" },
-        { key: "Dance Routine",      label: "Dance Routine", bold: true },
-        { key: "Class Name",         label: "Class Name" },
-        { key: "Remarks",            label: "Remarks" }
-      ];
-
-      // Named links for specific columns when a URL is present
-      const LINK_LABELS = { Costume: "Costume Link", Makeup: "Makeup Tutorial", Hair: "Hair Tutorial" };
-      const LINK_COLUMNS = new Set(Object.keys(LINK_LABELS));
-      const URL_RE = /https?:\/\/[^\s<>"')]+/i;
-
-      const $status = $("#status");
-      const $count = $("#count");
-
-      const normalize = (v) => String(v == null ? "" : v).toLowerCase().trim();
-      const escHtml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-      const firstUrl = (t) => { const m = URL_RE.exec(String(t || "")); return m ? m[0] : null; };
-
-      /* Choose tag class based on Event Type text */
-      function eventTypeClass(text) {
-        if (!text) return 'tag';
-        const s = String(text).toLowerCase();
-        if (s.includes("combined rehearsal")) return 'tag tag--cr';                         // green
-        if (s.includes("in-studio") || s.includes("in studio") || s.includes("is tech")) return 'tag tag--is'; // purple
-        if (s.includes("show day")) return 'tag tag--show';                                  // blue
-        return 'tag';
-      }
-
-      function buildHeader() {
-        const $row = $("#header-row").empty();
-        COLUMNS.forEach(col => $row.append(`<th>${col.label}</th>`));
-      }
-
-      function renderCell(key, raw) {
-        const val = raw == null ? "" : String(raw).trim();
-        if (!val) return '<span class="empty">—</span>';
-
-        if (key === "Event Type") {
-          return `<span class="${eventTypeClass(val)}">${escHtml(val)}</span>`;
-        }
-
-        if (LINK_COLUMNS.has(key)) {
-          const url = firstUrl(val);
-          if (url) {
-            return `<a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" title="${escHtml(url)}">${escHtml(LINK_LABELS[key])}</a>`;
-          }
-        }
-
-        return escHtml(val).replace(/\n/g, "<br>");
-      }
-
-      function renderTable(rows) {
-        const $tbody = $("#data-table tbody").empty();
-
-        if (!rows || rows.length === 0) {
-          $tbody.append(`<tr><td colspan="${COLUMNS.length}" class="empty" style="text-align:center;">No results</td></tr>`);
-          $count.text("");
-          return;
-        }
-
-        rows.forEach(row => {
-          const $tr = $("<tr>");
-          COLUMNS.forEach(col => {
-            const html = renderCell(col.key, row[col.key]);
-            $tr.append(`<td class="${col.bold ? "bold" : ""}">${html}</td>`);
-          });
-          $tbody.append($tr);
-        });
-        $count.text(`${rows.length} shown`);
-      }
-
-      function filterRows(rows, query) {
-        if (!query) return rows;
-        return rows.filter(row =>
-          COLUMNS.some(col => normalize(row[col.key]).includes(query))
-        );
-      }
-
-      // Init
-      buildHeader();
-
-      $.getJSON("/data")
-        .done(function (rows) {
-          if (!Array.isArray(rows)) {
-            $status.text("Unexpected data format from server.");
-            renderTable([]);
-            return;
-          }
-          renderTable(rows);
-
-          $("#searchInput").on("input", function () {
-            const q = normalize($(this).val());
-            renderTable(filterRows(rows, q));
-          });
-
-          $status.text("");
-        })
-        .fail(function (xhr) {
-          let msg = "Failed to load data.";
-          try { const err = JSON.parse(xhr.responseText || "{}"); if (err.error) msg += ` ${err.error}`; } catch (_) {}
-          $status.text(msg);
-          renderTable([]);
-        });
-    });
-  </script>
-
-</body>
-</html>
+    /
