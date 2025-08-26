@@ -18,7 +18,8 @@
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    .container{max-width:1200px;margin:32px auto;padding:0 16px}
+    /* ✅ Wider page so ALL columns fit without horizontal scroll */
+    .container{max-width:1800px;margin:32px auto;padding:0 16px}
     h1{font-size:32px;font-weight:800;letter-spacing:.2px;margin:0 0 8px}
     .underline-title{font-size:18px;font-weight:700;margin:4px 0 20px;position:relative;display:inline-block}
     .underline-title::after{content:"";position:absolute;left:0;bottom:-4px;height:3px;width:100%;background:linear-gradient(90deg,#111827,transparent 80%);border-radius:2px}
@@ -30,17 +31,17 @@
     .muted div{margin:4px 0}
 
     .search-wrap{margin:16px 0;text-align:center}
-    .search{width:100%;max-width:640px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:14px}
+    .search{width:100%;max-width:640px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px}
 
-    /* ✅ No vertical scroll box. Let table take full page height. */
-    .table-wrap{overflow-x:auto;}
-    table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:20px}
-    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:13px;padding:14px;border-bottom:1px solid var(--line)}
-    tbody td{padding:14px 10px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
-    tbody tr:nth-child(even){background:var(--row-alt);} /* zebra rows */
+    /* ✅ No inner scroll; fixed widths so everything fits */
+    .table-wrap{overflow:visible;}
+    table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;margin-top:20px}
+    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:12px;padding:10px;border-bottom:1px solid var(--line)}
+    tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top;white-space:normal;word-break:break-word}
+    tbody tr:nth-child(even){background:var(--row-alt);}
     .bold{font-weight:700}
 
-    .badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1}
+    .badge{display:inline-block;padding:3px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1}
     .badge.green{background:var(--badge-green-bg);color:var(--badge-green)}
     .badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
     .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
@@ -55,7 +56,7 @@
     <h1>ATJ ANNUAL RECITAL 2025</h1>
     <div class="underline-title">REHEARSAL &amp; PERFORMANCE SCHEDULE:</div>
 
-    <!-- Top grid: left = Combined Rehearsals, right = In-Studio + Mediacorp -->
+    <!-- Split header -->
     <div class="grid">
       <div class="card">
         <h3>Combined Rehearsals – at ATJ outlets:</h3>
@@ -82,6 +83,23 @@
 
     <div class="table-wrap">
       <table>
+        <!-- ✅ Fixed column widths so all fit on a wide desktop without horizontal scroll -->
+        <colgroup>
+          <col style="width:160px"> <!-- Event Type -->
+          <col style="width:150px"> <!-- Date -->
+          <col style="width:190px"> <!-- Student -->
+          <col style="width:160px"> <!-- Location -->
+          <col style="width:100px"> <!-- Reporting -->
+          <col style="width:100px"> <!-- Event Time -->
+          <col style="width:110px"> <!-- Dismissal -->
+          <col style="width:120px"> <!-- Costume -->
+          <col style="width:140px"> <!-- Footwear -->
+          <col style="width:120px"> <!-- Makeup -->
+          <col style="width:110px"> <!-- Hair -->
+          <col style="width:180px"> <!-- Dance Routine -->
+          <col style="width:150px"> <!-- Class Name -->
+          <col style="width:150px"> <!-- Remarks -->
+        </colgroup>
         <thead>
           <tr>
             <th>Event Type</th>
@@ -113,7 +131,6 @@
       'Makeup','Hair','Dance Routine','Class Name','Remarks'
     ];
 
-    // CSV parsing (handles commas/quotes/newlines)
     function csvToRows(text){
       const rows=[]; let cur=[], i=0, field='', inQ=false;
       while(i<text.length){
