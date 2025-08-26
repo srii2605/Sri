@@ -18,7 +18,6 @@
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    /* ✅ Wider page so ALL columns fit without horizontal scroll */
     .container{max-width:1800px;margin:32px auto;padding:0 16px}
     h1{font-size:32px;font-weight:800;letter-spacing:.2px;margin:0 0 8px}
     .underline-title{font-size:18px;font-weight:700;margin:4px 0 20px;position:relative;display:inline-block}
@@ -33,7 +32,6 @@
     .search-wrap{margin:16px 0;text-align:center}
     .search{width:100%;max-width:640px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px}
 
-    /* ✅ No inner scroll; fixed widths so everything fits */
     .table-wrap{overflow:visible;}
     table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;margin-top:20px}
     thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:12px;padding:10px;border-bottom:1px solid var(--line)}
@@ -83,7 +81,7 @@
 
     <div class="table-wrap">
       <table>
-        <!-- ✅ Fixed column widths so all fit on a wide desktop without horizontal scroll -->
+        <!-- ✅ Updated colgroup: merged “Full Look Guide” and removed Makeup/Hair -->
         <colgroup>
           <col style="width:160px"> <!-- Event Type -->
           <col style="width:150px"> <!-- Date -->
@@ -92,13 +90,11 @@
           <col style="width:100px"> <!-- Reporting -->
           <col style="width:100px"> <!-- Event Time -->
           <col style="width:110px"> <!-- Dismissal -->
-          <col style="width:120px"> <!-- Costume -->
+          <col style="width:220px"> <!-- Full Look Guide -->
           <col style="width:140px"> <!-- Footwear -->
-          <col style="width:120px"> <!-- Makeup -->
-          <col style="width:110px"> <!-- Hair -->
-          <col style="width:180px"> <!-- Dance Routine -->
-          <col style="width:150px"> <!-- Class Name -->
-          <col style="width:150px"> <!-- Remarks -->
+          <col style="width:200px"> <!-- Dance Routine -->
+          <col style="width:180px"> <!-- Class Name -->
+          <col style="width:160px"> <!-- Remarks -->
         </colgroup>
         <thead>
           <tr>
@@ -109,10 +105,8 @@
             <th>Reporting Time</th>
             <th>Event Time</th>
             <th>Dismissal Time</th>
-            <th>Costume</th>
+            <th>Full Look Guide</th>
             <th>Footwear</th>
-            <th>Makeup</th>
-            <th>Hair</th>
             <th>Dance Routine</th>
             <th>Class Name</th>
             <th>Remarks</th>
@@ -125,10 +119,12 @@
 
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&gid=785015495";
+
+    // ✅ Columns now include “Full Look Guide” and exclude Costume/Makeup/Hair
     const COLS = [
       'Event Type','Event Day & Date','Student Name','Event Location',
-      'Reporting Time','Event Time','Dismissal Time','Costume','Footwear',
-      'Makeup','Hair','Dance Routine','Class Name','Remarks'
+      'Reporting Time','Event Time','Dismissal Time','Full Look Guide','Footwear',
+      'Dance Routine','Class Name','Remarks'
     ];
 
     function csvToRows(text){
@@ -159,23 +155,29 @@
     }
 
     function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
-    function fmtLink(text, labelFor){
+
+    // Linkify any URLs and also split common separators (| or /) into new lines for readability
+    function formatFullLook(text){
       if(!text) return '';
-      const t=String(text).trim();
-      if(/^https?:\/\//i.test(t)){
-        const label = labelFor==='Costume' ? 'Costume&nbsp;Link'
-                    : labelFor==='Makeup'  ? 'Makeup&nbsp;Tutorial'
-                    : labelFor==='Hair'    ? 'Hair&nbsp;Tutorial'
-                    : 'Link';
-        return `<a class="link-pill" href="${escHtml(t)}" target="_blank" rel="noopener">${label}</a>`;
-      }
-      return escHtml(t).replace(/\n/g,"<br>");
+      let t = String(text).trim();
+      // turn separators into line breaks
+      t = t.replace(/\s*\|\s*/g, '<br>').replace(/\s*\/\s*/g, '<br>');
+      // linkify urls
+      const urlRegex = /((https?:\/\/)[^\s<]+)|(\bwww\.[^\s<]+)/gi;
+      t = t.replace(urlRegex, (url)=>{
+        let href = url; if(!/^https?:\/\//i.test(url)) href = "https://" + url;
+        // If the whole token is a URL, show a friendlier label
+        const label = 'Open link';
+        return `<a class="link-pill" href="${escHtml(href)}" target="_blank" rel="noopener">${label}</a>`;
+      });
+      return t;
     }
+
     function asBadge(type){
       const t=(type||'').toLowerCase();
       if(t.includes('combined rehearsal')) return `<span class="badge green">${escHtml(type)}</span>`;
       if(t.includes('in-studio') || t.includes('in studio')) return `<span class="badge purple">${escHtml(type)}</span>`;
-      if(t.includes('show day')) return `<span class="badge blue">${escHtml(type)}</span>`;
+      if(t.includes('show')) return `<span class="badge blue">${escHtml(type)}</span>`;
       return `<span class="badge">${escHtml(type||'')}</span>`;
     }
 
@@ -186,7 +188,7 @@
     function render(rows){
       tbody.innerHTML='';
       if(!rows.length){
-        tbody.innerHTML = `<tr><td colspan="14" class="muted" style="padding:12px;">No results</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
         return;
       }
       const html = rows.map(r=>`
@@ -198,10 +200,8 @@
           <td>${escHtml(r['Reporting Time']||'')}</td>
           <td>${escHtml(r['Event Time']||'')}</td>
           <td>${escHtml(r['Dismissal Time']||'')}</td>
-          <td>${fmtLink(r['Costume'],'Costume')}</td>
+          <td>${formatFullLook(r['Full Look Guide']||'')}</td>
           <td>${escHtml(r['Footwear']||'')}</td>
-          <td>${fmtLink(r['Makeup'],'Makeup')}</td>
-          <td>${fmtLink(r['Hair'],'Hair')}</td>
           <td>${escHtml(r['Dance Routine']||'')}</td>
           <td>${escHtml(r['Class Name']||'')}</td>
           <td>${escHtml(r['Remarks']||'')}</td>
@@ -221,13 +221,15 @@
         const res = await fetch(CSV_URL, { cache:'no-store' });
         if(!res.ok){ const t=await res.text(); throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`); }
         const csv = await res.text();
-        DATA = csvToObjects(csv).map(o=>{const x={};COLS.forEach(k=>x[k]=o[k]??'');return x;});
+        // Map only the columns we care about (COLS), by exact header text
+        const raw = csvToObjects(csv);
+        DATA = raw.map(o=>{const x={}; COLS.forEach(k=> x[k] = o[k] ?? ''); return x;});
         render(DATA);
       }catch(e){
         console.error('Load failed', e);
         msg.textContent='Failed to load data. Please check the CSV link or sharing.';
         msg.classList.remove('hidden');
-        tbody.innerHTML = `<tr><td colspan="14" class="muted" style="padding:12px;">${escHtml(e.message)}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="muted" style="padding:12px;">${escHtml(e.message)}</td></tr>`;
       }
     }
 
@@ -239,5 +241,3 @@
   </script>
 </body>
 </html>
-
-
