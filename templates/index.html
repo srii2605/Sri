@@ -15,29 +15,55 @@
       --badge-purple-bg:#f5f3ff; --badge-purple:#5b21b6;
       --badge-blue-bg:#eff6ff; --badge-blue:#1e40af;
       --row-alt:#fafafa;
+      --chip-bg:#f3f4f6; --chip-on:#111827; --chip-active-bg:#111827; --chip-active:#ffffff;
+      --hl:#fff3bf;
+      --card-bg:#ffffff;
+
+      --fs-th:12px;      /* table head & chip text */
+      --fs-td:13px;      /* table body & card text */
+      --fs-label:11px;   /* small grey labels in cards */
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    /* ✅ Wider page so ALL columns fit without horizontal scroll */
+
+    /* Layout */
     .container{max-width:1800px;margin:32px auto;padding:0 16px}
     h1{font-size:32px;font-weight:800;letter-spacing:.2px;margin:0 0 8px}
     .underline-title{font-size:18px;font-weight:700;margin:4px 0 20px;position:relative;display:inline-block}
     .underline-title::after{content:"";position:absolute;left:0;bottom:-4px;height:3px;width:100%;background:linear-gradient(90deg,#111827,transparent 80%);border-radius:2px}
 
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:18px 0 12px}
-    .card{border:1px solid var(--line);border-radius:14px;padding:16px}
+    .card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--card-bg)}
     .card h3{margin:0 0 6px;font-size:18px}
     .muted{color:var(--muted);font-size:14px;line-height:1.45}
     .muted div{margin:4px 0}
 
-    .search-wrap{margin:16px 0;text-align:center}
-    .search{width:100%;max-width:640px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin:16px 0}
+    .search{flex:1 1 420px;max-width:640px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px}
 
-    /* ✅ No inner scroll; fixed widths so everything fits */
-    .table-wrap{overflow:visible;}
-    table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;margin-top:20px}
-    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:12px;padding:10px;border-bottom:1px solid var(--line)}
-    tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top;white-space:normal;word-break:break-word}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .chip{
+      border:1px solid var(--line);
+      background:var(--chip-bg);
+      color:var(--chip-on);
+      border-radius:10px;        /* squarish */
+      padding:8px 10px;
+      font-size:var(--fs-th);
+      font-weight:600;
+      cursor:pointer; user-select:none
+    }
+    .chip.active{
+      background:var(--chip-active-bg);
+      color:var(--chip-active);
+      border-color:var(--chip-active-bg);
+      border-radius:10px;
+    }
+
+    /* Table (desktop) */
+    .table-wrap{display:block; overflow:visible;}
+    table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;margin-top:12px}
+    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
+    tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word}
     tbody tr:nth-child(even){background:var(--row-alt);}
     .bold{font-weight:700}
 
@@ -49,6 +75,37 @@
     .helper{color:var(--muted);font-size:13px;margin:10px 0 0;text-align:center}
     .hidden{display:none}
     a.link-pill{font-weight:600;text-decoration:none;border-bottom:1px dashed currentColor}
+    mark{background:var(--hl);padding:0 .1em;border-radius:2px}
+
+    /* Mobile cards (hidden on desktop) */
+    #cards{ display:none; gap:12px; margin-top:12px}
+    .row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:12px}
+    .row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+    .row-title{ font-size:var(--fs-td); font-weight:700; }
+    .row-sub{   font-size:var(--fs-td); color:var(--muted)}
+    .row-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .item{font-size:var(--fs-td)}
+    .item .label,.remark .label{font-size:var(--fs-label);color:var(--muted);display:block;margin-bottom:2px}
+    .times{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+    .remark{margin-top:8px;font-size:var(--fs-td)}
+    .chip-inline{display:inline-flex;gap:6px;flex-wrap:wrap}
+
+    /* Swap at 900px: desktop table off, mobile cards on */
+    @media (max-width: 900px){
+      .container{max-width:100%; padding:0 12px}
+      .grid{grid-template-columns:1fr} /* stack info cards */
+      .table-wrap{ display:none; }
+      #cards{ display:grid; }
+      .chips{ gap:6px; }
+      .times{grid-template-columns:1fr}
+      .row-grid{grid-template-columns:1fr}
+    }
+
+    @media print{
+      .controls,.grid,#cards{display:none}
+      .container{max-width:unset;margin:0;padding:0}
+      thead th,tbody td{font-size:11px;padding:6px}
+    }
   </style>
 </head>
 <body>
@@ -57,9 +114,9 @@
     <div class="underline-title">REHEARSAL &amp; PERFORMANCE SCHEDULE:</div>
 
     <!-- Split header -->
-    <div class="grid">
+    <div class="grid" aria-label="Locations">
       <div class="card">
-        <h3>Combined Rehearsals – at ATJ outlets:</h3>
+        <h3>Combined Rehearsals - at ATJ outlets:</h3>
         <div class="muted">
           <div><strong>Forum The Shopping Mall:</strong> 583 Orchard Road, #02–05/06/07, Singapore 238884</div>
           <div><strong>I12 Katong:</strong> 112 East Coast Road, #03–14/15, Singapore 428802</div>
@@ -76,27 +133,26 @@
       </div>
     </div>
 
-    <div class="search-wrap">
-      <input id="search" class="search" placeholder="Search all columns…" />
-      <div id="msg" class="helper hidden"></div>
+    <!-- Controls -->
+    <div class="controls">
+      <input id="search" class="search" placeholder="Search all columns…" aria-label="Search all columns"/>
+    </div>
+    <div class="chips" role="tablist" aria-label="Quick filters">
+      <div class="chip active" data-filter="all" role="tab" aria-selected="true">All</div>
+      <div class="chip" data-filter="combined" role="tab" aria-selected="false">Combined Rehearsal</div>
+      <div class="chip" data-filter="instudio" role="tab" aria-selected="false">In-Studio Tech</div>
+      <div class="chip" data-filter="show" role="tab" aria-selected="false">Show Day</div>
     </div>
 
-    <div class="table-wrap">
+    <div id="msg" class="helper hidden"></div>
+
+    <!-- Desktop table -->
+    <div class="table-wrap" aria-live="polite">
       <table>
-        <!-- ✅ Updated widths: merged to “Full Look Guide”, removed Makeup/Hair -->
         <colgroup>
-          <col style="width:160px"> <!-- Event Type -->
-          <col style="width:150px"> <!-- Date -->
-          <col style="width:190px"> <!-- Student -->
-          <col style="width:160px"> <!-- Location -->
-          <col style="width:100px"> <!-- Reporting -->
-          <col style="width:100px"> <!-- Event Time -->
-          <col style="width:110px"> <!-- Dismissal -->
-          <col style="width:220px"> <!-- Full Look Guide -->
-          <col style="width:140px"> <!-- Footwear -->
-          <col style="width:200px"> <!-- Dance Routine -->
-          <col style="width:180px"> <!-- Class Name -->
-          <col style="width:160px"> <!-- Remarks -->
+          <col style="width:160px"><col style="width:150px"><col style="width:190px"><col style="width:160px">
+          <col style="width:100px"><col style="width:100px"><col style="width:110px"><col style="width:220px">
+          <col style="width:140px"><col style="width:200px"><col style="width:180px"><col style="width:160px">
         </colgroup>
         <thead>
           <tr>
@@ -117,18 +173,31 @@
         <tbody id="tbody"></tbody>
       </table>
     </div>
+
+    <!-- Mobile card list -->
+    <div id="cards" aria-live="polite"></div>
   </div>
 
   <script>
-    const CSV_URL = "https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&gid=785015495";
+    const BASE_CSV_URL = "https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&gid=785015495";
 
-    // ✅ Columns now include “Full Look Guide”, without Costume/Makeup/Hair
     const COLS = [
       'Event Type','Event Day & Date','Student Name','Event Location',
       'Reporting Time','Event Time','Dismissal Time','Full Look Guide','Footwear',
       'Dance Routine','Class Name','Remarks'
     ];
 
+    const tbody = document.getElementById('tbody');
+    const cards = document.getElementById('cards');
+    const msg   = document.getElementById('msg');
+    const searchEl = document.getElementById('search');
+    const chips = Array.from(document.querySelectorAll('.chip'));
+
+    let RAW = [];
+    let FILTER = 'all';
+    let QUERY  = '';
+
+    /* CSV parsing */
     function csvToRows(text){
       const rows=[]; let cur=[], i=0, field='', inQ=false;
       while(i<text.length){
@@ -156,9 +225,11 @@
       });
     }
 
-    function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
+    /* Utils */
+    function escHtml(s){return String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
+    function escapeRegExp(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
 
-    // ✅ NEW: Always render raw URL as “Open link”
+    /* Render helpers */
     function formatFullLook(text){
       if(!text) return '';
       const t = String(text).trim();
@@ -167,73 +238,136 @@
         if (/^www\./i.test(href)) href = "https://" + href;
         return `<a class="link-pill" href="${escHtml(href)}" target="_blank" rel="noopener">Open link</a>`;
       }
-      // fallback: show plain text (you can split on | into lines if you like)
       return escHtml(t).replace(/\s*\|\s*/g, '<br>');
     }
-
     function asBadge(type){
-      const t=(type||'').toLowerCase();
-      if(t.includes('combined rehearsal')) return `<span class="badge green">${escHtml(type)}</span>`;
-      if(t.includes('in-studio') || t.includes('in studio')) return `<span class="badge purple">${escHtml(type)}</span>`;
-      if(t.includes('show')) return `<span class="badge blue">${escHtml(type)}</span>`;
-      return `<span class="badge">${escHtml(type||'')}</span>`;
+      const clean = String(type||'');
+      const t=clean.toLowerCase();
+      if(t.includes('combined rehearsal')) return `<span class="badge green">${escHtml(clean)}</span>`;
+      if(t.includes('in-studio') || t.includes('in studio')) return `<span class="badge purple">${escHtml(clean)}</span>`;
+      if(t.includes('show')) return `<span class="badge blue">${escHtml(clean)}</span>`;
+      return `<span class="badge">${escHtml(clean)}</span>`;
+    }
+    function withHighlight(text, q){
+      if(!q) return escHtml(text||'');
+      const safe = escHtml(text||'');
+      const re = new RegExp(`(${escapeRegExp(q)})`,'ig');
+      return safe.replace(re, '<mark>$1</mark>');
     }
 
-    const tbody = document.getElementById('tbody');
-    const msg   = document.getElementById('msg');
-    let DATA = [];
+    function passesFilter(row){
+      const t = String(row['Event Type']||'').toLowerCase();
+      if(FILTER==='combined') return t.includes('combined rehearsal');
+      if(FILTER==='instudio') return t.includes('in-studio') || t.includes('in studio');
+      if(FILTER==='show') return t.includes('show');
+      return true;
+    }
+    function matchesQuery(row){
+      if(!QUERY) return true;
+      const s = QUERY.toLowerCase();
+      return COLS.some(k => String(row[k]||'').toLowerCase().includes(s));
+    }
 
-    function render(rows){
-      tbody.innerHTML='';
+    /* Desktop table */
+    function renderTable(rows){
       if(!rows.length){
         tbody.innerHTML = `<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
         return;
       }
-      const html = rows.map(r=>`
+      tbody.innerHTML = rows.map(r=>`
         <tr>
           <td>${asBadge(r['Event Type'])}</td>
-          <td>${escHtml(r['Event Day & Date']||'')}</td>
-          <td>${escHtml(r['Student Name']||'')}</td>
-          <td>${escHtml(r['Event Location']||'')}</td>
-          <td>${escHtml(r['Reporting Time']||'')}</td>
-          <td>${escHtml(r['Event Time']||'')}</td>
-          <td>${escHtml(r['Dismissal Time']||'')}</td>
-          <td>${formatFullLook(r['Full Look Guide']||'')}</td>
-          <td>${escHtml(r['Footwear']||'')}</td>
-          <td>${escHtml(r['Dance Routine']||'')}</td>
-          <td>${escHtml(r['Class Name']||'')}</td>
-          <td>${escHtml(r['Remarks']||'')}</td>
+          <td>${withHighlight(r['Event Day & Date'], QUERY)}</td>
+          <td>${withHighlight(r['Student Name'], QUERY)}</td>
+          <td>${withHighlight(r['Event Location'], QUERY)}</td>
+          <td>${withHighlight(r['Reporting Time'], QUERY)}</td>
+          <td>${withHighlight(r['Event Time'], QUERY)}</td>
+          <td>${withHighlight(r['Dismissal Time'], QUERY)}</td>
+          <td>${formatFullLook(r['Full Look Guide'])}</td>
+          <td>${withHighlight(r['Footwear'], QUERY)}</td>
+          <td>${withHighlight(r['Dance Routine'], QUERY)}</td>
+          <td>${withHighlight(r['Class Name'], QUERY)}</td>
+          <td>${withHighlight(r['Remarks'], QUERY)}</td>
         </tr>`).join('');
-      tbody.innerHTML = html;
     }
 
-    function searchAll(q){
-      if(!q) return DATA;
-      const s = q.toLowerCase();
-      return DATA.filter(row => COLS.some(k => String(row[k]||'').toLowerCase().includes(s)));
+    /* Mobile cards */
+    function renderCards(rows){
+      if(!rows.length){
+        cards.innerHTML = `<div class="helper">No results</div>`;
+        return;
+      }
+      cards.innerHTML = rows.map(r=>{
+        const times = `
+          <div class="times">
+            <div class="item"><span class="label">Reporting</span>${withHighlight(r['Reporting Time'], QUERY)}</div>
+            <div class="item"><span class="label">Event</span>${withHighlight(r['Event Time'], QUERY)}</div>
+            <div class="item"><span class="label">Dismissal</span>${withHighlight(r['Dismissal Time'], QUERY)}</div>
+          </div>`;
+        return `
+          <div class="row-card">
+            <div class="row-head">
+              <div class="row-title">${withHighlight(r['Student Name'], QUERY)}</div>
+              <div class="chip-inline">${asBadge(r['Event Type'])}</div>
+            </div>
+            <div class="row-sub">${withHighlight(r['Event Day & Date'], QUERY)}</div>
+
+            <div class="row-grid" style="margin-top:8px">
+              <div class="item"><span class="label">Location</span>${withHighlight(r['Event Location'], QUERY)}</div>
+              <div class="item"><span class="label">Full Look</span>${formatFullLook(r['Full Look Guide'])}</div>
+              <div class="item"><span class="label">Footwear</span>${withHighlight(r['Footwear'], QUERY)}</div>
+              <div class="item"><span class="label">Dance Routine</span>${withHighlight(r['Dance Routine'], QUERY)}</div>
+              <div class="item"><span class="label">Class Name</span>${withHighlight(r['Class Name'], QUERY)}</div>
+            </div>
+
+            ${times}
+
+            ${r['Remarks'] ? `<div class="remark"><span class="label">Remarks</span>${withHighlight(r['Remarks'], QUERY)}</div>`:''}
+          </div>`;
+      }).join('');
+    }
+
+    function render(){
+      const rows = RAW.filter(r => passesFilter(r) && matchesQuery(r));
+      renderTable(rows);
+      renderCards(rows);
     }
 
     async function load(){
       try{
         msg.classList.add('hidden'); msg.textContent='';
+        const CSV_URL = `${BASE_CSV_URL}&cachebust=${Date.now()}`;
         const res = await fetch(CSV_URL, { cache:'no-store' });
         if(!res.ok){ const t=await res.text(); throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`); }
         const csv = await res.text();
-        DATA = csvToObjects(csv).map(o=>{const x={};COLS.forEach(k=>x[k]=o[k]??'');return x;});
-        render(DATA);
+        const objs = csvToObjects(csv);
+        RAW = objs.map(o => { const x={}; COLS.forEach(k => x[k] = o[k] ?? ""); return x; });
+        render();
       }catch(e){
         console.error('Load failed', e);
         msg.textContent='Failed to load data. Please check the CSV link or sharing.';
         msg.classList.remove('hidden');
         tbody.innerHTML = `<tr><td colspan="12" class="muted" style="padding:12px;">${escHtml(e.message)}</td></tr>`;
+        cards.innerHTML = `<div class="helper">${escHtml(e.message)}</div>`;
       }
     }
 
-    document.getElementById('search').addEventListener('input', (e)=>{
-      render(searchAll(e.target.value.trim()));
+    // Events
+    searchEl.addEventListener('input', (e)=>{ QUERY = e.target.value.trim(); render(); });
+    chips.forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        chips.forEach(c=>{ c.classList.remove('active'); c.setAttribute('aria-selected','false'); });
+        chip.classList.add('active');
+        chip.setAttribute('aria-selected','true');
+        FILTER = chip.dataset.filter;
+        render();
+      });
     });
 
+    // Initial load
     load();
+    // Optional: auto-refresh
+    // setInterval(load, 5 * 60 * 1000);
   </script>
 </body>
 </html>
