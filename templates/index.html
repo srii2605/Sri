@@ -19,16 +19,15 @@
       --hl:#fff3bf;
       --card-bg:#ffffff;
 
-      --fs-th:12px;      /* table head & chip text */
-      --fs-td:13px;      /* table body & card text */
-      --fs-label:11px;   /* small grey labels in cards */
+      --fs-th:12px;
+      --fs-td:13px;
+      --fs-label:11px;
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 
-    /* Layout */
     .container{max-width:1800px;margin:32px auto;padding:0 16px}
-    h1{font-size:32px;font-weight:800;letter-spacing:.2px;margin:0 0 8px}
+    h1{font-size:32px;font-weight:800;margin:0 0 8px}
     .underline-title{font-size:18px;font-weight:700;margin:4px 0 20px;position:relative;display:inline-block}
     .underline-title::after{content:"";position:absolute;left:0;bottom:-4px;height:3px;width:100%;background:linear-gradient(90deg,#111827,transparent 80%);border-radius:2px}
 
@@ -48,7 +47,7 @@
       border:1px solid var(--line);
       background:var(--chip-bg);
       color:var(--chip-on);
-      border-radius:10px; /* squarish */
+      border-radius:10px;
       padding:8px 12px;
       font-size:var(--fs-th);
       font-weight:600;
@@ -60,13 +59,12 @@
       border-color:var(--chip-active-bg);
     }
 
-    /* Table (desktop) */
+    /* Table */
     .table-wrap{display:block; overflow:visible;}
-    table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;margin-top:12px}
+    table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:12px}
     thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
     tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word}
     tbody tr:nth-child(even){background:var(--row-alt);}
-    .bold{font-weight:700}
 
     .badge{
       display:inline-flex; align-items:center;
@@ -77,22 +75,37 @@
     .badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
     .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
 
-    /* Force one-line in key columns */
-    td:nth-child(1),
+    /* Times single-line */
     td:nth-child(5),
     td:nth-child(6),
     td:nth-child(7){ white-space:nowrap; }
-    td:nth-child(1) br,
     td:nth-child(5) br,
     td:nth-child(6) br,
     td:nth-child(7) br{ display:none; }
+
+    /* Event Type column wider & wraps */
+    thead th:first-child,
+    tbody td:first-child{
+      width:240px;
+      white-space:normal !important;
+      word-break:break-word;
+      overflow-wrap:anywhere;
+    }
+    tbody td:first-child .badge{
+      display:inline-block;
+      white-space:normal;
+      overflow-wrap:anywhere;
+      line-height:1.1;
+      padding:4px 8px;
+    }
+    td:nth-child(1) br{ display:inline; }
 
     .helper{color:var(--muted);font-size:13px;margin:10px 0 0;text-align:center}
     .hidden{display:none}
     a.link-pill{font-weight:600;text-decoration:none;border-bottom:1px dashed currentColor}
     mark{background:var(--hl);padding:0 .1em;border-radius:2px}
 
-    /* Mobile cards (hidden on desktop) */
+    /* Mobile cards */
     #cards{ display:none; gap:12px; margin-top:12px}
     .row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:12px}
     .row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
@@ -105,10 +118,9 @@
     .remark{margin-top:8px;font-size:var(--fs-td)}
     .chip-inline{display:inline-flex;gap:6px;flex-wrap:wrap}
 
-    /* Swap at 900px: desktop table off, mobile cards on */
     @media (max-width: 900px){
       .container{max-width:100%; padding:0 12px}
-      .grid{grid-template-columns:1fr} /* stack info cards */
+      .grid{grid-template-columns:1fr}
       .table-wrap{ display:none; }
       #cards{ display:grid; }
       .chips{ gap:6px; }
@@ -128,12 +140,11 @@
     <h1>ATJ ANNUAL RECITAL 2025</h1>
     <div class="underline-title">REHEARSAL &amp; PERFORMANCE SCHEDULE:</div>
 
-    <!-- Split header -->
     <div class="grid" aria-label="Locations">
       <div class="card">
         <h3>Combined Rehearsals - at ATJ outlets:</h3>
         <div class="muted">
-          <div><strong>Forum The Shopping Mall:</strong> 583 Orchard Road, #02–05/06/07, Singapore 238884</div>
+          <div><strong>Forum:</strong> 583 Orchard Road, #02–05/06/07, Singapore 238884</div>
           <div><strong>I12 Katong:</strong> 112 East Coast Road, #03–14/15, Singapore 428802</div>
           <div><strong>10 Winstedt Road:</strong> #01–05/06/07/08, Singapore 227977</div>
           <div><strong>Prinsep:</strong> 36 Prinsep St, Level 4, Singapore 188648</div>
@@ -148,12 +159,10 @@
       </div>
     </div>
 
-    <!-- Controls -->
     <div class="controls">
       <input id="search" class="search" placeholder="Search all columns…" aria-label="Search all columns"/>
     </div>
 
-    <!-- Chips -->
     <div class="chips" role="tablist" aria-label="Quick filters">
       <div class="chip active" data-filter="all" role="tab" aria-selected="true">⭐ All</div>
       <div class="chip" data-filter="combined" role="tab" aria-selected="false">👥 Combined Rehearsal</div>
@@ -163,7 +172,6 @@
 
     <div id="msg" class="helper hidden"></div>
 
-    <!-- Desktop table -->
     <div class="table-wrap" aria-live="polite">
       <table>
         <thead>
@@ -186,7 +194,6 @@
       </table>
     </div>
 
-    <!-- Mobile card list -->
     <div id="cards" aria-live="polite"></div>
   </div>
 
@@ -209,7 +216,6 @@
     let FILTER = 'all';
     let QUERY  = '';
 
-    /* -------- Robust CSV parsing (handles quotes/commas/newlines) -------- */
     function csvToRows(text){
       const rows=[]; let cur=[], i=0, field='', inQ=false;
       while(i<text.length){
@@ -237,17 +243,14 @@
       });
     }
 
-    /* Utils */
-    function escHtml(s){return String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
+    function escHtml(s){return String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
     function escapeRegExp(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
     const oneLine = (s) => {
       let v = String(s ?? '').replace(/\s*[\r\n]+\s*/g, ' ');
-      // remove one pair of wrapping quotes (e.g., "Monday, 29th September")
       v = v.replace(/^"(.*)"$/,'$1');
       return v;
     };
 
-    /* Render helpers */
     function formatFullLook(text){
       if(!text) return '';
       const t = String(text).trim();
@@ -273,7 +276,6 @@
       return safe.replace(re, '<mark>$1</mark>');
     }
 
-    /* Filters */
     function passesFilter(row){
       const t = String(row['Event Type']||'').toLowerCase();
       if(FILTER==='combined') return t.includes('combined rehearsal');
@@ -287,105 +289,56 @@
       return COLS.some(k => String(row[k]||'').toLowerCase().includes(s));
     }
 
-    /* Desktop table */
     function renderTable(rows){
-      if(!rows.length){
-        tbody.innerHTML = `<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
-        return;
-      }
-      tbody.innerHTML = rows.map(r=>`
+      if(!rows.length){tbody.innerHTML=`<tr><td colspan="12">No results</td></tr>`;return;}
+      tbody.innerHTML=rows.map(r=>`
         <tr>
           <td>${asBadge(r['Event Type'])}</td>
-          <td>${withHighlight(r['Event Day & Date'], QUERY)}</td>
-          <td>${withHighlight(r['Student Name'], QUERY)}</td>
-          <td>${withHighlight(r['Event Location'], QUERY)}</td>
-          <td>${withHighlight(r['Reporting Time'], QUERY)}</td>
-          <td>${withHighlight(r['Event Time'], QUERY)}</td>
-          <td>${withHighlight(r['Dismissal Time'], QUERY)}</td>
+          <td>${withHighlight(r['Event Day & Date'],QUERY)}</td>
+          <td>${withHighlight(r['Student Name'],QUERY)}</td>
+          <td>${withHighlight(r['Event Location'],QUERY)}</td>
+          <td>${withHighlight(r['Reporting Time'],QUERY)}</td>
+          <td>${withHighlight(r['Event Time'],QUERY)}</td>
+          <td>${withHighlight(r['Dismissal Time'],QUERY)}</td>
           <td>${formatFullLook(r['Full Look Guide'])}</td>
-          <td>${withHighlight(r['Footwear'], QUERY)}</td>
-          <td>${withHighlight(r['Dance Routine'], QUERY)}</td>
-          <td>${withHighlight(r['Class Name'], QUERY)}</td>
-          <td>${withHighlight(r['Remarks'], QUERY)}</td>
+          <td>${withHighlight(r['Footwear'],QUERY)}</td>
+          <td>${withHighlight(r['Dance Routine'],QUERY)}</td>
+          <td>${withHighlight(r['Class Name'],QUERY)}</td>
+          <td>${withHighlight(r['Remarks'],QUERY)}</td>
         </tr>`).join('');
     }
 
-    /* Mobile cards */
     function renderCards(rows){
-      if(!rows.length){
-        cards.innerHTML = `<div class="helper">No results</div>`;
-        return;
-      }
-      cards.innerHTML = rows.map(r=>{
-        const times = `
-          <div class="times">
-            <div class="item"><span class="label">Reporting Time</span>${withHighlight(r['Reporting Time'], QUERY)}</div>
-            <div class="item"><span class="label">Event Time</span>${withHighlight(r['Event Time'], QUERY)}</div>
-            <div class="item"><span class="label">Dismissal Time</span>${withHighlight(r['Dismissal Time'], QUERY)}</div>
-          </div>`;
-        return `
-          <div class="row-card">
-            <div class="row-head">
-              <div class="row-title">${withHighlight(r['Student Name'], QUERY)}</div>
-              <div class="chip-inline">${asBadge(r['Event Type'])}</div>
-            </div>
-            <div class="row-sub">${withHighlight(r['Event Day & Date'], QUERY)}</div>
-
-            <div class="row-grid" style="margin-top:8px">
-              <div class="item"><span class="label">Location</span>${withHighlight(r['Event Location'], QUERY)}</div>
-              <div class="item"><span class="label">Full Look Guide</span>${formatFullLook(r['Full Look Guide'])}</div>
-              <div class="item"><span class="label">Footwear</span>${withHighlight(r['Footwear'], QUERY)}</div>
-              <div class="item"><span class="label">Dance Routine</span>${withHighlight(r['Dance Routine'], QUERY)}</div>
-              <div class="item"><span class="label">Class Name</span>${withHighlight(r['Class Name'], QUERY)}</div>
-            </div>
-
-            ${times}
-
-            ${r['Remarks'] ? `<div class="remark"><span class="label">Remarks</span>${withHighlight(r['Remarks'], QUERY)}</div>`:''}
-          </div>`;
-      }).join('');
+      if(!rows.length){cards.innerHTML=`<div>No results</div>`;return;}
+      cards.innerHTML=rows.map(r=>`
+        <div class="row-card">
+          <div class="row-head">
+            <div class="row-title">${withHighlight(r['Student Name'],QUERY)}</div>
+            <div class="chip-inline">${asBadge(r['Event Type'])}</div>
+          </div>
+          <div class="row-sub">${withHighlight(r['Event Day & Date'],QUERY)}</div>
+        </div>`).join('');
     }
 
     function render(){
-      const rows = RAW.filter(r => passesFilter(r) && matchesQuery(r));
-      renderTable(rows);
-      renderCards(rows);
+      const rows=RAW.filter(r=>passesFilter(r)&&matchesQuery(r));
+      renderTable(rows);renderCards(rows);
     }
 
     async function load(){
       try{
-        msg.classList.add('hidden'); msg.textContent='';
-        const res = await fetch(`${BASE_CSV_URL}&cachebust=${Date.now()}`, { cache:'no-store' });
-        if(!res.ok){ const t=await res.text(); throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`); }
-        const csv = await res.text();
-        const objs = csvToObjects(csv);
-        RAW = objs.map(o => { const x={}; COLS.forEach(k => x[k] = o[k] ?? ""); return x; });
+        const res=await fetch(`${BASE_CSV_URL}&cachebust=${Date.now()}`);
+        const csv=await res.text();
+        const objs=csvToObjects(csv);
+        RAW=objs.map(o=>{const x={};COLS.forEach(k=>x[k]=o[k]??"");return x;});
         render();
-      }catch(e){
-        console.error('Load failed', e);
-        msg.textContent='Failed to load data. Please check the CSV link or sharing.';
-        msg.classList.remove('hidden');
-        tbody.innerHTML = `<tr><td colspan="12" class="muted" style="padding:12px;">${escHtml(e.message)}</td></tr>`;
-        cards.innerHTML = `<div class="helper">${escHtml(e.message)}</div>`;
-      }
+      }catch(e){console.error(e);}
     }
 
-    // Events
-    searchEl.addEventListener('input', (e)=>{ QUERY = e.target.value.trim(); render(); });
-    chips.forEach(chip=>{
-      chip.addEventListener('click', ()=>{
-        chips.forEach(c=>{ c.classList.remove('active'); c.setAttribute('aria-selected','false'); });
-        chip.classList.add('active');
-        chip.setAttribute('aria-selected','true');
-        FILTER = chip.dataset.filter;   // 'all' | 'combined' | 'tech' | 'show'
-        render();
-      });
-    });
+    searchEl.addEventListener('input',e=>{QUERY=e.target.value.trim();render();});
+    chips.forEach(chip=>{chip.addEventListener('click',()=>{chips.forEach(c=>c.classList.remove('active'));chip.classList.add('active');FILTER=chip.dataset.filter;render();});});
 
-    // Initial load
     load();
-    // Optional: auto-refresh
-    // setInterval(load, 5 * 60 * 1000);
   </script>
 </body>
 </html>
