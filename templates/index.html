@@ -212,7 +212,42 @@
       // Build header and fetch data
       buildHeader();
 
-      $.getJSON("/data")
+      <script>
+  // Build header and fetch CSV directly
+  buildHeader();
+
+  function parseCSV(text) {
+    const lines = text.split(/\r?\n/).filter(Boolean);
+    const headers = lines[0].split(",");
+    return lines.slice(1).map(line => {
+      const cols = line.split(",");
+      const row = {};
+      headers.forEach((h, i) => row[h.trim()] = cols[i] || "");
+      return row;
+    });
+  }
+
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&gid=785015495";
+
+  $.ajax({ url: CSV_URL, dataType: "text" })
+    .done(function (csvText) {
+      const rows = parseCSV(csvText);
+      renderTable(rows);
+
+      $("#searchInput").on("input", function () {
+        const q = normalize($(this).val());
+        renderTable(filterRows(rows, q));
+      });
+
+      $("#status").text("");
+    })
+    .fail(function () {
+      $("#status").text("Failed to load CSV data.");
+      renderTable([]);
+    });
+</script>
+
+
         .done(function (rows) {
           if (!Array.isArray(rows)) {
             $status.text("Unexpected data format from server.");
