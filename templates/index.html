@@ -2,104 +2,152 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ATJ ANNUAL RECITAL 2025</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
     :root{
-      --bg:#ffffff; --text:#111827; --muted:#6b7280; --line:#e5e7eb;
-      --badge-green-bg:#ecfdf5; --badge-green:#065f46;
-      --badge-purple-bg:#f5f3ff; --badge-purple:#5b21b6;
-      --badge-blue-bg:#eff6ff; --badge-blue:#1e40af;
-      --row-alt:#fafafa;
+      --bg:#ffffff;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --line:#e2e8f0;
+
+      --tag-green:#16a34a20;
+      --tag-green-border:#16a34a;
+      --tag-purple:#7c3aed20;
+      --tag-purple-border:#7c3aed;
+      --tag-blue:#2563eb20;
+      --tag-blue-border:#2563eb;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    /* ✅ Wider page so ALL columns fit without horizontal scroll */
-    .container{max-width:1800px;margin:32px auto;padding:0 16px}
-    h1{font-size:32px;font-weight:800;letter-spacing:.2px;margin:0 0 8px}
-    .underline-title{font-size:18px;font-weight:700;margin:4px 0 20px;position:relative;display:inline-block}
-    .underline-title::after{content:"";position:absolute;left:0;bottom:-4px;height:3px;width:100%;background:linear-gradient(90deg,#111827,transparent 80%);border-radius:2px}
 
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:18px 0 12px}
-    .card{border:1px solid var(--line);border-radius:14px;padding:16px}
-    .card h3{margin:0 0 6px;font-size:18px}
-    .muted{color:var(--muted);font-size:14px;line-height:1.45}
-    .muted div{margin:4px 0}
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0; padding:24px;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--ink); background:var(--bg);
+    }
 
-    .search-wrap{margin:16px 0;text-align:center}
-    .search{width:100%;max-width:640px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px}
+    .page{
+      max-width: 1280px;
+      margin: 0 auto;
+    }
 
-    /* ✅ No inner scroll; fixed widths so everything fits */
-    .table-wrap{overflow:visible;}
-    table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;margin-top:20px}
-    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:12px;padding:10px;border-bottom:1px solid var(--line)}
-    tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top;white-space:normal;word-break:break-word}
-    tbody tr:nth-child(even){background:var(--row-alt);}
-    .bold{font-weight:700}
+    h1{
+      margin:0 0 6px 0; font-size:28px; letter-spacing:0.3px;
+      font-weight:800;
+    }
+    .kicker{
+      font-weight:700; margin:0 0 18px 0; font-size:14px;
+    }
+    .kicker u{ text-decoration: underline; text-underline-offset: 3px; }
 
-    .badge{display:inline-block;padding:3px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1}
-    .badge.green{background:var(--badge-green-bg);color:var(--badge-green)}
-    .badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
-    .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
+    /* info cards row */
+    .cards{
+      display:grid; grid-template-columns: 1.1fr 1fr; gap:16px; margin-bottom:16px;
+    }
+    .card{
+      border:1px solid var(--line); border-radius:12px; padding:14px 16px;
+      background:#fafafa;
+    }
+    .card h3{
+      margin:0 0 6px 0; font-size:16px;
+    }
+    .card p{ margin:4px 0; font-size:13px; color:var(--muted) }
 
-    .helper{color:var(--muted);font-size:13px;margin:10px 0 0;text-align:center}
-    .hidden{display:none}
-    a.link-pill{font-weight:600;text-decoration:none;border-bottom:1px dashed currentColor}
+    /* search */
+    .searchbar{
+      margin:10px 0 12px; display:flex; gap:8px; align-items:center;
+    }
+    .searchbar input{
+      width:420px; max-width:100%;
+      padding:10px 12px; border:1px solid var(--line); border-radius:10px; font-size:14px;
+    }
+
+    /* table */
+    .table-wrap{
+      border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff;
+    }
+    table{
+      border-collapse:separate; border-spacing:0; width:100%;
+      table-layout: fixed; /* prevents horizontal scroll, forces wrapping */
+      font-size:13px;
+    }
+    thead th{
+      position:sticky; top:0; z-index:2;
+      background:#f8fafc; border-bottom:1px solid var(--line);
+      text-align:left; padding:10px; font-weight:700;
+    }
+    tbody td{
+      border-top:1px solid var(--line); padding:10px; vertical-align:top; word-wrap:break-word; overflow-wrap:anywhere;
+    }
+    tbody tr:nth-child(even){ background:#fcfcfd; }
+
+    /* suggested column widths that balance the page without scrolling */
+    th:nth-child(1){ width:126px; }    /* Event Type */
+    th:nth-child(2){ width:132px; }    /* Day & Date */
+    th:nth-child(3){ width:160px; }    /* Student Name */
+    th:nth-child(4){ width:120px; }    /* Location */
+    th:nth-child(5){ width:88px; }     /* Reporting */
+    th:nth-child(6){ width:96px; }     /* Event Time */
+    th:nth-child(7){ width:96px; }     /* Dismissal */
+    th:nth-child(8){ width:180px; }    /* Full Look Guide */
+    th:nth-child(9){ width:120px; }    /* Footwear */
+    th:nth-child(10){ width:170px; }   /* Dance Routine */
+    th:nth-child(11){ width:170px; }   /* Class Name */
+    th:nth-child(12){ width:auto; }    /* Remarks (flex) */
+
+    /* event-type tags */
+    .tag{
+      display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; font-weight:700; border:1px solid;
+      white-space:nowrap;
+    }
+    .tag.green{ background:var(--tag-green); border-color:var(--tag-green-border); color:#065f46; }
+    .tag.purple{ background:var(--tag-purple); border-color:var(--tag-purple-border); color:#4c1d95; }
+    .tag.blue{ background:var(--tag-blue); border-color:var(--tag-blue-border); color:#1e3a8a; }
+
+    /* small helper text inside cells */
+    .muted{ color:var(--muted) }
+
+    @media (max-width: 960px){
+      .cards{ grid-template-columns:1fr; }
+      .searchbar input{ width:100% }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="page">
     <h1>ATJ ANNUAL RECITAL 2025</h1>
-    <div class="underline-title">REHEARSAL &amp; PERFORMANCE SCHEDULE:</div>
+    <p class="kicker"><u>REHEARSAL &amp; PERFORMANCE SCHEDULE:</u></p>
 
-    <!-- Split header -->
-    <div class="grid">
+    <!-- Info cards -->
+    <div class="cards">
       <div class="card">
         <h3>Combined Rehearsals – at ATJ outlets:</h3>
-        <div class="muted">
-          <div><strong>Forum The Shopping Mall:</strong> 583 Orchard Road, #02–05/06/07, Singapore 238884</div>
-          <div><strong>I12 Katong:</strong> 112 East Coast Road, #03–14/15, Singapore 428802</div>
-          <div><strong>10 Winstedt Road:</strong> #01–05/06/07/08, Singapore 227977</div>
-          <div><strong>Prinsep:</strong> 36 Prinsep St, Level 4, Singapore 188648</div>
-        </div>
+        <p><strong>Forum The Shopping Mall:</strong> 583 Orchard Road, #02-05/06/07, Singapore 238884</p>
+        <p><strong>I12 Katong:</strong> 112 East Coast Road, #03-14/15, Singapore 428802</p>
+        <p><strong>10 Winstedt Road:</strong> #01-05/06/07/08, Singapore 227977</p>
+        <p><strong>Prinsep:</strong> 36 Prinsep St, Level 4, Singapore 188648</p>
       </div>
       <div class="card">
         <h3>In-Studio Tech &amp; Mediacorp:</h3>
-        <div class="muted">
-          <div><strong>In-Studio Tech:</strong> Performance &amp; Training Centre, 36 Prinsep St, 04–01, S188638</div>
-          <div><strong>Mediacorp Tech &amp; Shows:</strong> The Theatre at Mediacorp, 1 Stars Ave, S138507</div>
-        </div>
+        <p><strong>In-Studio Tech:</strong> Performance &amp; Training Centre, 36 Prinsep St, 04-01, S188638</p>
+        <p><strong>Mediacorp Tech &amp; Shows:</strong> The Theatre at Mediacorp, 1 Stars Ave, S138507</p>
       </div>
     </div>
 
-    <div class="search-wrap">
-      <input id="search" class="search" placeholder="Search all columns…" />
-      <div id="msg" class="helper hidden"></div>
+    <!-- Search -->
+    <div class="searchbar">
+      <input type="text" id="search" placeholder="Search all columns…">
+      <span class="muted">Tip: try a student name or class</span>
     </div>
 
+    <!-- Table -->
     <div class="table-wrap">
-      <table>
-        <!-- ✅ Fixed column widths so all fit on a wide desktop without horizontal scroll -->
-        <colgroup>
-          <col style="width:160px"> <!-- Event Type -->
-          <col style="width:150px"> <!-- Date -->
-          <col style="width:190px"> <!-- Student -->
-          <col style="width:160px"> <!-- Location -->
-          <col style="width:100px"> <!-- Reporting -->
-          <col style="width:100px"> <!-- Event Time -->
-          <col style="width:110px"> <!-- Dismissal -->
-          <col style="width:120px"> <!-- Costume -->
-          <col style="width:140px"> <!-- Footwear -->
-          <col style="width:120px"> <!-- Makeup -->
-          <col style="width:110px"> <!-- Hair -->
-          <col style="width:180px"> <!-- Dance Routine -->
-          <col style="width:150px"> <!-- Class Name -->
-          <col style="width:150px"> <!-- Remarks -->
-        </colgroup>
+      <table id="data-table">
         <thead>
           <tr>
             <th>Event Type</th>
@@ -109,133 +157,92 @@
             <th>Reporting Time</th>
             <th>Event Time</th>
             <th>Dismissal Time</th>
-            <th>Costume</th>
+            <th>Full Look Guide</th>
             <th>Footwear</th>
-            <th>Makeup</th>
-            <th>Hair</th>
             <th>Dance Routine</th>
             <th>Class Name</th>
             <th>Remarks</th>
           </tr>
         </thead>
-        <tbody id="tbody"></tbody>
+        <tbody></tbody>
       </table>
     </div>
   </div>
 
   <script>
-    const CSV_URL = "https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&gid=785015495";
-    const COLS = [
-      'Event Type','Event Day & Date','Student Name','Event Location',
-      'Reporting Time','Event Time','Dismissal Time','Costume','Footwear',
-      'Makeup','Hair','Dance Routine','Class Name','Remarks'
-    ];
+    // ====== helpers ======
+    function tagClassFor(eventTypeRaw){
+      if(!eventTypeRaw) return "";
+      const t = String(eventTypeRaw).toLowerCase();
 
-    function csvToRows(text){
-      const rows=[]; let cur=[], i=0, field='', inQ=false;
-      while(i<text.length){
-        const c=text[i];
-        if(inQ){
-          if(c==='"' && text[i+1]==='"'){ field+='"'; i+=2; continue; }
-          if(c==='"'){ inQ=false; i++; continue; }
-          field+=c; i++; continue;
-        }else{
-          if(c==='"'){ inQ=true; i++; continue; }
-          if(c===','){ cur.push(field); field=''; i++; continue; }
-          if(c==='\n' || c==='\r'){ if(c==='\r' && text[i+1]==='\n') i++; cur.push(field); rows.push(cur); cur=[]; field=''; i++; continue; }
-          field+=c; i++; continue;
-        }
-      }
-      if(field.length || cur.length){ cur.push(field); rows.push(cur); }
-      return rows;
+      // green: Combined Rehearsal 1/2/3
+      if (t.includes("combined rehearsal")) return "green";
+
+      // purple: In-Studio Tech (any variation)
+      if (t.includes("in-studio") || t.includes("instudio") || t.includes("in studio")) return "purple";
+
+      // blue: Show Day 1/2 (or anything with 'show')
+      if (t.includes("show")) return "blue";
+
+      return ""; // default
     }
-    function csvToObjects(csvText) {
-      const rows = csvToRows(csvText);
-      if (!rows.length) return [];
-      const headers = rows[0].map(h => h.trim());
-      return rows.slice(1).map(r => {
-        const o={}; headers.forEach((h,i)=>{ o[h]=r[i] ?? ""; }); return o;
+
+    // Turns any URLs inside a string into clickable links.
+    function linkify(text){
+      if (!text) return "";
+      const urlRegex = /((https?:\/\/)[^\s)]+)|(\bwww\.[^\s)]+)/gi;
+      return String(text).replace(urlRegex, function(url){
+        let href = url;
+        if (!/^https?:\/\//i.test(url)) href = "https://" + url;
+        // display a friendly label if the cell is just a URL
+        const label = "Open link";
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
       });
     }
 
-    function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
-    function fmtLink(text, labelFor){
-      if(!text) return '';
-      const t=String(text).trim();
-      if(/^https?:\/\//i.test(t)){
-        const label = labelFor==='Costume' ? 'Costume&nbsp;Link'
-                    : labelFor==='Makeup'  ? 'Makeup&nbsp;Tutorial'
-                    : labelFor==='Hair'    ? 'Hair&nbsp;Tutorial'
-                    : 'Link';
-        return `<a class="link-pill" href="${escHtml(t)}" target="_blank" rel="noopener">${label}</a>`;
-      }
-      return escHtml(t).replace(/\n/g,"<br>");
-    }
-    function asBadge(type){
-      const t=(type||'').toLowerCase();
-      if(t.includes('combined rehearsal')) return `<span class="badge green">${escHtml(type)}</span>`;
-      if(t.includes('in-studio') || t.includes('in studio')) return `<span class="badge purple">${escHtml(type)}</span>`;
-      if(t.includes('show day')) return `<span class="badge blue">${escHtml(type)}</span>`;
-      return `<span class="badge">${escHtml(type||'')}</span>`;
+    // Render event type with a colored badge
+    function renderEventType(value){
+      const klass = tagClassFor(value);
+      const safe = value ? value : "";
+      return klass ? `<span class="tag ${klass}">${safe}</span>` : safe;
     }
 
-    const tbody = document.getElementById('tbody');
-    const msg   = document.getElementById('msg');
-    let DATA = [];
+    // ====== main ======
+    $(function(){
+      const DATA_URL = "YOUR_SHEET_JSON_URL_HERE"; // <- replace with your JSON endpoint
 
-    function render(rows){
-      tbody.innerHTML='';
-      if(!rows.length){
-        tbody.innerHTML = `<tr><td colspan="14" class="muted" style="padding:12px;">No results</td></tr>`;
-        return;
-      }
-      const html = rows.map(r=>`
-        <tr>
-          <td>${asBadge(r['Event Type'])}</td>
-          <td>${escHtml(r['Event Day & Date']||'')}</td>
-          <td>${escHtml(r['Student Name']||'')}</td>
-          <td>${escHtml(r['Event Location']||'')}</td>
-          <td>${escHtml(r['Reporting Time']||'')}</td>
-          <td>${escHtml(r['Event Time']||'')}</td>
-          <td>${escHtml(r['Dismissal Time']||'')}</td>
-          <td>${fmtLink(r['Costume'],'Costume')}</td>
-          <td>${escHtml(r['Footwear']||'')}</td>
-          <td>${fmtLink(r['Makeup'],'Makeup')}</td>
-          <td>${fmtLink(r['Hair'],'Hair')}</td>
-          <td>${escHtml(r['Dance Routine']||'')}</td>
-          <td>${escHtml(r['Class Name']||'')}</td>
-          <td>${escHtml(r['Remarks']||'')}</td>
-        </tr>`).join('');
-      tbody.innerHTML = html;
-    }
+      $.getJSON(DATA_URL, function (rows) {
+        // if your endpoint wraps rows differently, adjust here (e.g., rows = rows.data)
+        let html = "";
+        rows.forEach(row => {
+          html += `
+            <tr>
+              <td>${renderEventType(row["Event Type"])}</td>
+              <td>${row["Event Day & Date"] || ""}</td>
+              <td>${row["Student Name"] || ""}</td>
+              <td>${row["Event Location"] || ""}</td>
+              <td>${row["Reporting Time"] || ""}</td>
+              <td>${row["Event Time"] || ""}</td>
+              <td>${row["Dismissal Time"] || ""}</td>
+              <td>${linkify(row["Full Look Guide"] || "NA")}</td>
+              <td>${row["Footwear"] || ""}</td>
+              <td>${row["Dance Routine"] || ""}</td>
+              <td>${row["Class Name"] || ""}</td>
+              <td>${row["Remarks"] || ""}</td>
+            </tr>
+          `;
+        });
+        $("#data-table tbody").html(html);
+      });
 
-    function searchAll(q){
-      if(!q) return DATA;
-      const s = q.toLowerCase();
-      return DATA.filter(row => COLS.some(k => String(row[k]||'').toLowerCase().includes(s)));
-    }
-
-    async function load(){
-      try{
-        msg.classList.add('hidden'); msg.textContent='';
-        const res = await fetch(CSV_URL, { cache:'no-store' });
-        if(!res.ok){ const t=await res.text(); throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`); }
-        const csv = await res.text();
-        DATA = csvToObjects(csv).map(o=>{const x={};COLS.forEach(k=>x[k]=o[k]??'');return x;});
-        render(DATA);
-      }catch(e){
-        console.error('Load failed', e);
-        msg.textContent='Failed to load data. Please check the CSV link or sharing.';
-        msg.classList.remove('hidden');
-        tbody.innerHTML = `<tr><td colspan="14" class="muted" style="padding:12px;">${escHtml(e.message)}</td></tr>`;
-      }
-    }
-
-    document.getElementById('search').addEventListener('input', (e)=>{
-      render(searchAll(e.target.value.trim()));
+      // simple all-columns search
+      $("#search").on("input", function(){
+        const q = $(this).val().toLowerCase();
+        $("#data-table tbody tr").each(function(){
+          $(this).toggle($(this).text().toLowerCase().indexOf(q) > -1);
+        });
+      });
     });
-
-    load();
   </script>
 </body>
 </html>
