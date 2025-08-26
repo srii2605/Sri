@@ -29,13 +29,13 @@
     .muted{color:var(--muted);font-size:14px;line-height:1.45}
     .muted div{margin:4px 0}
 
-    .search-wrap{margin:16px 0}
+    .search-wrap{margin:16px 0;text-align:center}
     .search{width:100%;max-width:640px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:14px}
 
-    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}
-    table{width:100%;border-collapse:separate;border-spacing:0}
-    thead th{position:sticky;top:0;background:#fafafa;z-index:1;text-align:left;font-weight:600;font-size:13px;padding:12px;border-bottom:1px solid var(--line)}
-    tbody td{padding:12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+    .table-wrap{overflow-x:auto; /* allow horizontal scroll only */}
+    table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:20px}
+    thead th{position:sticky;top:0;background:#fafafa;z-index:1;text-align:left;font-weight:600;font-size:13px;padding:14px;border-bottom:1px solid var(--line)}
+    tbody td{padding:14px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
     .bold{font-weight:700}
 
     .badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1}
@@ -43,7 +43,7 @@
     .badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
     .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
 
-    .helper{color:var(--muted);font-size:13px;margin:10px 0 0}
+    .helper{color:var(--muted);font-size:13px;margin:10px 0 0;text-align:center}
     .hidden{display:none}
     a.link-pill{font-weight:600;text-decoration:none;border-bottom:1px dashed currentColor}
   </style>
@@ -104,16 +104,13 @@
   </div>
 
   <script>
-    // ---------- CONFIG ----------
     const CSV_URL = "https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&gid=785015495";
-    // Column mapping (must match your CSV headers exactly)
     const COLS = [
       'Event Type','Event Day & Date','Student Name','Event Location',
       'Reporting Time','Event Time','Dismissal Time','Costume','Footwear',
       'Makeup','Hair','Dance Routine','Class Name','Remarks'
     ];
 
-    // ---------- CSV PARSER (robust) ----------
     function csvToRows(text){
       const rows=[]; let cur=[], i=0, field='', inQ=false;
       while(i<text.length){
@@ -125,10 +122,7 @@
         }else{
           if(c==='"'){ inQ=true; i++; continue; }
           if(c===','){ cur.push(field); field=''; i++; continue; }
-          if(c==='\n' || c==='\r'){
-            if(c==='\r' && text[i+1]==='\n') i++;
-            cur.push(field); rows.push(cur); cur=[]; field=''; i++; continue;
-          }
+          if(c==='\n' || c==='\r'){ if(c==='\r' && text[i+1]==='\n') i++; cur.push(field); rows.push(cur); cur=[]; field=''; i++; continue; }
           field+=c; i++; continue;
         }
       }
@@ -141,13 +135,10 @@
       if (!rows.length) return [];
       const headers = rows[0].map(h => h.trim());
       return rows.slice(1).map(r => {
-        const o = {};
-        headers.forEach((h, i) => { o[h] = r[i] ?? ""; });
-        return o;
+        const o={}; headers.forEach((h,i)=>{ o[h]=r[i] ?? ""; }); return o;
       });
     }
 
-    // ---------- RENDER HELPERS ----------
     function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
     function fmtLink(text, labelFor){
       if(!text) return '';
@@ -205,20 +196,13 @@
       return DATA.filter(row => COLS.some(k => String(row[k]||'').toLowerCase().includes(s)));
     }
 
-    // ---------- LOAD ----------
     async function load(){
       try{
         msg.classList.add('hidden'); msg.textContent='';
         const res = await fetch(CSV_URL, { cache:'no-store' });
         if(!res.ok){ const t=await res.text(); throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`); }
         const csv = await res.text();
-        const objects = csvToObjects(csv);
-
-        // Map to our COLS (in case sheet adds extra columns)
-        DATA = objects.map(o=>{
-          const x={}; COLS.forEach(k=>x[k]=o[k]??''); return x;
-        });
-
+        DATA = csvToObjects(csv).map(o=>{const x={};COLS.forEach(k=>x[k]=o[k]??'');return x;});
         render(DATA);
       }catch(e){
         console.error('Load failed', e);
