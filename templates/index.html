@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>ATJ ANNUAL RECITAL 2025</title>
 
-  <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
@@ -15,6 +14,7 @@
       --badge-green-bg:#ecfdf5; --badge-green:#065f46;
       --badge-purple-bg:#f5f3ff; --badge-purple:#5b21b6;
       --badge-blue-bg:#eff6ff; --badge-blue:#1e40af;
+      --row-alt:#fafafa;
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
@@ -32,10 +32,12 @@
     .search-wrap{margin:16px 0;text-align:center}
     .search{width:100%;max-width:640px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:14px}
 
-    .table-wrap{overflow-x:auto; /* allow horizontal scroll only */}
+    /* ✅ No vertical scroll box. Let table take full page height. */
+    .table-wrap{overflow-x:auto;}
     table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:20px}
-    thead th{position:sticky;top:0;background:#fafafa;z-index:1;text-align:left;font-weight:600;font-size:13px;padding:14px;border-bottom:1px solid var(--line)}
-    tbody td{padding:14px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:13px;padding:14px;border-bottom:1px solid var(--line)}
+    tbody td{padding:14px 10px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+    tbody tr:nth-child(even){background:var(--row-alt);} /* zebra rows */
     .bold{font-weight:700}
 
     .badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1}
@@ -111,6 +113,7 @@
       'Makeup','Hair','Dance Routine','Class Name','Remarks'
     ];
 
+    // CSV parsing (handles commas/quotes/newlines)
     function csvToRows(text){
       const rows=[]; let cur=[], i=0, field='', inQ=false;
       while(i<text.length){
@@ -129,7 +132,6 @@
       if(field.length || cur.length){ cur.push(field); rows.push(cur); }
       return rows;
     }
-
     function csvToObjects(csvText) {
       const rows = csvToRows(csvText);
       if (!rows.length) return [];
