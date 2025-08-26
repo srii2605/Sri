@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UDO-APAC X ATJ 2025</title>
+  <title>ANNUAL RECITAL 2025</title>
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      margin: 0; 
+      padding: 20px; 
     }
     h1 { margin-bottom: 5px; font-size: 2rem; }
     .header-info {
@@ -26,27 +26,17 @@
     .header-info p { margin: 5px 0; }
     .header-info strong { font-weight: bold; }
     hr { border: none; border-top: 1px solid #ddd; margin: 20px auto; width: 80%; }
-    #searchInput {
-      width: 60%;
-      max-width: 640px;
-      padding: 10px;
-      margin: 20px 0;
-      text-align: center;
+    #searchInput { 
+      width: 60%; 
+      max-width: 640px; 
+      padding: 10px; 
+      margin: 20px 0; 
+      text-align: center; 
     }
     .table-wrap { max-height: 72vh; overflow: auto; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: center;
-      vertical-align: top;
-    }
-    th {
-      background-color: #f2f2f2;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; vertical-align: top; }
+    th { background-color: #f2f2f2; position: sticky; top: 0; z-index: 1; }
     .bold { font-weight: bold; }
     .muted { color: #777; }
     a { text-decoration: underline; }
@@ -56,14 +46,19 @@
 
   <h1>ATJ ANNUAL RECITAL 2025</h1>
   <div class="header-info">
-    <p class="subtitle">REHEARSAL &amp; PERFORMANCE SCHEDULE:</p>
-    <p>Combined Rehearsals – at ATJ outlets</p>
-    <p>
-      <strong>In-Studio Tech Rehearsals:</strong><br>
-      Performance &amp; Training Centre, 36 Prinsep St, 04-01, S188638
+    <p class="subtitle">REHEARSAL & PERFORMANCE SCHEDULE:</p>
+    <p><strong>Combined Rehearsals – at ATJ outlets:</strong><br>
+      Forum The Shopping Mall: 583 Orchard Road, #02-05/06/07, Singapore 238884<br>
+      I12 Katong: 112 East Coast Road, #03-14/15, Singapore 428802<br>
+      10 Winstedt Road: #01-05/06/07/08, Singapore 227977<br>
+      Prinsep: 36 Prinsep St, Level 4, Singapore 188648
     </p>
     <p>
-      <strong>Mediacorp Tech &amp; Show Days:</strong><br>
+      <strong>In-Studio Tech Rehearsals:</strong><br>
+      Performance & Training Centre, 36 Prinsep St, 04-01, S188638
+    </p>
+    <p>
+      <strong>Mediacorp Tech & Show Days:</strong><br>
       The Theatre at Mediacorp, 1 Stars Avenue, S138507
     </p>
   </div>
@@ -85,10 +80,8 @@
 
   <script>
     $(function () {
-      // --- CONFIG: your working CSV export URL ---
       const CSV_URL = "https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&gid=785015495";
 
-      // Keys MUST match your CSV headers exactly
       const COLUMNS = [
         { key: "Event Type",         label: "Event Type" },
         { key: "Event Day & Date",   label: "Event Day & Date", bold: true },
@@ -106,7 +99,6 @@
         { key: "Remarks",            label: "Remarks" }
       ];
 
-      // Columns that should render as a fixed-label link if a URL is present
       const LINK_LABELS = {
         "Costume": "Costume Link",
         "Makeup": "Makeup Tutorial",
@@ -114,24 +106,14 @@
       };
       const LINK_COLUMNS = new Set(Object.keys(LINK_LABELS));
       const URL_RE = /https?:\/\/[^\s<>"')]+/i;
-
       const $status = $("#status");
 
       function normalize(v) { return String(v == null ? "" : v).toLowerCase().trim(); }
-
       function escHtml(s) {
-        return String(s)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
+        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
       }
       function escAttr(s) { return escHtml(s); }
-      function firstUrl(text) {
-        const m = URL_RE.exec(String(text || ""));
-        return m ? m[0] : null;
-      }
+      function firstUrl(text) { const m = URL_RE.exec(String(text||"")); return m ? m[0] : null; }
 
       function buildHeader() {
         const $row = $("#header-row").empty();
@@ -145,10 +127,10 @@
           const url = firstUrl(val);
           if (url) {
             const label = LINK_LABELS[colKey] || "Link";
-            return `<a href="${escAttr(url)}" target="_blank" rel="noopener noreferrer" title="${escAttr(url)}">${escHtml(label)}</a>`;
+            return `<a href="${escAttr(url)}" target="_blank" rel="noopener noreferrer">${escHtml(label)}</a>`;
           }
         }
-        return escHtml(val).replace(/\n/g, "<br>");
+        return escHtml(val).replace(/\n/g,"<br>");
       }
 
       function renderTable(rows) {
@@ -174,7 +156,7 @@
         );
       }
 
-      // --- Robust CSV parsing (handles commas, quotes, newlines) ---
+      // --- CSV parsing ---
       function csvToRows(text){
         const rows=[]; let cur=[], i=0, field='', inQ=false;
         while(i<text.length){
@@ -186,10 +168,7 @@
           }else{
             if(c==='"'){ inQ=true; i++; continue; }
             if(c===','){ cur.push(field); field=''; i++; continue; }
-            if(c==='\n' || c==='\r'){
-              if(c==='\r' && text[i+1]==='\n') i++;
-              cur.push(field); rows.push(cur); cur=[]; field=''; i++; continue;
-            }
+            if(c==='\n' || c==='\r'){ if(c==='\r' && text[i+1]==='\n') i++; cur.push(field); rows.push(cur); cur=[]; field=''; i++; continue; }
             field+=c; i++; continue;
           }
         }
@@ -202,25 +181,23 @@
         if (!rows.length) return [];
         const headers = rows[0].map(h => h.trim());
         return rows.slice(1).map(r => {
-          const o = {};
-          headers.forEach((h, i) => { o[h] = r[i] ?? ""; });
+          const o={};
+          headers.forEach((h,i)=>{ o[h]=r[i] ?? ""; });
           return o;
         });
       }
 
-      // --- Init: build header + fetch CSV ---
+      // --- Init ---
       buildHeader();
 
       $.ajax({ url: CSV_URL, dataType: "text", cache: false })
         .done(function (csvText) {
           const rows = csvToObjects(csvText);
           renderTable(rows);
-
           $("#searchInput").on("input", function () {
             const q = normalize($(this).val());
             renderTable(filterRows(rows, q));
           });
-
           $status.text("");
         })
         .fail(function () {
