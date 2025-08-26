@@ -300,9 +300,9 @@
       cards.innerHTML = rows.map(r=>{
         const times = `
           <div class="times">
-            <div class="item"><span class="label">Reporting</span>${withHighlight(r['Reporting Time'], QUERY)}</div>
-            <div class="item"><span class="label">Event</span>${withHighlight(r['Event Time'], QUERY)}</div>
-            <div class="item"><span class="label">Dismissal</span>${withHighlight(r['Dismissal Time'], QUERY)}</div>
+            <div class="item"><span class="label">Reporting Time</span>${withHighlight(r['Reporting Time'], QUERY)}</div>
+            <div class="item"><span class="label">Event Time</span>${withHighlight(r['Event Time'], QUERY)}</div>
+            <div class="item"><span class="label">Dismissal Time</span>${withHighlight(r['Dismissal Time'], QUERY)}</div>
           </div>`;
         return `
           <div class="row-card">
@@ -314,7 +314,7 @@
 
             <div class="row-grid" style="margin-top:8px">
               <div class="item"><span class="label">Location</span>${withHighlight(r['Event Location'], QUERY)}</div>
-              <div class="item"><span class="label">Full Look</span>${formatFullLook(r['Full Look Guide'])}</div>
+              <div class="item"><span class="label">Full Look Guide</span>${formatFullLook(r['Full Look Guide'])}</div>
               <div class="item"><span class="label">Footwear</span>${withHighlight(r['Footwear'], QUERY)}</div>
               <div class="item"><span class="label">Dance Routine</span>${withHighlight(r['Dance Routine'], QUERY)}</div>
               <div class="item"><span class="label">Class Name</span>${withHighlight(r['Class Name'], QUERY)}</div>
