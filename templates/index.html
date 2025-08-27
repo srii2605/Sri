@@ -17,12 +17,18 @@
       --row-alt:#fafafa;
       --chip-bg:#f3f4f6; --chip-on:#111827; --chip-active-bg:#111827; --chip-active:#ffffff;
       --hl:#fff3bf; --card-bg:#ffffff;
-      --fs-th:12px; --fs-td:13px; --fs-label:11px;
+
+      /* Bigger table text */
+      --fs-th:15px;   /* was 12px */
+      --fs-td:17px;   /* was 13px */
+      --fs-label:12px;/* was 11px */
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 
-    .container{max-width:1800px;margin:32px auto;padding:0 16px}
+    /* Full-width container with small gutter */
+    .container{max-width:100%;margin:32px auto;padding:0 24px}
+
     h1{font-size:32px;font-weight:800;letter-spacing:.2px;margin:0 0 8px}
     .underline-title{font-size:18px;font-weight:700;margin:4px 0 20px;position:relative;display:inline-block}
     .underline-title::after{content:"";position:absolute;left:0;bottom:-4px;height:3px;width:100%;background:linear-gradient(90deg,#111827,transparent 80%);border-radius:2px}
@@ -34,7 +40,7 @@
     .muted div{margin:4px 0}
 
     .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin:16px 0}
-    .search{flex:1 1 420px;max-width:640px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px}
+    .search{flex:1 1 420px;max-width:900px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:16px}
 
     /* Chips */
     .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
@@ -43,7 +49,7 @@
       border:1px solid var(--line);
       background:var(--chip-bg);
       color:var(--chip-on);
-      border-radius:10px; padding:8px 12px;
+      border-radius:10px; padding:10px 14px;
       font-size:var(--fs-th); font-weight:600; cursor:pointer; user-select:none;
     }
     .chip.active{ background:var(--chip-active-bg); color:var(--chip-active); border-color:var(--chip-active-bg); }
@@ -51,13 +57,13 @@
     /* Table */
     .table-wrap{display:block; overflow:visible;}
     table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:12px}
-    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
-    tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word}
+    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:14px;border-bottom:1px solid var(--line)}
+    tbody td{padding:14px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word;line-height:1.4}
     tbody tr:nth-child(even){background:var(--row-alt);}
 
     .badge{
       display:inline-flex; align-items:center;
-      padding:3px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1;
+      padding:4px 10px;border-radius:999px;font-weight:700;font-size:13px;line-height:1;
       white-space:nowrap;
     }
     .badge.green{background:var(--badge-green-bg);color:var(--badge-green)}
@@ -65,9 +71,7 @@
     .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
 
     /* Keep time columns on one line */
-    td:nth-child(5),
-    td:nth-child(6),
-    td:nth-child(7){ white-space:nowrap; }
+    td:nth-child(5), td:nth-child(6), td:nth-child(7){ white-space:nowrap; }
     td:nth-child(5) br, td:nth-child(6) br, td:nth-child(7) br{ display:none; }
 
     /* Event Type column: wider + wraps cleanly */
@@ -75,7 +79,7 @@
       width:240px; white-space:normal !important; word-break:break-word; overflow-wrap:anywhere;
     }
     tbody td:first-child .badge{
-      display:inline-block; white-space:normal; overflow-wrap:anywhere; line-height:1.1; padding:4px 8px;
+      display:inline-block; white-space:normal; overflow-wrap:anywhere; line-height:1.1; padding:6px 10px;
     }
     td:nth-child(1) br{ display:inline; }
 
@@ -99,7 +103,7 @@
 
     /* Responsive: show cards on mobile */
     @media (max-width: 900px){
-      .container{max-width:100%; padding:0 12px}
+      .container{padding:0 12px}
       .grid{grid-template-columns:1fr}
       .table-wrap{ display:none; }
       #cards{ display:grid; }
@@ -111,7 +115,7 @@
     @media print{
       .controls,.grid,#cards{display:none}
       .container{max-width:unset;margin:0;padding:0}
-      thead th,tbody td{font-size:11px;padding:6px}
+      thead th,tbody td{font-size:12px;padding:8px}
     }
   </style>
 </head>
@@ -201,7 +205,7 @@
     let FILTER = 'all';
     let QUERY  = '';
 
-    /* Robust CSV parse (handles quotes/commas/newlines) */
+    /* Robust CSV parsing */
     function csvToRows(text){
       const rows=[]; let cur=[], i=0, field='', inQ=false;
       while(i<text.length){
@@ -234,7 +238,7 @@
     function escapeRegExp(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
     const oneLine = (s) => {
       let v = String(s ?? '').replace(/\s*[\r\n]+\s*/g, ' ');
-      v = v.replace(/^"(.*)"$/,'$1'); /* remove wrapping quotes like "Monday, 29th September" */
+      v = v.replace(/^"(.*)"$/,'$1'); /* strip wrapping quotes */
       return v;
     };
 
@@ -301,7 +305,7 @@
         </tr>`).join('');
     }
 
-    /* Mobile cards (FULL details) */
+    /* Mobile cards (full details) */
     function renderCards(rows){
       if(!rows.length){
         cards.innerHTML = `<div class="helper">No results</div>`;
