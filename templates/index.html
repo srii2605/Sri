@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>ATJ ANNUAL RECITAL 2025</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--badge-green-bg:#ecfdf5;--badge-green:#065f46;--badge-purple-bg:#f5f3ff;--badge-purple:#5b21b6;--badge-blue-bg:#eff6ff;--badge-blue:#1e40af;--row-alt:#fafafa;--chip-bg:#f3f4f6;--chip-on:#111827;--chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;--card-bg:#fff;--fs-th:12px;--fs-td:14px;--fs-label:11px}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 .container{max-width:100%;margin:24px auto;padding:0 12px}
 h1{font-size:24px;font-weight:800;margin:0 0 6px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .underline-title{font-size:14px;font-weight:700;margin:4px 0 12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;position:relative}
@@ -27,15 +27,22 @@ table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;mar
 thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
 tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word;line-height:1.35}
 tbody tr:nth-child(even){background:var(--row-alt)}
-/* Bold Event Location (col 4), Italic Class Name (col 11) */
-td:nth-child(4){font-weight:700}td:nth-child(11){font-style:italic}
+/* Desktop emphasis */
+td:nth-child(4){font-weight:700}          /* Event Location bold */
+td:nth-child(11){font-style:italic}       /* Class Name italic */
+/* Badges */
 .badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1;white-space:nowrap}
-.badge.green{background:var(--badge-green-bg);color:var(--badge-green)}.badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}.badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
+.badge.green{background:var(--badge-green-bg);color:var(--badge-green)}
+.badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
+.badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
+/* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
+/* Wrap long Event Type gracefully */
 thead th:first-child,tbody td:first-child{width:240px;white-space:normal !important;word-break:break-word;overflow-wrap:anywhere}
 .helper{color:var(--muted);font-size:13px;margin:10px 0 0;text-align:center}.hidden{display:none}
 a.link-pill{font-weight:600;text-decoration:none;border-bottom:1px dashed currentColor}
 mark{background:var(--hl);padding:0 .1em;border-radius:2px}
+/* Mobile cards */
 #cards{display:grid;gap:12px;margin-top:12px}
 .row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:10px}
 .row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
@@ -44,6 +51,7 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
 .item .label,.remark .label{font-size:var(--fs-label);color:var(--muted);display:block;margin-bottom:2px}
 .times{display:grid;grid-template-columns:1fr;gap:6px}.remark{margin-top:8px;font-size:var(--fs-td)}
 .chip-inline{display:inline-flex;gap:6px;flex-wrap:wrap}
+/* Desktop adjustments */
 @media (min-width:901px){
   .container{max-width:100%;margin:32px auto;padding:0 24px}
   h1{font-size:32px;white-space:normal}
@@ -53,9 +61,10 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
   .controls{gap:10px;margin:16px 0}.search{max-width:900px;padding:12px 14px;font-size:16px}
   .chips{gap:8px}.chip{padding:10px 14px;font-size:15px}
   .table-wrap{display:block}#cards{display:none}
-  :root{--fs-th:15px;--fs-td:17px;--fs-label:12px}
-  thead th{padding:14px}tbody td{padding:14px;line-height:1.4}
-  .badge{font-size:13px;padding:6px 10px}.row-grid{grid-template-columns:1fr 1fr}
+  :root{--fs-th:13px;--fs-td:15px;--fs-label:12px}
+  thead th{padding:12px}tbody td{padding:12px;line-height:1.35}
+  .badge{font-size:13px;padding:6px 10px}
+  .row-grid{grid-template-columns:1fr 1fr}
 }
 @media print{.controls,.grid,#cards{display:none}.container{max-width:unset;margin:0;padding:0}thead th,tbody td{font-size:12px;padding:8px}}
 </style>
@@ -114,75 +123,50 @@ const BASE="https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS
 const COLS=['Event Type','Event Day & Date','Student Name','Event Location','Reporting Time','Event Time','Dismissal Time','Full Look Guide','Footwear','Dance Routine','Class Name','Remarks'];
 const tbody=document.getElementById('tbody'),cards=document.getElementById('cards'),msg=document.getElementById('msg'),searchEl=document.getElementById('search'),chips=[...document.querySelectorAll('.chip')];
 let RAW=[],FILTER='all',QUERY='';
-
 function csvToRows(t){const r=[];let a=[],f="",i=0,q=!1;for(;i<t.length;){const c=t[i];if(q){if(c=='"'&&t[i+1]=='"'){f+='"';i+=2;continue}if(c=='"'){q=!1;i++;continue}f+=c;i++}else{if(c=='"'){q=!0;i++;continue}if(c==','){a.push(f);f="";i++;continue}if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;a.push(f);r.push(a);a=[];f="";i++;continue}f+=c;i++}}if(f.length||a.length){a.push(f);r.push(a)}return r}
 function csvToObjects(csv){const rows=csvToRows(csv);if(!rows.length)return[];const h=rows[0].map(x=>x.trim());return rows.slice(1).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]??"");return o})}
-function esc(s){return String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
-function oneLine(s){let v=String(s??'').replace(/\s*[\r\n]+\s*/g,' ');return v.replace(/^"(.*)"$/,'$1')}
-function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
-function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t; if(/^www\./i.test(href)) href="https://"+href; return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
+const esc=s=>String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,'$1');
+function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
+function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
 function badge(type){const clean=oneLine(type),t=String(clean||'').toLowerCase();if(t.includes('combined rehearsal'))return`<span class="badge green">${esc(clean)}</span>`;if(t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp'))return`<span class="badge purple">${esc(clean)}</span>`;if(t.includes('show'))return`<span class="badge blue">${esc(clean)}</span>`;return`<span class="badge">${esc(clean)}</span>`}
 function passFilter(r){const t=String(r['Event Type']||'').toLowerCase();if(FILTER==='combined')return t.includes('combined rehearsal');if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');if(FILTER==='show')return t.includes('show');return true}
 function matchQuery(r){if(!QUERY)return true;const s=QUERY.toLowerCase();return COLS.some(k=>String(r[k]||'').toLowerCase().includes(s))}
-
-function renderTable(rows){
-  tbody.innerHTML=rows.length?rows.map(r=>`<tr>
-    <td>${badge(r['Event Type'])}</td>
-    <td>${hi(r['Event Day & Date'],QUERY)}</td>
-    <td>${hi(r['Student Name'],QUERY)}</td>
-    <td><strong>${hi(r['Event Location'],QUERY)}</strong></td>
-    <td>${hi(r['Reporting Time'],QUERY)}</td>
-    <td>${hi(r['Event Time'],QUERY)}</td>
-    <td>${hi(r['Dismissal Time'],QUERY)}</td>
-    <td>${linkify(r['Full Look Guide'])}</td>
-    <td>${hi(r['Footwear'],QUERY)}</td>
-    <td>${hi(r['Dance Routine'],QUERY)}</td>
-    <td><em>${hi(r['Class Name'],QUERY)}</em></td>
-    <td>${hi(r['Remarks'],QUERY)}</td>
-  </tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
-}
-
-function renderCards(rows){
-  cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
-    <div class="row-head"><div class="row-title">${hi(r['Student Name'],QUERY)}</div><div class="chip-inline">${badge(r['Event Type'])}</div></div>
-    <div class="row-sub">${hi(r['Event Day & Date'],QUERY)}</div>
-    <div class="row-grid" style="margin-top:8px">
-      <div class="item"><span class="label">Location</span><strong>${hi(r['Event Location'],QUERY)}</strong></div>
-      <div class="item"><span class="label">Full Look Guide</span>${linkify(r['Full Look Guide'])}</div>
-      <div class="item"><span class="label">Footwear</span>${hi(r['Footwear'],QUERY)}</div>
-      <div class="item"><span class="label">Dance Routine</span>${hi(r['Dance Routine'],QUERY)}</div>
-      <div class="item"><span class="label">Class Name</span><em>${hi(r['Class Name'],QUERY)}</em></div>
-    </div>
-    <div class="times">
-      <div class="item"><span class="label">Reporting Time</span>${hi(r['Reporting Time'],QUERY)}</div>
-      <div class="item"><span class="label">Event Time</span>${hi(r['Event Time'],QUERY)}</div>
-      <div class="item"><span class="label">Dismissal Time</span>${hi(r['Dismissal Time'],QUERY)}</div>
-    </div>
-    ${r['Remarks']?`<div class="remark"><span class="label">Remarks</span>${hi(r['Remarks'],QUERY)}</div>`:''}
-  </div>`).join(''):`<div class="helper">No results</div>`;
-}
-
+function renderTable(rows){tbody.innerHTML=rows.length?rows.map(r=>`<tr>
+<td>${badge(r['Event Type'])}</td>
+<td>${hi(r['Event Day & Date'],QUERY)}</td>
+<td>${hi(r['Student Name'],QUERY)}</td>
+<td><strong>${hi(r['Event Location'],QUERY)}</strong></td>
+<td>${hi(r['Reporting Time'],QUERY)}</td>
+<td>${hi(r['Event Time'],QUERY)}</td>
+<td>${hi(r['Dismissal Time'],QUERY)}</td>
+<td>${linkify(r['Full Look Guide'])}</td>
+<td>${hi(r['Footwear'],QUERY)}</td>
+<td>${hi(r['Dance Routine'],QUERY)}</td>
+<td><em>${hi(r['Class Name'],QUERY)}</em></td>
+<td>${hi(r['Remarks'],QUERY)}</td>
+</tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`}
+function renderCards(rows){cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
+<div class="row-head"><div class="row-title">${hi(r['Student Name'],QUERY)}</div><div class="chip-inline">${badge(r['Event Type'])}</div></div>
+<div class="row-sub">${hi(r['Event Day & Date'],QUERY)}</div>
+<div class="row-grid" style="margin-top:8px">
+  <div class="item"><span class="label">Location</span><strong>${hi(r['Event Location'],QUERY)}</strong></div>
+  <div class="item"><span class="label">Full Look Guide</span>${linkify(r['Full Look Guide'])}</div>
+  <div class="item"><span class="label">Footwear</span>${hi(r['Footwear'],QUERY)}</div>
+  <div class="item"><span class="label">Dance Routine</span>${hi(r['Dance Routine'],QUERY)}</div>
+  <div class="item"><span class="label">Class Name</span><em>${hi(r['Class Name'],QUERY)}</em></div>
+</div>
+<div class="times">
+  <div class="item"><span class="label">Reporting Time</span>${hi(r['Reporting Time'],QUERY)}</div>
+  <div class="item"><span class="label">Event Time</span>${hi(r['Event Time'],QUERY)}</div>
+  <div class="item"><span class="label">Dismissal Time</span>${hi(r['Dismissal Time'],QUERY)}</div>
+</div>
+${r['Remarks']?`<div class="remark"><span class="label">Remarks</span>${hi(r['Remarks'],QUERY)}</div>`:''}
+</div>`).join(''):`<div class="helper">No results</div>`}
 function render(){const rows=RAW.filter(r=>passFilter(r)&&matchQuery(r));renderTable(rows);renderCards(rows)}
-
-async function load(){
-  try{
-    msg.classList.add('hidden');msg.textContent='';
-    const res=await fetch(`${BASE}&cachebust=${Date.now()}`,{cache:'no-store'});
-    if(!res.ok){const t=await res.text();throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`)}
-    const csv=await res.text();const objs=csvToObjects(csv);
-    RAW=objs.map(o=>{const x={};COLS.forEach(k=>x[k]=o[k]??'');return x});render();
-  }catch(e){
-    console.error('Load failed',e);
-    msg.textContent='Failed to load data. Please check the CSV link or sharing.';
-    msg.classList.remove('hidden');
-    tbody.innerHTML=`<tr><td colspan="12" class="muted" style="padding:12px;">${esc(e.message)}</td></tr>`;
-    cards.innerHTML=`<div class="helper">${esc(e.message)}</div>`;
-  }
-}
-
+async function load(){try{msg.classList.add('hidden');msg.textContent='';const res=await fetch(`${BASE}&cachebust=${Date.now()}`,{cache:'no-store'});if(!res.ok){const t=await res.text();throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`)}const csv=await res.text();const objs=csvToObjects(csv);RAW=objs.map(o=>{const x={};COLS.forEach(k=>x[k]=o[k]??'');return x});render()}catch(e){console.error('Load failed',e);msg.textContent='Failed to load data. Please check the CSV link or sharing.';msg.classList.remove('hidden');tbody.innerHTML=`<tr><td colspan="12" class="muted" style="padding:12px;">${esc(e.message)}</td></tr>`;cards.innerHTML=`<div class="helper">${esc(e.message)}</div>`}}
 searchEl.addEventListener('input',e=>{QUERY=e.target.value.trim();render()});
 chips.forEach(ch=>ch.addEventListener('click',()=>{chips.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false')});ch.classList.add('active');ch.setAttribute('aria-selected','true');FILTER=ch.dataset.filter;render()}));
-
 load();
 </script>
 </body>
