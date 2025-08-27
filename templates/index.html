@@ -9,6 +9,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================
+       MOBILE-FIRST BASE STYLES
+       (these restore your old mobile look)
+       ========================= */
     :root{
       --bg:#ffffff; --text:#111827; --muted:#6b7280; --line:#e5e7eb;
       --badge-green-bg:#ecfdf5; --badge-green:#065f46;
@@ -18,68 +22,83 @@
       --chip-bg:#f3f4f6; --chip-on:#111827; --chip-active-bg:#111827; --chip-active:#ffffff;
       --hl:#fff3bf; --card-bg:#ffffff;
 
-      /* Bigger table text */
-      --fs-th:15px;   /* was 12px */
-      --fs-td:17px;   /* was 13px */
-      --fs-label:12px;/* was 11px */
+      /* Mobile sizes */
+      --fs-th:12px;
+      --fs-td:14px;
+      --fs-label:11px;
     }
+
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 
-    /* Full-width container with small gutter */
-    .container{max-width:100%;margin:32px auto;padding:0 24px}
+    .container{max-width:100%;margin:24px auto;padding:0 12px}
 
-    h1{font-size:32px;font-weight:800;letter-spacing:.2px;margin:0 0 8px}
-    .underline-title{font-size:18px;font-weight:700;margin:4px 0 20px;position:relative;display:inline-block}
+    /* Headings on ONE line on mobile */
+    h1{
+      font-size:20px;            /* mobile size */
+      font-weight:800;
+      letter-spacing:.2px;
+      margin:0 0 6px;
+      line-height:1.1;
+      white-space:nowrap;
+      overflow:hidden; text-overflow:ellipsis;
+    }
+    .underline-title{
+      font-size:14px;            /* mobile size */
+      font-weight:700;
+      margin:4px 0 12px;
+      position:relative;display:inline-block;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      line-height:1.2;
+    }
     .underline-title::after{content:"";position:absolute;left:0;bottom:-4px;height:3px;width:100%;background:linear-gradient(90deg,#111827,transparent 80%);border-radius:2px}
 
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:18px 0 12px}
-    .card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--card-bg)}
-    .card h3{margin:0 0 6px;font-size:18px}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin:14px 0 10px}
+    .card{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--card-bg)}
+    .card h3{margin:0 0 6px;font-size:16px}
     .muted{color:var(--muted);font-size:14px;line-height:1.45}
     .muted div{margin:4px 0}
 
-    .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin:16px 0}
-    .search{flex:1 1 420px;max-width:900px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:16px}
+    .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:12px 0}
+    .search{flex:1 1 320px;max-width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px}
 
     /* Chips */
-    .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
     .chip{
       display:inline-flex; align-items:center; gap:.4rem;
       border:1px solid var(--line);
       background:var(--chip-bg);
       color:var(--chip-on);
-      border-radius:10px; padding:10px 14px;
+      border-radius:10px; padding:8px 10px;
       font-size:var(--fs-th); font-weight:600; cursor:pointer; user-select:none;
     }
     .chip.active{ background:var(--chip-active-bg); color:var(--chip-active); border-color:var(--chip-active-bg); }
 
-    /* Table */
-    .table-wrap{display:block; overflow:visible;}
+    /* Table (hidden on mobile) */
+    .table-wrap{display:none;}
     table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:12px}
-    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:14px;border-bottom:1px solid var(--line)}
-    tbody td{padding:14px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word;line-height:1.4}
+    thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
+    tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word;line-height:1.35}
     tbody tr:nth-child(even){background:var(--row-alt);}
 
     .badge{
       display:inline-flex; align-items:center;
-      padding:4px 10px;border-radius:999px;font-weight:700;font-size:13px;line-height:1;
-      white-space:nowrap;
+      padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1;white-space:nowrap;
     }
     .badge.green{background:var(--badge-green-bg);color:var(--badge-green)}
     .badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
     .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
 
-    /* Keep time columns on one line */
+    /* Keep time columns on one line (when table is visible) */
     td:nth-child(5), td:nth-child(6), td:nth-child(7){ white-space:nowrap; }
     td:nth-child(5) br, td:nth-child(6) br, td:nth-child(7) br{ display:none; }
 
-    /* Event Type column: wider + wraps cleanly */
+    /* Event Type column wider + wraps if needed */
     thead th:first-child, tbody td:first-child{
       width:240px; white-space:normal !important; word-break:break-word; overflow-wrap:anywhere;
     }
     tbody td:first-child .badge{
-      display:inline-block; white-space:normal; overflow-wrap:anywhere; line-height:1.1; padding:6px 10px;
+      display:inline-block; white-space:normal; overflow-wrap:anywhere; line-height:1.1; padding:4px 8px;
     }
     td:nth-child(1) br{ display:inline; }
 
@@ -88,28 +107,55 @@
     a.link-pill{font-weight:600;text-decoration:none;border-bottom:1px dashed currentColor}
     mark{background:var(--hl);padding:0 .1em;border-radius:2px}
 
-    /* Mobile cards */
-    #cards{ display:none; gap:12px; margin-top:12px}
-    .row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:12px}
+    /* Mobile cards (visible on mobile) */
+    #cards{ display:grid; gap:12px; margin-top:12px}
+    .row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:10px}
     .row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
     .row-title{ font-size:var(--fs-td); font-weight:700; }
     .row-sub{   font-size:var(--fs-td); color:var(--muted)}
-    .row-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .row-grid{display:grid;grid-template-columns:1fr;gap:8px}
     .item{font-size:var(--fs-td)}
     .item .label,.remark .label{font-size:var(--fs-label);color:var(--muted);display:block;margin-bottom:2px}
-    .times{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+    .times{display:grid;grid-template-columns:1fr;gap:6px}
     .remark{margin-top:8px;font-size:var(--fs-td)}
     .chip-inline{display:inline-flex;gap:6px;flex-wrap:wrap}
 
-    /* Responsive: show cards on mobile */
-    @media (max-width: 900px){
-      .container{padding:0 12px}
-      .grid{grid-template-columns:1fr}
-      .table-wrap{ display:none; }
-      #cards{ display:grid; }
-      .chips{ gap:6px; }
-      .times{grid-template-columns:1fr}
-      .row-grid{grid-template-columns:1fr}
+    /* =========================
+       DESKTOP / LARGE (>= 901px)
+       Only here we enlarge fonts & stretch layout
+       ========================= */
+    @media (min-width: 901px){
+      .container{max-width:100%;margin:32px auto;padding:0 24px}
+
+      /* Let headings be larger and can wrap */
+      h1{font-size:32px; white-space:normal;}
+      .underline-title{font-size:18px; white-space:normal; margin-bottom:20px;}
+
+      .grid{grid-template-columns:1fr 1fr; gap:24px; margin:18px 0 12px}
+      .card{padding:16px}
+      .card h3{font-size:18px}
+
+      .controls{gap:10px; margin:16px 0}
+      .search{max-width:900px; padding:12px 14px; font-size:16px}
+
+      .chips{gap:8px}
+      .chip{padding:10px 14px; font-size:15px}
+
+      /* Show table on desktop */
+      .table-wrap{display:block;}
+      #cards{display:none;}
+
+      /* Bigger table fonts */
+      :root{
+        --fs-th:15px;
+        --fs-td:17px;
+        --fs-label:12px;
+      }
+      thead th{ padding:14px; }
+      tbody td{ padding:14px; line-height:1.4; }
+
+      .badge{ font-size:13px; padding:6px 10px; }
+      .row-grid{grid-template-columns:1fr 1fr} /* (only applies if cards shown, but here they're hidden) */
     }
 
     @media print{
@@ -122,7 +168,7 @@
 <body>
   <div class="container">
     <h1>ATJ ANNUAL RECITAL 2025</h1>
-    <div class="underline-title">REHEARSAL &amp; PERFORMANCE SCHEDULE</div>
+    <div class="underline-title">REHEARSAL &amp; PERFORMANCE SCHEDULE:</div>
 
     <!-- Split header -->
     <div class="grid" aria-label="Locations">
@@ -153,7 +199,7 @@
     <div class="chips" role="tablist" aria-label="Quick filters">
       <div class="chip active" data-filter="all" role="tab" aria-selected="true">⭐ All</div>
       <div class="chip" data-filter="combined" role="tab" aria-selected="false">👥 Combined Rehearsal</div>
-      <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsal</div>
+      <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsals</div>
       <div class="chip" data-filter="show" role="tab" aria-selected="false">🎬 Show Day</div>
     </div>
 
@@ -205,7 +251,7 @@
     let FILTER = 'all';
     let QUERY  = '';
 
-    /* Robust CSV parsing */
+    /* Robust CSV parser */
     function csvToRows(text){
       const rows=[]; let cur=[], i=0, field='', inQ=false;
       while(i<text.length){
@@ -365,7 +411,6 @@
       }
     }
 
-    // Events
     searchEl.addEventListener('input', (e)=>{ QUERY = e.target.value.trim(); render(); });
     chips.forEach(chip=>{
       chip.addEventListener('click', ()=>{
@@ -378,7 +423,6 @@
     });
 
     load();
-    // setInterval(load, 5 * 60 * 1000); // optional auto-refresh
   </script>
 </body>
 </html>
