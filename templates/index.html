@@ -6,7 +6,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--badge-green-bg:#ecfdf5;--badge-green:#065f46;--badge-purple-bg:#f5f3ff;--badge-purple:#5b21b6;--badge-blue-bg:#eff6ff;--badge-blue:#1e40af;--row-alt:#fafafa;--chip-bg:#f3f4f6;--chip-on:#111827;--chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;--card-bg:#fff;--fs-th:12px;--fs-td:14px;--fs-label:11px}
+:root{
+  --bg:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;
+  --badge-green-bg:#ecfdf5;--badge-green:#065f46;
+  --badge-purple-bg:#f5f3ff;--badge-purple:#5b21b6;
+  --badge-blue-bg:#eff6ff;--badge-blue:#1e40af;
+  --row-alt:#fafafa;--chip-bg:#f3f4f6;--chip-on:#111827;
+  --chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;
+  --card-bg:#fff;
+  --fs-th:12px;
+  --fs-td:11px;   /* reduced by 3 */
+  --fs-label:11px
+}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 .container{max-width:100%;margin:24px auto;padding:0 12px}
@@ -61,7 +72,7 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
   .controls{gap:10px;margin:16px 0}.search{max-width:900px;padding:12px 14px;font-size:16px}
   .chips{gap:8px}.chip{padding:10px 14px;font-size:15px}
   .table-wrap{display:block}#cards{display:none}
-  :root{--fs-th:13px;--fs-td:15px;--fs-label:12px}
+  :root{--fs-th:13px;--fs-td:12px;--fs-label:12px}  /* reduced by 3 */
   thead th{padding:12px}tbody td{padding:12px;line-height:1.35}
   .badge{font-size:13px;padding:6px 10px}
   .row-grid{grid-template-columns:1fr 1fr}
@@ -171,5 +182,3 @@ load();
 </script>
 </body>
 </html>
-
-
