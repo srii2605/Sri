@@ -15,14 +15,14 @@
   --chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;
   --card-bg:#fff;
   --fs-th:12px;
-  --fs-td:11px;   /* base mobile/table-cell size (we'll bump on mobile below) */
+  --fs-td:11px;   /* base */
   --fs-label:11px
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 .container{max-width:100%;margin:24px auto;padding:0 12px}
 
-/* Headings / top section */
+/* Top section */
 h1{font-size:24px;font-weight:800;margin:0 0 6px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .underline-title{font-size:14px;font-weight:700;margin:4px 0 12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;position:relative}
 .underline-title::after{content:"";display:block;height:3px;margin-top:6px;background:linear-gradient(90deg,#111827,transparent 80%);border-radius:2px}
@@ -45,20 +45,16 @@ table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;mar
 thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
 tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word;line-height:1.35}
 tbody tr:nth-child(even){background:var(--row-alt)}
-
 /* Emphasis */
 td:nth-child(4){font-weight:700}          /* Event Location bold */
 td:nth-child(11){font-style:italic}       /* Class Name italic */
-
 /* Badges */
 .badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1;white-space:nowrap}
 .badge.green{background:var(--badge-green-bg);color:var(--badge-green)}
 .badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
 .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
-
 /* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
-
 /* Wrap long Event Type gracefully */
 thead th:first-child,tbody td:first-child{width:240px;white-space:normal !important;word-break:break-word;overflow-wrap:anywhere}
 
@@ -71,7 +67,6 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
 .row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:10px}
 .row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
 .row-title{font-size:var(--fs-td);font-weight:700}
-.row-sub{font-size:var(--fs-td);color:var(--muted)}
 .row-grid{display:grid;grid-template-columns:1fr;gap:8px}
 .item{font-size:var(--fs-td)}
 .item .label,.remark .label{font-size:var(--fs-label);color:var(--muted);display:block;margin-bottom:2px}
@@ -89,23 +84,22 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
   .controls{gap:10px;margin:16px 0}.search{max-width:900px;padding:12px 14px;font-size:16px}
   .chips{gap:8px}.chip{padding:10px 14px;font-size:15px}
   .table-wrap{display:block}#cards{display:none}
-  :root{--fs-th:13px;--fs-td:12px;--fs-label:12px}  /* desktop sizes (unchanged) */
+  :root{--fs-th:13px;--fs-td:12px;--fs-label:12px}
   thead th{padding:12px}tbody td{padding:12px;line-height:1.35}
   .badge{font-size:13px;padding:6px 10px}
   .row-grid{grid-template-columns:1fr 1fr}
 }
 
-/* ✅ Mobile-only tweaks requested */
+/* ✅ Mobile-only tweaks */
 @media (max-width:900px){
-  /* 1) Top of page (above search) 2 sizes smaller */
-  h1{font-size:20px}               /* 24 -> 20 */
-  .underline-title{font-size:12px} /* 14 -> 12 */
-  .card h3{font-size:14px}         /* 16 -> 14 */
-  .muted{font-size:13px}           /* 14 -> 13 */
+  /* Top section two sizes smaller */
+  h1{font-size:20px}
+  .underline-title{font-size:12px}
+  .card h3{font-size:14px}
+  .muted{font-size:13px}
 
-  /* 2) Data size 1 step bigger on mobile (affects card body text) */
-  :root{ --fs-td:12px }            /* 11 -> 12 on mobile */
-  /* keep labels readable relative to body */
+  /* Data size one step bigger for cards */
+  :root{ --fs-td:12px }
   .item .label,.remark .label{font-size:11px}
 }
 @media print{.controls,.grid,#cards{display:none}.container{max-width:unset;margin:0;padding:0}thead th,tbody td{font-size:12px;padding:8px}}
@@ -176,7 +170,7 @@ function badge(type){const clean=oneLine(type),t=String(clean||'').toLowerCase()
 function passFilter(r){const t=String(r['Event Type']||'').toLowerCase();if(FILTER==='combined')return t.includes('combined rehearsal');if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');if(FILTER==='show')return t.includes('show');return true}
 function matchQuery(r){if(!QUERY)return true;const s=QUERY.toLowerCase();return COLS.some(k=>String(r[k]||'').toLowerCase().includes(s))}
 
-/* Desktop table render (unchanged) */
+/* Desktop table render */
 function renderTable(rows){
   tbody.innerHTML=rows.length?rows.map(r=>`<tr>
 <td>${badge(r['Event Type'])}</td>
@@ -194,33 +188,27 @@ function renderTable(rows){
 </tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
 }
 
-/* ✅ Mobile cards render:
-   - Class Name moved to the very end of the card */
+/* ✅ Mobile cards render updated per your list */
 function renderCards(rows){
   cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
   <div class="row-head">
     <div class="row-title">${hi(r['Student Name'],QUERY)}</div>
     <div class="chip-inline">${badge(r['Event Type'])}</div>
   </div>
-  <div class="row-sub">${hi(r['Event Day & Date'],QUERY)}</div>
 
   <div class="row-grid" style="margin-top:8px">
+    <div class="item"><span class="label">Event Day &amp; Date</span><strong>${hi(r['Event Day & Date'],QUERY)}</strong></div>
     <div class="item"><span class="label">Location</span><strong>${hi(r['Event Location'],QUERY)}</strong></div>
-    <div class="item"><span class="label">Full Look Guide</span>${linkify(r['Full Look Guide'])}</div>
-    <div class="item"><span class="label">Footwear</span>${hi(r['Footwear'],QUERY)}</div>
-    <div class="item"><span class="label">Dance Routine</span>${hi(r['Dance Routine'],QUERY)}</div>
-  </div>
-
-  <div class="times">
-    <div class="item"><span class="label">Reporting Time</span>${hi(r['Reporting Time'],QUERY)}</div>
+    <div class="item"><span class="label">Reporting Time</span><strong>${hi(r['Reporting Time'],QUERY)}</strong></div>
     <div class="item"><span class="label">Event Time</span>${hi(r['Event Time'],QUERY)}</div>
     <div class="item"><span class="label">Dismissal Time</span>${hi(r['Dismissal Time'],QUERY)}</div>
+    <div class="item"><span class="label">Full Look Guide</span>${linkify(r['Full Look Guide'])}</div>
+    <div class="item"><span class="label">Footwear</span>${hi(r['Footwear'],QUERY)}</div>
+    <div class="item" style="margin-bottom:8px"><span class="label">Dance Routine</span>${hi(r['Dance Routine'],QUERY)}</div>
+    <div class="item"><span class="label">Class Name</span><em>${hi(r['Class Name'],QUERY)}</em></div>
   </div>
 
   ${r['Remarks']?`<div class="remark"><span class="label">Remarks</span>${hi(r['Remarks'],QUERY)}</div>`:''}
-
-  <!-- Class Name last -->
-  <div class="item" style="margin-top:8px"><span class="label">Class Name</span><em>${hi(r['Class Name'],QUERY)}</em></div>
 </div>`).join(''):`<div class="helper">No results</div>`;
 }
 
@@ -247,7 +235,8 @@ async function load(){
 searchEl.addEventListener('input',e=>{QUERY=e.target.value.trim();render()});
 chips.forEach(ch=>ch.addEventListener('click',()=>{
   chips.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false')});
-  ch.classList.add('active');ch.setAttribute('aria-selected','true');FILTER=ch.dataset.filter;render()
+  ch.classList.add('active');ch.setAttribute('aria-selected','true');
+  FILTER=ch.dataset.filter;render();
 }));
 load();
 </script>
