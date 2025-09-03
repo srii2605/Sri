@@ -136,7 +136,7 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
     <div class="chip" data-filter="combined" role="tab" aria-selected="false">👥 Combined Rehearsal</div>
     <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsal</div>
     <div class="chip" data-filter="show" role="tab" aria-selected="false">🎬 Show Day</div>
-    <!-- ✅ New Student Leader chip (hidden by default; revealed based on search) -->
+    <!-- ✅ Student Leader chip (hidden by default; revealed only when full name matches & has SL events) -->
     <div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;">🧑‍🎓 Student Leader Schedule</div>
   </div>
 
@@ -190,7 +190,7 @@ function renderTable(rows){
 </tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
 }
 
-/* ✅ Mobile cards render updated per your list */
+/* Mobile cards render */
 function renderCards(rows){
   cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
   <div class="row-head">
@@ -219,19 +219,22 @@ function render(){
   renderTable(rows);
   renderCards(rows);
 
-  // 🔎 Show Student Leader chip only when there's a query AND matching leader rows exist
+  // 🔎 Show Student Leader chip only when query EXACTLY matches a full student name
   const leaderChip=document.getElementById('studentLeaderChip');
-  const hasQuery=QUERY && QUERY.trim().length>0;
   let leaderCount=0;
-  if(hasQuery){
-    const s=QUERY.toLowerCase();
-    leaderCount = RAW.reduce((acc,r)=>{
+
+  if(QUERY && QUERY.trim().length>0){
+    const qLower=QUERY.toLowerCase().trim();
+    RAW.forEach(r=>{
+      const studentName=String(r['Student Name']||'').toLowerCase().trim();
       const isLeader=String(r['Event Type']||'').toLowerCase().includes('student leader');
-      const matches=COLS.some(k=>String(r[k]||'').toLowerCase().includes(s));
-      return acc + (isLeader && matches ? 1 : 0);
-    },0);
+      if(studentName === qLower && isLeader){
+        leaderCount++;
+      }
+    });
   }
-  if(hasQuery && leaderCount>0){
+
+  if(leaderCount>0){
     leaderChip.style.display='';
   }else{
     const wasActive=leaderChip.classList.contains('active');
@@ -242,7 +245,6 @@ function render(){
       const allChip=document.querySelector('.chip[data-filter="all"]');
       if(allChip){allChip.classList.add('active');allChip.setAttribute('aria-selected','true')}
       FILTER='all';
-      // re-render to reflect fallback
       const rows2=RAW.filter(r=>passFilter(r)&&matchQuery(r));
       renderTable(rows2);
       renderCards(rows2);
