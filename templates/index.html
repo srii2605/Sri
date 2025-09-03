@@ -129,13 +129,15 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
     </div>
   </div>
 
-  <div class="controls"><input id="search" class="search" placeholder="Search by Student Name" aria-label="Search by Student Name"/></div>
+  <div class="controls"><input id="search" class="search" placeholder="Search all columns…" aria-label="Search all columns"/></div>
 
   <div class="chips" role="tablist" aria-label="Quick filters">
     <div class="chip active" data-filter="all" role="tab" aria-selected="true">⭐ All</div>
     <div class="chip" data-filter="combined" role="tab" aria-selected="false">👥 Combined Rehearsal</div>
     <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsal</div>
     <div class="chip" data-filter="show" role="tab" aria-selected="false">🎬 Show Day</div>
+    <!-- ✅ New Student Leader chip (hidden by default; revealed based on search) -->
+    <div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;">🧑‍🎓 Student Leader Schedule</div>
   </div>
 
   <div id="msg" class="helper hidden"></div>
@@ -167,7 +169,7 @@ const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,
 function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
 function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
 function badge(type){const clean=oneLine(type),t=String(clean||'').toLowerCase();if(t.includes('combined rehearsal'))return`<span class="badge green">${esc(clean)}</span>`;if(t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp'))return`<span class="badge purple">${esc(clean)}</span>`;if(t.includes('show'))return`<span class="badge blue">${esc(clean)}</span>`;return`<span class="badge">${esc(clean)}</span>`}
-function passFilter(r){const t=String(r['Event Type']||'').toLowerCase();if(FILTER==='combined')return t.includes('combined rehearsal');if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');if(FILTER==='show')return t.includes('show');return true}
+function passFilter(r){const t=String(r['Event Type']||'').toLowerCase();if(FILTER==='combined')return t.includes('combined rehearsal');if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');if(FILTER==='show')return t.includes('show');if(FILTER==='student-leader')return t.includes('student leader');return true}
 function matchQuery(r){if(!QUERY)return true;const s=QUERY.toLowerCase();return COLS.some(k=>String(r[k]||'').toLowerCase().includes(s))}
 
 /* Desktop table render */
@@ -212,7 +214,41 @@ function renderCards(rows){
 </div>`).join(''):`<div class="helper">No results</div>`;
 }
 
-function render(){const rows=RAW.filter(r=>passFilter(r)&&matchQuery(r));renderTable(rows);renderCards(rows)}
+function render(){
+  const rows=RAW.filter(r=>passFilter(r)&&matchQuery(r));
+  renderTable(rows);
+  renderCards(rows);
+
+  // 🔎 Show Student Leader chip only when there's a query AND matching leader rows exist
+  const leaderChip=document.getElementById('studentLeaderChip');
+  const hasQuery=QUERY && QUERY.trim().length>0;
+  let leaderCount=0;
+  if(hasQuery){
+    const s=QUERY.toLowerCase();
+    leaderCount = RAW.reduce((acc,r)=>{
+      const isLeader=String(r['Event Type']||'').toLowerCase().includes('student leader');
+      const matches=COLS.some(k=>String(r[k]||'').toLowerCase().includes(s));
+      return acc + (isLeader && matches ? 1 : 0);
+    },0);
+  }
+  if(hasQuery && leaderCount>0){
+    leaderChip.style.display='';
+  }else{
+    const wasActive=leaderChip.classList.contains('active');
+    leaderChip.style.display='none';
+    if(wasActive){
+      // fallback to All if student-leader was active but now not available
+      chips.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false')});
+      const allChip=document.querySelector('.chip[data-filter="all"]');
+      if(allChip){allChip.classList.add('active');allChip.setAttribute('aria-selected','true')}
+      FILTER='all';
+      // re-render to reflect fallback
+      const rows2=RAW.filter(r=>passFilter(r)&&matchQuery(r));
+      renderTable(rows2);
+      renderCards(rows2);
+    }
+  }
+}
 
 async function load(){
   try{
