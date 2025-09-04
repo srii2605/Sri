@@ -54,10 +54,10 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 .badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
 .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
 
-/* ▶︎ New specific badge colors */
+/* ▶︎ Specific badge colors */
 .badge-instudio1{background:#ffedd5;color:#9a3412}  /* Orange */
 .badge-instudio2{background:#fce7f3;color:#9d174d}  /* Pink */
-.badge-instudio3{background:#ccfbf1;color:#115e59}  /* Teal (distinct from existing blue/green) */
+.badge-instudio3{background:#ccfbf1;color:#115e59}  /* Teal */
 
 .badge-showday1{background:#fee2e2;color:#991b1b}   /* Red */
 .badge-showday2{background:#fef9c3;color:#854d0e}   /* Amber */
@@ -183,6 +183,33 @@ const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,
 function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
 function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
 
+/* --- Show Day sorting: by day, then Event Time --- */
+function parseTimeToMinutes(s){
+  if(!s) return 1e9;
+  const m = String(s).trim().match(/(\d{1,2}):(\d{2})\s*(am|pm)?/i); // handles "08:00" or "08:00 - 11:30"
+  if(!m) return 1e9;
+  let h = parseInt(m[1],10), min = parseInt(m[2],10);
+  const ap = m[3]?.toLowerCase();
+  if(ap==='pm' && h<12) h += 12;
+  if(ap==='am' && h===12) h = 0;
+  return h*60 + min;
+}
+function getShowDay(type){
+  const t = String(type||'').toLowerCase();
+  if(t.includes('show day 1')) return 1;
+  if(t.includes('show day 2')) return 2;
+  return 99;
+}
+function maybeSortShowRows(rows){
+  const isShowView = FILTER==='show' || rows.every(r => String(r['Event Type']||'').toLowerCase().includes('show'));
+  if(!isShowView) return rows;
+  return rows.slice().sort((a,b)=>{
+    const ad = getShowDay(a['Event Type']), bd = getShowDay(b['Event Type']);
+    if(ad !== bd) return ad - bd; // Day 1 then Day 2
+    return parseTimeToMinutes(a['Event Time']) - parseTimeToMinutes(b['Event Time']);
+  });
+}
+
 /* ▶︎ Updated badge mapping with specific variants */
 function badge(type){
   const clean=oneLine(type);
@@ -269,8 +296,9 @@ function renderCards(rows){
 
 function render(){
   const rows=RAW.filter(r=>passFilter(r)&&matchQuery(r));
-  renderTable(rows);
-  renderCards(rows);
+  const sorted=maybeSortShowRows(rows);   // apply Show Day sort when relevant
+  renderTable(sorted);
+  renderCards(sorted);
 
   // 🔎 Show Student Leader chip only when query EXACTLY matches a full student name
   const leaderChip=document.getElementById('studentLeaderChip');
