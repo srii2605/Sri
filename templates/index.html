@@ -67,7 +67,7 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 .badge-combined3{background:#f5f5f4;color:#78350f}  /* Brown text on warm gray bg */
 .badge-combined4{background:#e5e7eb;color:#111827}  /* Neutral gray */
 
-/* NEW: Student Leader variants */
+/* Student Leader variants */
 .badge-sl-combined{background:#111827;color:#fff}     /* Combined Reh. – Student Leader (same color for 1/2/3) */
 .badge-sl-mediacorp{background:#fae8ff;color:#86198f} /* Mediacorp Tech – Student Leader (magenta) */
 
@@ -187,7 +187,7 @@ const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,
 function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
 function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
 
-/* --- Show Day sorting: by day, then Event Time --- */
+/* --- Time parsing (first time in string) --- */
 function parseTimeToMinutes(s){
   if(!s) return 1e9;
   const m = String(s).trim().match(/(\d{1,2}):(\d{2})\s*(am|pm)?/i); // handles "08:00" or "08:00 - 11:30"
@@ -198,23 +198,46 @@ function parseTimeToMinutes(s){
   if(ap==='am' && h===12) h = 0;
   return h*60 + min;
 }
+
+/* --- Show Day helpers --- */
 function getShowDay(type){
   const t = String(type||'').toLowerCase();
   if(t.includes('show day 1')) return 1;
   if(t.includes('show day 2')) return 2;
   return 99;
 }
-function maybeSortShowRows(rows){
-  const isShowView = FILTER==='show' || rows.every(r => String(r['Event Type']||'').toLowerCase().includes('show'));
-  if(!isShowView) return rows;
-  return rows.slice().sort((a,b)=>{
-    const ad = getShowDay(a['Event Type']), bd = getShowDay(b['Event Type']);
-    if(ad !== bd) return ad - bd; // Day 1 then Day 2
-    return parseTimeToMinutes(a['Event Time']) - parseTimeToMinutes(b['Event Time']);
-  });
+
+/* --- Sorting controller: applies per view/type --- */
+function maybeSortRows(rows){
+  if(!rows || !rows.length) return rows;
+
+  const typeOf = r => String(r['Event Type']||'').toLowerCase();
+
+  const isShowView = FILTER==='show' || rows.every(r => typeOf(r).includes('show'));
+  if(isShowView){
+    return rows.slice().sort((a,b)=>{
+      const ad = getShowDay(a['Event Type']), bd = getShowDay(b['Event Type']);
+      if(ad !== bd) return ad - bd; // Day 1 then Day 2
+      return parseTimeToMinutes(a['Event Time']) - parseTimeToMinutes(b['Event Time']);
+    });
+  }
+
+  const isCombinedView = FILTER==='combined' || rows.every(r => typeOf(r).includes('combined rehearsal'));
+  if(isCombinedView){
+    return rows.slice().sort((a,b)=>parseTimeToMinutes(a['Event Time']) - parseTimeToMinutes(b['Event Time']));
+  }
+
+  // In-Studio (within TECH view or isolated)
+  const isInStudioOnly = rows.every(r => (typeOf(r).includes('in-studio') || typeOf(r).includes('in studio')));
+  const isTechView = FILTER==='tech';
+  if(isTechView || isInStudioOnly){
+    return rows.slice().sort((a,b)=>parseTimeToMinutes(a['Event Time']) - parseTimeToMinutes(b['Event Time']));
+  }
+
+  return rows; // leave other views as-is
 }
 
-/* ▶︎ Updated badge mapping with specific variants */
+/* ▶︎ Badge mapping with specific variants */
 function badge(type){
   const clean=oneLine(type);
   const t=String(clean||'').toLowerCase();
@@ -306,7 +329,7 @@ function renderCards(rows){
 
 function render(){
   const rows=RAW.filter(r=>passFilter(r)&&matchQuery(r));
-  const sorted=maybeSortShowRows(rows);   // apply Show Day sort when relevant
+  const sorted=maybeSortRows(rows);   // apply sorting for Show/Combined/Tech
   renderTable(sorted);
   renderCards(sorted);
 
