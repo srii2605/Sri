@@ -53,6 +53,20 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 .badge.green{background:var(--badge-green-bg);color:var(--badge-green)}
 .badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
 .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
+
+/* ▶︎ New specific badge colors */
+.badge-instudio1{background:#ffedd5;color:#9a3412}  /* Orange */
+.badge-instudio2{background:#fce7f3;color:#9d174d}  /* Pink */
+.badge-instudio3{background:#ccfbf1;color:#115e59}  /* Teal (distinct from existing blue/green) */
+
+.badge-showday1{background:#fee2e2;color:#991b1b}   /* Red */
+.badge-showday2{background:#fef9c3;color:#854d0e}   /* Amber */
+
+.badge-combined1{background:#e0e7ff;color:#3730a3}  /* Indigo */
+.badge-combined2{background:#cffafe;color:#155e75}  /* Cyan */
+.badge-combined3{background:#f5f5f4;color:#78350f}  /* Brown text on warm gray bg */
+.badge-combined4{background:#e5e7eb;color:#111827}  /* Neutral gray */
+
 /* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
 /* Wrap long Event Type gracefully */
@@ -168,7 +182,46 @@ const esc=s=>String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>
 const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,'$1');
 function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
 function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
-function badge(type){const clean=oneLine(type),t=String(clean||'').toLowerCase();if(t.includes('combined rehearsal'))return`<span class="badge green">${esc(clean)}</span>`;if(t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp'))return`<span class="badge purple">${esc(clean)}</span>`;if(t.includes('show'))return`<span class="badge blue">${esc(clean)}</span>`;return`<span class="badge">${esc(clean)}</span>`}
+
+/* ▶︎ Updated badge mapping with specific variants */
+function badge(type){
+  const clean=oneLine(type);
+  const t=String(clean||'').toLowerCase();
+
+  /* In-Studio Rehearsals 1/2/3 */
+  if(t.includes('in-studio rehearsal 1')||t.includes('in studio rehearsal 1'))
+    return `<span class="badge badge-instudio1">${esc(clean)}</span>`;
+  if(t.includes('in-studio rehearsal 2')||t.includes('in studio rehearsal 2'))
+    return `<span class="badge badge-instudio2">${esc(clean)}</span>`;
+  if(t.includes('in-studio rehearsal 3')||t.includes('in studio rehearsal 3'))
+    return `<span class="badge badge-instudio3">${esc(clean)}</span>`;
+
+  /* Show Day 1/2 */
+  if(t.includes('show day 1'))
+    return `<span class="badge badge-showday1">${esc(clean)}</span>`;
+  if(t.includes('show day 2'))
+    return `<span class="badge badge-showday2">${esc(clean)}</span>`;
+
+  /* Combined Rehearsal 1–4 */
+  if(t.includes('combined rehearsal 1'))
+    return `<span class="badge badge-combined1">${esc(clean)}</span>`;
+  if(t.includes('combined rehearsal 2'))
+    return `<span class="badge badge-combined2">${esc(clean)}</span>`;
+  if(t.includes('combined rehearsal 3'))
+    return `<span class="badge badge-combined3">${esc(clean)}</span>`;
+  if(t.includes('combined rehearsal 4'))
+    return `<span class="badge badge-combined4">${esc(clean)}</span>`;
+
+  /* Fallbacks (existing mappings) */
+  if(t.includes('combined rehearsal'))
+    return `<span class="badge green">${esc(clean)}</span>`;
+  if(t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp'))
+    return `<span class="badge purple">${esc(clean)}</span>`;
+  if(t.includes('show'))
+    return `<span class="badge blue">${esc(clean)}</span>`;
+  return `<span class="badge">${esc(clean)}</span>`;
+}
+
 function passFilter(r){const t=String(r['Event Type']||'').toLowerCase();if(FILTER==='combined')return t.includes('combined rehearsal');if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');if(FILTER==='show')return t.includes('show');if(FILTER==='student-leader')return t.includes('student leader');return true}
 function matchQuery(r){if(!QUERY)return true;const s=QUERY.toLowerCase();return COLS.some(k=>String(r[k]||'').toLowerCase().includes(s))}
 
