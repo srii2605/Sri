@@ -187,16 +187,57 @@ const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,
 function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
 function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
 
-/* --- Time parsing (first time in string) --- */
+/* --- Date & Time parsing helpers --- */
+function parseDateValue(s){
+  if(!s) return 9e15;
+  let t = String(s).trim();
+  // Remove weekday prefixes like "Mon," or "Monday -"
+  t = t.replace(/^[A-Za-z]{3,9}[,\\-]\\s*/,'');
+  // Remove ordinal suffixes (1st -> 1)
+  t = t.replace(/(\\d{1,2})(st|nd|rd|th)/gi,'$1');
+
+  // dd/mm/yyyy or dd-mm-yyyy
+  let m = t.match(/(\\d{1,2})[\\/\\-](\\d{1,2})[\\/\\-](\\d{2,4})/);
+  if(m){
+    let d=parseInt(m[1],10), mo=parseInt(m[2],10)-1, y=parseInt(m[3],10);
+    if(y<100) y+=2000;
+    return new Date(y,mo,d).getTime();
+  }
+  // "2 Jun 2025" / "2 June 2025"
+  const months={jan:0,january:0,feb:1,february:1,mar:2,march:2,apr:3,april:3,may:4,jun:5,june:5,jul:6,july:6,aug:7,august:7,sep:8,september:8,oct:9,october:9,nov:10,november:10,dec:11,december:11};
+  m = t.match(/(\\d{1,2})\\s+([A-Za-z]+)\\s*,?\\s*(\\d{2,4})?/);
+  if(m){
+    const d=parseInt(m[1],10);
+    const key=m[2].toLowerCase();
+    const mo=months[key];
+    if(mo!==undefined){
+      let y = m[3]? parseInt(m[3],10) : new Date().getFullYear();
+      if(y<100) y+=2000;
+      return new Date(y,mo,d).getTime();
+    }
+  }
+  const n = Date.parse(t);
+  return isNaN(n) ? 9e15 : n;
+}
 function parseTimeToMinutes(s){
   if(!s) return 1e9;
-  const m = String(s).trim().match(/(\d{1,2}):(\d{2})\s*(am|pm)?/i); // handles "08:00" or "08:00 - 11:30"
+  // takes first time found, supports "08:00", "8:00am", "08:00 - 11:30", etc.
+  const m = String(s).trim().match(/(\\d{1,2}):(\\d{2})\\s*(am|pm)?/i);
   if(!m) return 1e9;
   let h = parseInt(m[1],10), min = parseInt(m[2],10);
   const ap = m[3]?.toLowerCase();
   if(ap==='pm' && h<12) h += 12;
   if(ap==='am' && h===12) h = 0;
   return h*60 + min;
+}
+function sortByDateThenTime(rows){
+  return rows.slice().sort((a,b)=>{
+    const ad = parseDateValue(a['Event Day & Date']), bd = parseDateValue(b['Event Day & Date']);
+    if(ad !== bd) return ad - bd;
+    const at = parseTimeToMinutes(a['Event Time']), bt = parseTimeToMinutes(b['Event Time']);
+    if(at !== bt) return at - bt;
+    return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
+  });
 }
 
 /* --- Show Day helpers --- */
@@ -207,34 +248,37 @@ function getShowDay(type){
   return 99;
 }
 
-/* --- Sorting controller: applies per view/type --- */
+/* --- Sorting controller: view-aware --- */
 function maybeSortRows(rows){
   if(!rows || !rows.length) return rows;
-
   const typeOf = r => String(r['Event Type']||'').toLowerCase();
 
+  // Show Day: Day 1 → Day 2, then by date, then time
   const isShowView = FILTER==='show' || rows.every(r => typeOf(r).includes('show'));
   if(isShowView){
     return rows.slice().sort((a,b)=>{
       const ad = getShowDay(a['Event Type']), bd = getShowDay(b['Event Type']);
-      if(ad !== bd) return ad - bd; // Day 1 then Day 2
+      if(ad !== bd) return ad - bd;
+      const aDate = parseDateValue(a['Event Day & Date']), bDate = parseDateValue(b['Event Day & Date']);
+      if(aDate !== bDate) return aDate - bDate;
       return parseTimeToMinutes(a['Event Time']) - parseTimeToMinutes(b['Event Time']);
     });
   }
 
+  // Combined: date → time
   const isCombinedView = FILTER==='combined' || rows.every(r => typeOf(r).includes('combined rehearsal'));
   if(isCombinedView){
-    return rows.slice().sort((a,b)=>parseTimeToMinutes(a['Event Time']) - parseTimeToMinutes(b['Event Time']));
+    return sortByDateThenTime(rows);
   }
 
-  // In-Studio (within TECH view or isolated)
+  // In-Studio / Tech: date → time
   const isInStudioOnly = rows.every(r => (typeOf(r).includes('in-studio') || typeOf(r).includes('in studio')));
   const isTechView = FILTER==='tech';
   if(isTechView || isInStudioOnly){
-    return rows.slice().sort((a,b)=>parseTimeToMinutes(a['Event Time']) - parseTimeToMinutes(b['Event Time']));
+    return sortByDateThenTime(rows);
   }
 
-  return rows; // leave other views as-is
+  return rows; // leave other views unchanged
 }
 
 /* ▶︎ Badge mapping with specific variants */
@@ -329,7 +373,7 @@ function renderCards(rows){
 
 function render(){
   const rows=RAW.filter(r=>passFilter(r)&&matchQuery(r));
-  const sorted=maybeSortRows(rows);   // apply sorting for Show/Combined/Tech
+  const sorted=maybeSortRows(rows);   // apply date→time sorting per view
   renderTable(sorted);
   renderCards(sorted);
 
