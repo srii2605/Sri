@@ -15,7 +15,7 @@
   --chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;
   --card-bg:#fff;
   --fs-th:12px;
-  --fs-td:11px;   /* base */
+  --fs-td:11px;
   --fs-label:11px
 }
 *{box-sizing:border-box}
@@ -68,8 +68,8 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 .badge-combined4{background:#e5e7eb;color:#111827}  /* Neutral gray */
 
 /* Student Leader variants */
-.badge-sl-combined{background:#111827;color:#fff}     /* Combined Reh. – Student Leader (same color for 1/2/3) */
-.badge-sl-mediacorp{background:#fae8ff;color:#86198f} /* Mediacorp Tech – Student Leader (magenta) */
+.badge-sl-combined{background:#111827;color:#fff}
+.badge-sl-mediacorp{background:#fae8ff;color:#86198f}
 
 /* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
@@ -110,13 +110,10 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
 
 /* ✅ Mobile-only tweaks */
 @media (max-width:900px){
-  /* Top section two sizes smaller */
   h1{font-size:20px}
   .underline-title{font-size:12px}
   .card h3{font-size:14px}
   .muted{font-size:13px}
-
-  /* Data size one step bigger for cards */
   :root{ --fs-td:12px }
   .item .label,.remark .label{font-size:11px}
 }
@@ -154,7 +151,6 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
     <div class="chip" data-filter="combined" role="tab" aria-selected="false">👥 Combined Rehearsal</div>
     <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsal</div>
     <div class="chip" data-filter="show" role="tab" aria-selected="false">🎬 Show Day</div>
-    <!-- ✅ Student Leader chip (hidden by default; revealed only when full name matches & has SL events) -->
     <div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;">🧑‍🎓 Student Leader Schedule</div>
   </div>
 
@@ -180,67 +176,54 @@ const COLS=['Event Type','Event Day & Date','Student Name','Event Location','Rep
 const tbody=document.getElementById('tbody'),cards=document.getElementById('cards'),msg=document.getElementById('msg'),searchEl=document.getElementById('search'),chips=[...document.querySelectorAll('.chip')];
 let RAW=[],FILTER='all',QUERY='';
 
+/* ---------- CSV helpers ---------- */
 function csvToRows(t){const r=[];let a=[],f="",i=0,q=!1;for(;i<t.length;){const c=t[i];if(q){if(c=='"'&&t[i+1]=='"'){f+='"';i+=2;continue}if(c=='"'){q=!1;i++;continue}f+=c;i++}else{if(c=='"'){q=!0;i++;continue}if(c==','){a.push(f);f="";i++;continue}if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;a.push(f);r.push(a);a=[];f="";i++;continue}f+=c;i++}}if(f.length||a.length){a.push(f);r.push(a)}return r}
 function csvToObjects(csv){const rows=csvToRows(csv);if(!rows.length)return[];const h=rows[0].map(x=>x.trim());return rows.slice(1).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]??"");return o})}
 const esc=s=>String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,'$1');
-function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
+function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
 function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
 
-/* --- Date & Time parsing helpers --- */
-function parseDateValue(s){
-  if(!s) return 9e15;
-  let t = String(s).trim();
-  // Remove weekday prefixes like "Mon," or "Monday -"
-  t = t.replace(/^[A-Za-z]{3,9}[,\\-]\\s*/,'');
-  // Remove ordinal suffixes (1st -> 1)
-  t = t.replace(/(\\d{1,2})(st|nd|rd|th)/gi,'$1');
+/* ---------- Date & Time parsing (robust) ---------- */
+const MONTHS = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
 
-  // dd/mm/yyyy or dd-mm-yyyy
-  let m = t.match(/(\\d{1,2})[\\/\\-](\\d{1,2})[\\/\\-](\\d{2,4})/);
-  if(m){
-    let d=parseInt(m[1],10), mo=parseInt(m[2],10)-1, y=parseInt(m[3],10);
-    if(y<100) y+=2000;
-    return new Date(y,mo,d).getTime();
+function parseDateFromCell(s, defaultYear = 2025){
+  if(!s) return null;
+  const txt = String(s).toLowerCase();
+  // grab all occurrences like "16th Oct", "30 Oct", "2 nov"
+  const matches = [...txt.matchAll(/(\d{1,2})(?:st|nd|rd|th)?\s+(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)/gi)];
+  if(matches.length){
+    const times = matches.map(m=>{
+      const day = +m[1];
+      const mon = MONTHS[m[2].slice(0,3)];
+      return new Date(defaultYear, mon, day).getTime();
+    });
+    return new Date(Math.min(...times)); // earliest mentioned date
   }
-  // "2 Jun 2025" / "2 June 2025"
-  const months={jan:0,january:0,feb:1,february:1,mar:2,march:2,apr:3,april:3,may:4,jun:5,june:5,jul:6,july:6,aug:7,august:7,sep:8,september:8,oct:9,october:9,nov:10,november:10,dec:11,december:11};
-  m = t.match(/(\\d{1,2})\\s+([A-Za-z]+)\\s*,?\\s*(\\d{2,4})?/);
-  if(m){
-    const d=parseInt(m[1],10);
-    const key=m[2].toLowerCase();
-    const mo=months[key];
-    if(mo!==undefined){
-      let y = m[3]? parseInt(m[3],10) : new Date().getFullYear();
-      if(y<100) y+=2000;
-      return new Date(y,mo,d).getTime();
-    }
+  // fallback: dd/mm/yyyy or dd-mm-yyyy
+  const m2 = txt.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+  if(m2){
+    let d=+m2[1], mo=(+m2[2])-1, y=+m2[3]; if(y<100) y+=2000;
+    return new Date(y,mo,d);
   }
-  const n = Date.parse(t);
-  return isNaN(n) ? 9e15 : n;
+  // final fallback
+  const n = Date.parse(txt);
+  return isNaN(n) ? null : new Date(n);
 }
-function parseTimeToMinutes(s){
-  if(!s) return 1e9;
-  // takes first time found, supports "08:00", "8:00am", "08:00 - 11:30", etc.
-  const m = String(s).trim().match(/(\\d{1,2}):(\\d{2})\\s*(am|pm)?/i);
-  if(!m) return 1e9;
-  let h = parseInt(m[1],10), min = parseInt(m[2],10);
-  const ap = m[3]?.toLowerCase();
-  if(ap==='pm' && h<12) h += 12;
-  if(ap==='am' && h===12) h = 0;
+
+function parseStartMinutes(s){
+  if(!s) return Number.POSITIVE_INFINITY;
+  const m = String(s).match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+  if(!m) return Number.POSITIVE_INFINITY;
+  let h = (+m[1])%12, min = +m[2];
+  const mer = (m[3]||'').toUpperCase();
+  if(mer==='PM') h += 12;
+  if(!m[3] && +m[1]===12) h = 12; // 24h "12:xx"
+  if(mer==='AM' && +m[1]===12) h = 0; // 12 AM
   return h*60 + min;
 }
-function sortByDateThenTime(rows){
-  return rows.slice().sort((a,b)=>{
-    const ad = parseDateValue(a['Event Day & Date']), bd = parseDateValue(b['Event Day & Date']);
-    if(ad !== bd) return ad - bd;
-    const at = parseTimeToMinutes(a['Event Time']), bt = parseTimeToMinutes(b['Event Time']);
-    if(at !== bt) return at - bt;
-    return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
-  });
-}
 
-/* --- Show Day helpers --- */
+/* ---------- Sorting ---------- */
 function getShowDay(type){
   const t = String(type||'').toLowerCase();
   if(t.includes('show day 1')) return 1;
@@ -248,51 +231,55 @@ function getShowDay(type){
   return 99;
 }
 
-/* --- Sorting controller: view-aware --- */
+function sortDateReportingThenEvent(rows){
+  return rows.slice().sort((a,b)=>{
+    const da = parseDateFromCell(a['Event Day & Date']) || new Date(2100,0,1);
+    const db = parseDateFromCell(b['Event Day & Date']) || new Date(2100,0,1);
+    if(da.getTime() !== db.getTime()) return da - db;
+    const ra = parseStartMinutes(a['Reporting Time']);
+    const rb = parseStartMinutes(b['Reporting Time']);
+    if(ra !== rb) return ra - rb;
+    const ea = parseStartMinutes(a['Event Time']);
+    const eb = parseStartMinutes(b['Event Time']);
+    if(ea !== eb) return ea - eb;
+    return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
+  });
+}
+
 function maybeSortRows(rows){
   if(!rows || !rows.length) return rows;
-  const typeOf = r => String(r['Event Type']||'').toLowerCase();
 
-  // Show Day: Day 1 → Day 2, then by date, then time
-  const isShowView = FILTER==='show' || rows.every(r => typeOf(r).includes('show'));
+  const isShowView   = FILTER==='show' || rows.every(r => String(r['Event Type']||'').toLowerCase().includes('show'));
   if(isShowView){
     return rows.slice().sort((a,b)=>{
-      const ad = getShowDay(a['Event Type']), bd = getShowDay(b['Event Type']);
-      if(ad !== bd) return ad - bd;
-      const aDate = parseDateValue(a['Event Day & Date']), bDate = parseDateValue(b['Event Day & Date']);
-      if(aDate !== bDate) return aDate - bDate;
-      return parseTimeToMinutes(a['Event Time']) - parseTimeToMinutes(b['Event Time']);
+      const sdA = getShowDay(a['Event Type']), sdB = getShowDay(b['Event Type']);
+      if(sdA !== sdB) return sdA - sdB;                       // Day 1 → Day 2
+      const da = parseDateFromCell(a['Event Day & Date']) || new Date(2100,0,1);
+      const db = parseDateFromCell(b['Event Day & Date']) || new Date(2100,0,1);
+      if(da.getTime() !== db.getTime()) return da - db;       // date
+      const ra = parseStartMinutes(a['Reporting Time']);      // reporting time
+      const rb = parseStartMinutes(b['Reporting Time']);
+      if(ra !== rb) return ra - rb;
+      const ea = parseStartMinutes(a['Event Time']);          // fallback
+      const eb = parseStartMinutes(b['Event Time']);
+      return ea - eb;
     });
   }
 
-  // Combined: date → time
-  const isCombinedView = FILTER==='combined' || rows.every(r => typeOf(r).includes('combined rehearsal'));
-  if(isCombinedView){
-    return sortByDateThenTime(rows);
-  }
-
-  // In-Studio / Tech: date → time
-  const isInStudioOnly = rows.every(r => (typeOf(r).includes('in-studio') || typeOf(r).includes('in studio')));
-  const isTechView = FILTER==='tech';
-  if(isTechView || isInStudioOnly){
-    return sortByDateThenTime(rows);
-  }
-
-  return rows; // leave other views unchanged
+  // All other views: strictly date → reporting time → event time
+  return sortDateReportingThenEvent(rows);
 }
 
-/* ▶︎ Badge mapping with specific variants */
+/* ---------- Badges ---------- */
 function badge(type){
   const clean=oneLine(type);
   const t=String(clean||'').toLowerCase();
 
-  /* Student Leader first (specific) */
   if(t.includes('student leader') && t.includes('combined'))
     return `<span class="badge badge-sl-combined">${esc(clean)}</span>`;
   if(t.includes('student leader') && t.includes('mediacorp'))
     return `<span class="badge badge-sl-mediacorp">${esc(clean)}</span>`;
 
-  /* In-Studio Rehearsals 1/2/3 */
   if(t.includes('in-studio rehearsal 1')||t.includes('in studio rehearsal 1'))
     return `<span class="badge badge-instudio1">${esc(clean)}</span>`;
   if(t.includes('in-studio rehearsal 2')||t.includes('in studio rehearsal 2'))
@@ -300,13 +287,11 @@ function badge(type){
   if(t.includes('in-studio rehearsal 3')||t.includes('in studio rehearsal 3'))
     return `<span class="badge badge-instudio3">${esc(clean)}</span>`;
 
-  /* Show Day 1/2 */
   if(t.includes('show day 1'))
     return `<span class="badge badge-showday1">${esc(clean)}</span>`;
   if(t.includes('show day 2'))
     return `<span class="badge badge-showday2">${esc(clean)}</span>`;
 
-  /* Combined Rehearsal 1–4 */
   if(t.includes('combined rehearsal 1'))
     return `<span class="badge badge-combined1">${esc(clean)}</span>`;
   if(t.includes('combined rehearsal 2'))
@@ -316,7 +301,6 @@ function badge(type){
   if(t.includes('combined rehearsal 4'))
     return `<span class="badge badge-combined4">${esc(clean)}</span>`;
 
-  /* Fallbacks (existing mappings) */
   if(t.includes('combined rehearsal'))
     return `<span class="badge green">${esc(clean)}</span>`;
   if(t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp'))
@@ -326,10 +310,18 @@ function badge(type){
   return `<span class="badge">${esc(clean)}</span>`;
 }
 
-function passFilter(r){const t=String(r['Event Type']||'').toLowerCase();if(FILTER==='combined')return t.includes('combined rehearsal');if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');if(FILTER==='show')return t.includes('show');if(FILTER==='student-leader')return t.includes('student leader');return true}
+/* ---------- Filters & search ---------- */
+function passFilter(r){
+  const t=String(r['Event Type']||'').toLowerCase();
+  if(FILTER==='combined')return t.includes('combined rehearsal');
+  if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');
+  if(FILTER==='show')return t.includes('show');
+  if(FILTER==='student-leader')return t.includes('student leader');
+  return true;
+}
 function matchQuery(r){if(!QUERY)return true;const s=QUERY.toLowerCase();return COLS.some(k=>String(r[k]||'').toLowerCase().includes(s))}
 
-/* Desktop table render */
+/* ---------- Rendering ---------- */
 function renderTable(rows){
   tbody.innerHTML=rows.length?rows.map(r=>`<tr>
 <td>${badge(r['Event Type'])}</td>
@@ -347,7 +339,6 @@ function renderTable(rows){
 </tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
 }
 
-/* Mobile cards render */
 function renderCards(rows){
   cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
   <div class="row-head">
@@ -373,11 +364,11 @@ function renderCards(rows){
 
 function render(){
   const rows=RAW.filter(r=>passFilter(r)&&matchQuery(r));
-  const sorted=maybeSortRows(rows);   // apply date→time sorting per view
+  const sorted=maybeSortRows(rows);
   renderTable(sorted);
   renderCards(sorted);
 
-  // 🔎 Show Student Leader chip only when query EXACTLY matches a full student name
+  // Student Leader chip visibility: only when full name matched AND has SL events
   const leaderChip=document.getElementById('studentLeaderChip');
   let leaderCount=0;
 
@@ -386,9 +377,7 @@ function render(){
     RAW.forEach(r=>{
       const studentName=String(r['Student Name']||'').toLowerCase().trim();
       const isLeader=String(r['Event Type']||'').toLowerCase().includes('student leader');
-      if(studentName === qLower && isLeader){
-        leaderCount++;
-      }
+      if(studentName === qLower && isLeader){ leaderCount++; }
     });
   }
 
@@ -398,18 +387,19 @@ function render(){
     const wasActive=leaderChip.classList.contains('active');
     leaderChip.style.display='none';
     if(wasActive){
-      // fallback to All if student-leader was active but now not available
       chips.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false')});
       const allChip=document.querySelector('.chip[data-filter="all"]');
       if(allChip){allChip.classList.add('active');allChip.setAttribute('aria-selected','true')}
       FILTER='all';
       const rows2=RAW.filter(r=>passFilter(r)&&matchQuery(r));
-      renderTable(rows2);
-      renderCards(rows2);
+      const sorted2=maybeSortRows(rows2);
+      renderTable(sorted2);
+      renderCards(sorted2);
     }
   }
 }
 
+/* ---------- Load & events ---------- */
 async function load(){
   try{
     msg.classList.add('hidden');msg.textContent='';
