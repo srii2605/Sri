@@ -14,7 +14,9 @@
   --row-alt:#fafafa;--chip-bg:#f3f4f6;--chip-on:#111827;
   --chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;
   --card-bg:#fff;
-  --fs-th:12px;--fs-td:11px;--fs-label:11px
+  --fs-th:12px;
+  --fs-td:11px;   /* base */
+  --fs-label:11px
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
@@ -44,30 +46,14 @@ thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font
 tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word;line-height:1.35}
 tbody tr:nth-child(even){background:var(--row-alt)}
 /* Emphasis */
-td:nth-child(4){font-weight:700}
-td:nth-child(11){font-style:italic}
+td:nth-child(4){font-weight:700}          /* Event Location bold */
+td:nth-child(11){font-style:italic}       /* Class Name italic */
 /* Badges */
 .badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1;white-space:nowrap}
 .badge.green{background:var(--badge-green-bg);color:var(--badge-green)}
 .badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
 .badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
-
-/* ▶︎ Specific badge colors */
-.badge-instudio1{background:#ffedd5;color:#9a3412}
-.badge-instudio2{background:#fce7f3;color:#9d174d}
-.badge-instudio3{background:#ccfbf1;color:#115e59}
-.badge-showday1{background:#fee2e2;color:#991b1b}
-.badge-showday2{background:#fef9c3;color:#854d0e}
-.badge-combined1{background:#e0e7ff;color:#3730a3}
-.badge-combined2{background:#cffafe;color:#155e75}
-.badge-combined3{background:#f5f5f4;color:#78350f}
-.badge-combined4{background:#e5e7eb;color:#111827}
-
-/* Student Leader variants */
-.badge-sl-combined{background:#111827;color:#fff}
-.badge-sl-mediacorp{background:#fae8ff;color:#86198f}
-
-/* Keep times on one line (5=Event,6=Reporting,7=Dismissal) */
+/* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
 /* Wrap long Event Type gracefully */
 thead th:first-child,tbody td:first-child{width:240px;white-space:normal !important;word-break:break-word;overflow-wrap:anywhere}
@@ -106,10 +92,13 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
 
 /* ✅ Mobile-only tweaks */
 @media (max-width:900px){
+  /* Top section two sizes smaller */
   h1{font-size:20px}
   .underline-title{font-size:12px}
   .card h3{font-size:14px}
   .muted{font-size:13px}
+
+  /* Data size one step bigger for cards */
   :root{ --fs-td:12px }
   .item .label,.remark .label{font-size:11px}
 }
@@ -147,6 +136,7 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
     <div class="chip" data-filter="combined" role="tab" aria-selected="false">👥 Combined Rehearsal</div>
     <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsal</div>
     <div class="chip" data-filter="show" role="tab" aria-selected="false">🎬 Show Day</div>
+    <!-- ✅ Student Leader chip (hidden by default; revealed only when full name matches & has SL events) -->
     <div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;">🧑‍🎓 Student Leader Schedule</div>
   </div>
 
@@ -155,18 +145,9 @@ mark{background:var(--hl);padding:0 .1em;border-radius:2px}
   <div class="table-wrap" aria-live="polite">
     <table>
       <thead><tr>
-        <th>Event Type</th>
-        <th>Event Day &amp; Date</th>
-        <th>Student Name</th>
-        <th>Event Location</th>
-        <th>Event Time</th>
-        <th>Reporting Time</th>
-        <th>Dismissal Time</th>
-        <th>Full Look Guide</th>
-        <th>Footwear</th>
-        <th>Dance Routine</th>
-        <th>Class Name</th>
-        <th>Remarks</th>
+        <th>Event Type</th><th>Event Day &amp; Date</th><th>Student Name</th><th>Event Location</th>
+        <th>Reporting Time</th><th>Event Time</th><th>Dismissal Time</th><th>Full Look Guide</th>
+        <th>Footwear</th><th>Dance Routine</th><th>Class Name</th><th>Remarks</th>
       </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
@@ -181,147 +162,25 @@ const COLS=['Event Type','Event Day & Date','Student Name','Event Location','Rep
 const tbody=document.getElementById('tbody'),cards=document.getElementById('cards'),msg=document.getElementById('msg'),searchEl=document.getElementById('search'),chips=[...document.querySelectorAll('.chip')];
 let RAW=[],FILTER='all',QUERY='';
 
-/* ---------- CSV helpers ---------- */
 function csvToRows(t){const r=[];let a=[],f="",i=0,q=!1;for(;i<t.length;){const c=t[i];if(q){if(c=='"'&&t[i+1]=='"'){f+='"';i+=2;continue}if(c=='"'){q=!1;i++;continue}f+=c;i++}else{if(c=='"'){q=!0;i++;continue}if(c==','){a.push(f);f="";i++;continue}if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;a.push(f);r.push(a);a=[];f="";i++;continue}f+=c;i++}}if(f.length||a.length){a.push(f);r.push(a)}return r}
 function csvToObjects(csv){const rows=csvToRows(csv);if(!rows.length)return[];const h=rows[0].map(x=>x.trim());return rows.slice(1).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]??"");return o})}
 const esc=s=>String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,'$1');
-function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
+function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
 function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
-
-/* ---------- Date & Time parsing ---------- */
-const MONTHS = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
-function parseDateFromCell(s, defaultYear = 2025){
-  if(!s) return null;
-  const txt = String(s).toLowerCase();
-  const matches = [...txt.matchAll(/(\d{1,2})(?:st|nd|rd|th)?\s+(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)/gi)];
-  if(matches.length){
-    const times = matches.map(m=>{
-      const day = +m[1];
-      const mon = MONTHS[m[2].slice(0,3)];
-      return new Date(defaultYear, mon, day).getTime();
-    });
-    return new Date(Math.min(...times));
-  }
-  const m2 = txt.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
-  if(m2){
-    let d=+m2[1], mo=(+m2[2])-1, y=+m2[3]; if(y<100) y+=2000;
-    return new Date(y,mo,d);
-  }
-  const n = Date.parse(txt);
-  return isNaN(n) ? null : new Date(n);
-}
-function parseStartMinutes(s){
-  if(!s) return Number.POSITIVE_INFINITY;
-  const m = String(s).match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
-  if(!m) return Number.POSITIVE_INFINITY;
-  let h = (+m[1])%12, min = +m[2];
-  const mer = (m[3]||'').toUpperCase();
-  if(mer==='PM') h += 12;
-  if(!m[3] && +m[1]===12) h = 12;
-  if(mer==='AM' && +m[1]===12) h = 0;
-  return h*60 + min;
-}
-
-/* ---------- Event Type ranking ---------- */
-function eventTypeRank(rawType){
-  const t = String(rawType||'').toLowerCase();
-  let bucket = 99, sub = 0;
-  const isShow = t.includes('show');
-  const isCombined = t.includes('combined rehearsal');
-  const isTech = t.includes('in-studio') || t.includes('in studio') || t.includes('mediacorp') || t.includes('technical rehearsal');
-  if (isCombined) bucket = 1;
-  else if (isTech) bucket = 2;
-  else if (isShow) bucket = 3;
-
-  if (isCombined){
-    const m = t.match(/combined rehearsal\s*(\d+)/);
-    if(m) sub = parseInt(m[1],10);
-  }
-  if (isShow){
-    if (t.includes('show day 1')) sub = 1;
-    else if (t.includes('show day 2')) sub = 2;
-    else sub = 9;
-  }
-  return [bucket, sub];
-}
-
-/* ---------- Sorting ---------- */
-/* Event Type → Date → Reporting Time → Event Time → Student */
-function sortRows(rows){
-  return rows.slice().sort((a,b)=>{
-    const [ba,sa] = eventTypeRank(a['Event Type']);
-    const [bb,sb] = eventTypeRank(b['Event Type']);
-    if (ba!==bb) return ba-bb;
-    if (sa!==sb) return sa-sb;
-
-    const da = parseDateFromCell(a['Event Day & Date']) || new Date(2100,0,1);
-    const db = parseDateFromCell(b['Event Day & Date']) || new Date(2100,0,1);
-    if (da.getTime()!==db.getTime()) return da - db;
-
-    const ra = parseStartMinutes(a['Reporting Time']);
-    const rb = parseStartMinutes(b['Reporting Time']);
-    if (ra!==rb) return ra - rb;
-
-    const ea = parseStartMinutes(a['Event Time']);
-    const eb = parseStartMinutes(b['Event Time']);
-    if (ea!==eb) return ea - eb;
-
-    return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
-  });
-}
-
-/* ---------- Badges ---------- */
-function badge(type){
-  const clean=oneLine(type);
-  const t=String(clean||'').toLowerCase();
-
-  if(t.includes('student leader') && t.includes('combined'))
-    return `<span class="badge badge-sl-combined">${esc(clean)}</span>`;
-  if(t.includes('student leader') && t.includes('mediacorp'))
-    return `<span class="badge badge-sl-mediacorp">${esc(clean)}</span>`;
-
-  if(t.includes('in-studio rehearsal 1')||t.includes('in studio rehearsal 1'))
-    return `<span class="badge badge-instudio1">${esc(clean)}</span>`;
-  if(t.includes('in-studio rehearsal 2')||t.includes('in studio rehearsal 2'))
-    return `<span class="badge badge-instudio2">${esc(clean)}</span>`;
-  if(t.includes('in-studio rehearsal 3')||t.includes('in studio rehearsal 3'))
-    return `<span class="badge badge-instudio3">${esc(clean)}</span>`;
-
-  if(t.includes('show day 1')) return `<span class="badge badge-showday1">${esc(clean)}</span>`;
-  if(t.includes('show day 2')) return `<span class="badge badge-showday2">${esc(clean)}</span>`;
-
-  if(t.includes('combined rehearsal 1')) return `<span class="badge badge-combined1">${esc(clean)}</span>`;
-  if(t.includes('combined rehearsal 2')) return `<span class="badge badge-combined2">${esc(clean)}</span>`;
-  if(t.includes('combined rehearsal 3')) return `<span class="badge badge-combined3">${esc(clean)}</span>`;
-  if(t.includes('combined rehearsal 4')) return `<span class="badge badge-combined4">${esc(clean)}</span>`;
-
-  if(t.includes('combined rehearsal')) return `<span class="badge green">${esc(clean)}</span>`;
-  if(t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp')) return `<span class="badge purple">${esc(clean)}</span>`;
-  if(t.includes('show')) return `<span class="badge blue">${esc(clean)}</span>`;
-  return `<span class="badge">${esc(clean)}</span>`;
-}
-
-/* ---------- Filters & search ---------- */
-function passFilter(r){
-  const t=String(r['Event Type']||'').toLowerCase();
-  if(FILTER==='combined')return t.includes('combined rehearsal');
-  if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');
-  if(FILTER==='show')return t.includes('show');
-  if(FILTER==='student-leader')return t.includes('student leader');
-  return true;
-}
+function badge(type){const clean=oneLine(type),t=String(clean||'').toLowerCase();if(t.includes('combined rehearsal'))return`<span class="badge green">${esc(clean)}</span>`;if(t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp'))return`<span class="badge purple">${esc(clean)}</span>`;if(t.includes('show'))return`<span class="badge blue">${esc(clean)}</span>`;return`<span class="badge">${esc(clean)}</span>`}
+function passFilter(r){const t=String(r['Event Type']||'').toLowerCase();if(FILTER==='combined')return t.includes('combined rehearsal');if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');if(FILTER==='show')return t.includes('show');if(FILTER==='student-leader')return t.includes('student leader');return true}
 function matchQuery(r){if(!QUERY)return true;const s=QUERY.toLowerCase();return COLS.some(k=>String(r[k]||'').toLowerCase().includes(s))}
 
-/* ---------- Rendering ---------- */
+/* Desktop table render */
 function renderTable(rows){
   tbody.innerHTML=rows.length?rows.map(r=>`<tr>
 <td>${badge(r['Event Type'])}</td>
 <td>${hi(r['Event Day & Date'],QUERY)}</td>
 <td>${hi(r['Student Name'],QUERY)}</td>
 <td><strong>${hi(r['Event Location'],QUERY)}</strong></td>
-<td>${hi(r['Event Time'],QUERY)}</td>
 <td>${hi(r['Reporting Time'],QUERY)}</td>
+<td>${hi(r['Event Time'],QUERY)}</td>
 <td>${hi(r['Dismissal Time'],QUERY)}</td>
 <td>${linkify(r['Full Look Guide'])}</td>
 <td>${hi(r['Footwear'],QUERY)}</td>
@@ -331,6 +190,7 @@ function renderTable(rows){
 </tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
 }
 
+/* Mobile cards render */
 function renderCards(rows){
   cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
   <div class="row-head">
@@ -341,11 +201,8 @@ function renderCards(rows){
   <div class="row-grid" style="margin-top:8px">
     <div class="item"><span class="label">Event Day &amp; Date</span><strong>${hi(r['Event Day & Date'],QUERY)}</strong></div>
     <div class="item"><span class="label">Location</span><strong>${hi(r['Event Location'],QUERY)}</strong></div>
-
-    <!-- Swapped: Event Time first, then Reporting Time -->
-    <div class="item"><span class="label">Event Time</span>${hi(r['Event Time'],QUERY)}</div>
     <div class="item"><span class="label">Reporting Time</span><strong>${hi(r['Reporting Time'],QUERY)}</strong></div>
-
+    <div class="item"><span class="label">Event Time</span>${hi(r['Event Time'],QUERY)}</div>
     <div class="item"><span class="label">Dismissal Time</span>${hi(r['Dismissal Time'],QUERY)}</div>
     <div class="item"><span class="label">Full Look Guide</span>${linkify(r['Full Look Guide'])}</div>
     <div class="item"><span class="label">Footwear</span>${hi(r['Footwear'],QUERY)}</div>
@@ -359,20 +216,21 @@ function renderCards(rows){
 
 function render(){
   const rows=RAW.filter(r=>passFilter(r)&&matchQuery(r));
-  const sorted=sortRows(rows);
-  renderTable(sorted);
-  renderCards(sorted);
+  renderTable(rows);
+  renderCards(rows);
 
-  // Student Leader chip visibility only when the queried full name has SL items
+  // 🔎 Show Student Leader chip only when query EXACTLY matches a full student name
   const leaderChip=document.getElementById('studentLeaderChip');
   let leaderCount=0;
 
-  if(QUERY && QUERY.trim()){
+  if(QUERY && QUERY.trim().length>0){
     const qLower=QUERY.toLowerCase().trim();
     RAW.forEach(r=>{
       const studentName=String(r['Student Name']||'').toLowerCase().trim();
       const isLeader=String(r['Event Type']||'').toLowerCase().includes('student leader');
-      if(studentName===qLower && isLeader){leaderCount++;}
+      if(studentName === qLower && isLeader){
+        leaderCount++;
+      }
     });
   }
 
@@ -382,19 +240,18 @@ function render(){
     const wasActive=leaderChip.classList.contains('active');
     leaderChip.style.display='none';
     if(wasActive){
+      // fallback to All if student-leader was active but now not available
       chips.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false')});
       const allChip=document.querySelector('.chip[data-filter="all"]');
       if(allChip){allChip.classList.add('active');allChip.setAttribute('aria-selected','true')}
       FILTER='all';
       const rows2=RAW.filter(r=>passFilter(r)&&matchQuery(r));
-      const sorted2=sortRows(rows2);
-      renderTable(sorted2);
-      renderCards(sorted2);
+      renderTable(rows2);
+      renderCards(rows2);
     }
   }
 }
 
-/* ---------- Load & events ---------- */
 async function load(){
   try{
     msg.classList.add('hidden');msg.textContent='';
@@ -423,3 +280,5 @@ load();
 </script>
 </body>
 </html>
+
+
