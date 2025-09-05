@@ -10,10 +10,11 @@
   --bg:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;
   --badge-green-bg:#ecfdf5;--badge-green:#065f46;           /* Combined Rehearsal */
   --badge-purple-bg:#f5f3ff;--badge-purple:#5b21b6;         /* In-Studio Tech */
-  --badge-blue-bg:#eff6ff;--badge-blue:#1e40af;             /* (kept for any uncategorised) */
+  --badge-blue-bg:#eff6ff;--badge-blue:#1e40af;             /* Fallback */
   --badge-orange-bg:#fff7ed;--badge-orange:#c2410c;         /* Show Day 1 */
   --badge-teal-bg:#f0fdfa;--badge-teal:#0f766e;             /* Show Day 2 */
   --badge-pink-bg:#fdf2f8;--badge-pink:#be185d;             /* Mediacorp Tech */
+  --badge-yellow-bg:#fefce8;--badge-yellow:#854d0e;         /* Rehearsal w/ Ms Abi/Chelsea */
   --row-alt:#fafafa;--chip-bg:#f3f4f6;--chip-on:#111827;
   --chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;
   --card-bg:#fff;
@@ -60,11 +61,12 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 .badge.orange{background:var(--badge-orange-bg);color:var(--badge-orange)}
 .badge.teal{background:var(--badge-teal-bg);color:var(--badge-teal)}
 .badge.pink{background:var(--badge-pink-bg);color:var(--badge-pink)}
+.badge.yellow{background:var(--badge-yellow-bg);color:var(--badge-yellow)}
 
 /* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
 
-/* 3) Center reporting & dismissal times on desktop only */
+/* Center reporting & dismissal times on desktop only */
 @media (min-width:901px){
   td:nth-child(6), td:nth-child(7){text-align:center}
 }
@@ -136,7 +138,6 @@ td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
     </div>
   </div>
 
-  <!-- Search placeholder kept as per prior version -->
   <div class="controls"><input id="search" class="search" placeholder="Search by student's full name" aria-label="Search by student's full name"/></div>
 
   <div class="chips" role="tablist" aria-label="Quick filters">
@@ -144,7 +145,7 @@ td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
     <div class="chip" data-filter="combined" role="tab" aria-selected="false">👥 Combined Rehearsal</div>
     <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsal</div>
     <div class="chip" data-filter="show" role="tab" aria-selected="false">🎬 Show Day</div>
-    <!-- Student Leader chip (revealed when full-name + SL matches) -->
+    <!-- Student Leader chip (revealed only when full-name match + SL events) -->
     <div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;">🧑‍🎓 Student Leader Schedule</div>
   </div>
 
@@ -178,7 +179,7 @@ const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,
 function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
 function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
 
-/* Badge color logic (Show 1/2; In-Studio vs Mediacorp; Combined) */
+/* Badge color logic (Show 1/2; In-Studio; Mediacorp; Ms Abi/Chelsea; Combined) */
 function badge(type){
   const clean=oneLine(type);
   const t=String(clean||'').toLowerCase();
@@ -187,16 +188,23 @@ function badge(type){
   if(t.includes('show day 2')) return `<span class="badge teal">${esc(clean)}</span>`;
   if(t.includes('in-studio')||t.includes('in studio')) return `<span class="badge purple">${esc(clean)}</span>`;
   if(t.includes('mediacorp')) return `<span class="badge pink">${esc(clean)}</span>`;
+  if(t.includes('rehearsal with ms abi') || t.includes('rehearsal with ms chelsea'))
+    return `<span class="badge yellow">${esc(clean)}</span>`;
   if(t.includes('combined rehearsal')) return `<span class="badge green">${esc(clean)}</span>`;
   return `<span class="badge blue">${esc(clean)}</span>`;
 }
 
+/* Filter logic — include Abi/Chelsea under Technical Rehearsal */
 function passFilter(r){
   const t=String(r['Event Type']||'').toLowerCase();
-  if(FILTER==='combined')return t.includes('combined rehearsal');
-  if(FILTER==='tech')return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp');
-  if(FILTER==='show')return t.includes('show');
-  if(FILTER==='student-leader')return t.includes('student leader');
+  if(FILTER==='combined') return t.includes('combined rehearsal');
+  if(FILTER==='tech')
+    return t.includes('in-studio') || t.includes('in studio') ||
+           t.includes('mediacorp') ||
+           t.includes('rehearsal with ms abi') ||
+           t.includes('rehearsal with ms chelsea');
+  if(FILTER==='show') return t.includes('show');
+  if(FILTER==='student-leader') return t.includes('student leader');
   return true
 }
 function matchQuery(r){
