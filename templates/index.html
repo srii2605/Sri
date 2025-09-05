@@ -248,7 +248,8 @@ function eventTypeRank(rawType){
   return [bucket, sub];
 }
 
-/* ---------- Sorting: Event Type → Date → Event Time → Reporting Time → Student ---------- */
+/* ---------- Sorting ---------- */
+/* Event Type → Date → (Show: Event Time → Student) | (Others: Reporting → Event Time → Student) */
 function sortRows(rows){
   return rows.slice().sort((a,b)=>{
     const [ba,sa] = eventTypeRank(a['Event Type']);
@@ -260,13 +261,24 @@ function sortRows(rows){
     const db = parseDateFromCell(b['Event Day & Date']) || new Date(2100,0,1);
     if (da.getTime()!==db.getTime()) return da - db;
 
-    const ea = parseStartMinutes(a['Event Time']);
-    const eb = parseStartMinutes(b['Event Time']);
-    if (ea!==eb) return ea - eb;
+    const isShowA = String(a['Event Type']||'').toLowerCase().includes('show');
+    const isShowB = String(b['Event Type']||'').toLowerCase().includes('show');
+    const bothShow = isShowA && isShowB;
+
+    if (bothShow){
+      const ea = parseStartMinutes(a['Event Time']);
+      const eb = parseStartMinutes(b['Event Time']);
+      if (ea!==eb) return ea - eb;
+      return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
+    }
 
     const ra = parseStartMinutes(a['Reporting Time']);
     const rb = parseStartMinutes(b['Reporting Time']);
     if (ra!==rb) return ra - rb;
+
+    const ea = parseStartMinutes(a['Event Time']);
+    const eb = parseStartMinutes(b['Event Time']);
+    if (ea!==eb) return ea - eb;
 
     return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
   });
