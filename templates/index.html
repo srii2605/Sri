@@ -182,7 +182,7 @@ const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,
 function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
 function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
 
-/* ---------- Date & Time parsing (robust) ---------- */
+/* ---------- Date & Time parsing ---------- */
 const MONTHS = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
 
 function parseDateFromCell(s, defaultYear = 2025){
@@ -218,46 +218,55 @@ function parseStartMinutes(s){
   return h*60 + min;
 }
 
-/* ---------- Sorting ---------- */
-function maybeSortRows(rows){
-  if(!rows || !rows.length) return rows;
+/* ---------- Event Type ranking ---------- */
+function eventTypeRank(rawType){
+  const t = String(rawType||'').toLowerCase();
 
-  const isShowView =
-    FILTER === 'show' ||
-    rows.every(r => String(r['Event Type']||'').toLowerCase().includes('show'));
+  // Primary buckets: Combined (1) < Tech (2) < Show (3)
+  let bucket = 99, sub = 0;
 
-  if (isShowView) {
-    // Show Day: Date → Event Time → Reporting Time → Student
-    return rows.slice().sort((a,b)=>{
-      const da = parseDateFromCell(a['Event Day & Date']) || new Date(2100,0,1);
-      const db = parseDateFromCell(b['Event Day & Date']) || new Date(2100,0,1);
-      if (da.getTime() !== db.getTime()) return da - db;
+  // Student Leader inherits the base bucket of the underlying type
+  const isShow = t.includes('show');
+  const isCombined = t.includes('combined rehearsal');
+  const isTech = t.includes('in-studio') || t.includes('in studio') || t.includes('mediacorp') || t.includes('technical rehearsal');
 
-      const etA = parseStartMinutes(a['Event Time']);
-      const etB = parseStartMinutes(b['Event Time']);
-      if (etA !== etB) return etA - etB;
+  if (isCombined) bucket = 1;
+  else if (isTech) bucket = 2;
+  else if (isShow) bucket = 3;
 
-      const rtA = parseStartMinutes(a['Reporting Time']);
-      const rtB = parseStartMinutes(b['Reporting Time']);
-      if (rtA !== rtB) return rtA - rtB;
-
-      return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
-    });
+  // Sub-ordering within buckets
+  if (isCombined){
+    const m = t.match(/combined rehearsal\s*(\d+)/);
+    if(m) sub = parseInt(m[1],10); // CR1 -> CR2 -> CR3 -> CR4
+  }
+  if (isShow){
+    if (t.includes('show day 1')) sub = 1;
+    else if (t.includes('show day 2')) sub = 2;
+    else sub = 9; // generic "show"
   }
 
-  // All other views: Date → Reporting Time → Event Time → Student
+  return [bucket, sub];
+}
+
+/* ---------- Sorting: Event Type → Date → Event Time → Reporting Time → Student ---------- */
+function sortRows(rows){
   return rows.slice().sort((a,b)=>{
+    const [ba,sa] = eventTypeRank(a['Event Type']);
+    const [bb,sb] = eventTypeRank(b['Event Type']);
+    if (ba!==bb) return ba-bb;
+    if (sa!==sb) return sa-sb;
+
     const da = parseDateFromCell(a['Event Day & Date']) || new Date(2100,0,1);
     const db = parseDateFromCell(b['Event Day & Date']) || new Date(2100,0,1);
-    if (da.getTime() !== db.getTime()) return da - db;
-
-    const ra = parseStartMinutes(a['Reporting Time']);
-    const rb = parseStartMinutes(b['Reporting Time']);
-    if (ra !== rb) return ra - rb;
+    if (da.getTime()!==db.getTime()) return da - db;
 
     const ea = parseStartMinutes(a['Event Time']);
     const eb = parseStartMinutes(b['Event Time']);
-    if (ea !== eb) return ea - eb;
+    if (ea!==eb) return ea - eb;
+
+    const ra = parseStartMinutes(a['Reporting Time']);
+    const rb = parseStartMinutes(b['Reporting Time']);
+    if (ra!==rb) return ra - rb;
 
     return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
   });
@@ -357,7 +366,7 @@ function renderCards(rows){
 
 function render(){
   const rows=RAW.filter(r=>passFilter(r)&&matchQuery(r));
-  const sorted=maybeSortRows(rows);
+  const sorted=sortRows(rows);
   renderTable(sorted);
   renderCards(sorted);
 
@@ -385,7 +394,7 @@ function render(){
       if(allChip){allChip.classList.add('active');allChip.setAttribute('aria-selected','true')}
       FILTER='all';
       const rows2=RAW.filter(r=>passFilter(r)&&matchQuery(r));
-      const sorted2=maybeSortRows(rows2);
+      const sorted2=sortRows(rows2);
       renderTable(sorted2);
       renderCards(sorted2);
     }
