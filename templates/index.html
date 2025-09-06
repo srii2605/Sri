@@ -47,7 +47,9 @@ h1{font-size:24px;font-weight:800;margin:0 0 6px;line-height:1.1;white-space:now
 .table-wrap{display:none}
 table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:12px}
 thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
-tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word;line-height:1.35}
+tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;line-height:1.35;
+/* prevent mid-word splits globally */
+word-break:normal;overflow-wrap:break-word;hyphens:none}
 tbody tr:nth-child(even){background:var(--row-alt)}
 /* Emphasis */
 td:nth-child(4){font-weight:700}          /* Event Location bold */
@@ -66,7 +68,16 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 /* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
 
-/* Center reporting & dismissal times on desktop only */
+/* Wrap long Event Type gracefully (without splitting words) */
+thead th:first-child,tbody td:first-child{
+  width:240px;
+  white-space:normal !important;
+  word-break:normal;
+  overflow-wrap:break-word;
+  hyphens:none;
+}
+
+/* 3) Center reporting & dismissal times on desktop only */
 @media (min-width:901px){
   td:nth-child(6), td:nth-child(7){text-align:center}
 }
@@ -75,12 +86,12 @@ td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
 #cards{display:grid;gap:12px;margin-top:12px}
 .row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:10px}
 .row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
-.row-title{font-size:var(--fs-td);font-weight:700}
+.row-title{font-size:var(--fs-td);font-weight:700;word-break:normal;overflow-wrap:break-word;hyphens:none}
 .row-grid{display:grid;grid-template-columns:1fr;gap:8px}
-.item{font-size:var(--fs-td)}
+.item{font-size:var(--fs-td);word-break:normal;overflow-wrap:break-word;hyphens:none}
 .item .label,.remark .label{font-size:var(--fs-label);color:var(--muted);display:block;margin-bottom:2px}
 .times{display:grid;grid-template-columns:1fr;gap:6px}
-.remark{margin-top:8px;font-size:var(--fs-td)}
+.remark{margin-top:8px;font-size:var(--fs-td);word-break:normal;overflow-wrap:break-word;hyphens:none}
 .chip-inline{display:inline-flex;gap:6px;flex-wrap:wrap}
 
 /* Desktop adjustments */
@@ -146,7 +157,7 @@ td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
     <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsal</div>
     <div class="chip" data-filter="show" role="tab" aria-selected="false">🎬 Show Day</div>
     <!-- Student Leader chip (revealed only when full-name match + SL events) -->
-    <div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;">🧑‍🎓 Student Leader Schedule</div>
+    <div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;">👯‍♀️ Student Leader Schedule</div>
   </div>
 
   <div id="msg" class="helper hidden"></div>
