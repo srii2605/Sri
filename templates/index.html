@@ -95,7 +95,7 @@ td:first-child .badge{
 
 /* Center reporting & dismissal times on desktop only */
 @media (min-width:901px){
-  td:nth-child(6), td:nth-child(7){text-align:center}
+  td:nth-child(5), td:nth-child(7){text-align:center}  /* ← updated (Reporting is now col 5) */
 }
 
 /* Mobile cards */
@@ -182,7 +182,8 @@ td:first-child .badge{
     <table>
       <thead><tr>
         <th>Event Type</th><th>Event Day &amp; Date</th><th>Student Name</th><th>Event Location</th>
-        <th>Event Time</th><th>Reporting Time</th><th>Dismissal Time</th><th>Full Look Guide</th>
+        <!-- ↓ swapped order -->
+        <th>Reporting Time</th><th>Event Time</th><th>Dismissal Time</th><th>Full Look Guide</th>
         <th>Footwear</th><th>Dance Routine</th><th>Class Name</th><th>Remarks</th>
       </tr></thead>
       <tbody id="tbody"></tbody>
@@ -278,15 +279,15 @@ function sortRows(rows){
   });
 }
 
-/* Desktop table render (header order preserved) */
+/* Desktop table render — order updated (Reporting before Event) */
 function renderTable(rows){
   tbody.innerHTML=rows.length?rows.map(r=>`<tr>
 <td>${badge(r['Event Type'])}</td>
 <td>${hi(r['Event Day & Date'],QUERY)}</td>
 <td>${hi(r['Student Name'],QUERY)}</td>
 <td><strong>${hi(r['Event Location'],QUERY)}</strong></td>
-<td>${hi(r['Event Time'],QUERY)}</td>
 <td>${hi(r['Reporting Time'],QUERY)}</td>
+<td>${hi(r['Event Time'],QUERY)}</td>
 <td>${hi(r['Dismissal Time'],QUERY)}</td>
 <td>${linkify(r['Full Look Guide'])}</td>
 <td>${hi(r['Footwear'],QUERY)}</td>
@@ -296,7 +297,7 @@ function renderTable(rows){
 </tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
 }
 
-/* Mobile cards render (inherits same sorted data) */
+/* Mobile cards render (unchanged: already shows Reporting before Event) */
 function renderCards(rows){
   cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
   <div class="row-head">
