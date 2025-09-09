@@ -78,6 +78,21 @@ th, td, .row-card, .item, .row-title, .muted, .remark {
   hyphens: none;
 }
 
+/* ✅ Let Event Type wrap inside the pill (at spaces only) and trim its width */
+td:first-child .badge{
+  white-space:normal;           /* allow wrap at spaces */
+  line-height:1.2;
+  display:inline-block;
+}
+@media (min-width:901px){
+  th:nth-child(1), td:nth-child(1){width:180px}   /* narrower Event Type column */
+}
+
+/* ✅ Give Footwear a bit more room so it fits one line */
+@media (min-width:901px){
+  th:nth-child(9), td:nth-child(9){min-width:130px}
+}
+
 /* Center reporting & dismissal times on desktop only */
 @media (min-width:901px){
   td:nth-child(6), td:nth-child(7){text-align:center}
