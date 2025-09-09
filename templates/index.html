@@ -48,7 +48,6 @@ h1{font-size:24px;font-weight:800;margin:0 0 6px;line-height:1.1;white-space:now
 table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:12px}
 thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
 tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;line-height:1.35;
-/* prevent mid-word splits globally */
 word-break:normal;overflow-wrap:break-word;hyphens:none}
 tbody tr:nth-child(even){background:var(--row-alt)}
 /* Emphasis */
@@ -68,14 +67,27 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 /* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
 
-/* Wrap long Event Type gracefully (without splitting words) */
+/* Tweak column widths to free space for Full Look & Footwear */
 thead th:first-child,tbody td:first-child{
-  width:240px;
+  width:220px; /* slightly tighter Event Type */
   white-space:normal !important;
   word-break:normal;
   overflow-wrap:break-word;
   hyphens:none;
 }
+/* Make Event Day & Date a bit narrower and single-line */
+td:nth-child(2), th:nth-child(2){
+  width:140px;
+  white-space:nowrap;
+}
+
+/* Give Full Look Guide & Footwear breathing room */
+td:nth-child(8), th:nth-child(8){ min-width:170px; }
+td:nth-child(9), th:nth-child(9){ min-width:160px; }
+
+/* Keep “In Progress ⏳” on one line inside Full Look Guide */
+td:nth-child(8){ white-space:nowrap; }
+td:nth-child(8) a.link-pill{ display:inline-block; }
 
 /* 3) Center reporting & dismissal times on desktop only */
 @media (min-width:901px){
@@ -359,7 +371,7 @@ async function load(){
 }
 
 searchEl.addEventListener('input',e=>{QUERY=e.target.value.trim();render()});
-chips.forEach(ch=>ch.addEventListener('click',()=>{
+chips.forEach(ch=>addEventListener('click',()=>{
   chips.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false')});
   ch.classList.add('active');ch.setAttribute('aria-selected','true');
   FILTER=ch.dataset.filter;render();
