@@ -47,7 +47,12 @@ h1{font-size:24px;font-weight:800;margin:0 0 6px;line-height:1.1;white-space:now
 .table-wrap{display:none}
 table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:12px}
 thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
-tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:var(--fs-td);vertical-align:top;white-space:normal;word-break:break-word;line-height:1.35}
+tbody td{
+  padding:10px;border-bottom:1px solid var(--line);
+  font-size:var(--fs-td);vertical-align:top;
+  white-space:normal;word-break:keep-all;overflow-wrap:normal;hyphens:none;
+  line-height:1.35
+}
 tbody tr:nth-child(even){background:var(--row-alt)}
 /* Emphasis */
 td:nth-child(4){font-weight:700}          /* Event Location bold */
@@ -65,6 +70,13 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 
 /* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
+
+/* ✅ Prevent breaking words everywhere */
+th, td, .row-card, .item, .row-title, .muted, .remark {
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+}
 
 /* Center reporting & dismissal times on desktop only */
 @media (min-width:901px){
@@ -357,5 +369,3 @@ load();
 </script>
 </body>
 </html>
-
-
