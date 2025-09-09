@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>ATJ ANNUAL RECITAL 2025</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -19,7 +20,7 @@
   --chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;
   --card-bg:#fff;
   --fs-th:12px;
-  --fs-td:11px;   /* base */
+  --fs-td:11px;
   --fs-label:11px
 }
 *{box-sizing:border-box}
@@ -43,27 +44,39 @@ h1{font-size:24px;font-weight:800;margin:0 0 6px;line-height:1.1;white-space:now
 .chip{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);background:var(--chip-bg);color:var(--chip-on);border-radius:10px;padding:8px 10px;font-size:var(--fs-th);font-weight:600;cursor:pointer;user-select:none}
 .chip.active{background:var(--chip-active-bg);color:var(--chip-active);border-color:var(--chip-active-bg)}
 
-/* Table (desktop) */
+/* ===== Table (desktop) ===== */
 .table-wrap{display:none}
-
-/* Make table always fit without horizontal scroll */
 table{
   width:100%;
   border-collapse:separate;
   border-spacing:0;
-  table-layout:fixed;     /* <= force shrink-to-fit */
+  table-layout:fixed;       /* ensure no horizontal scroll */
   margin-top:12px;
 }
 thead th{
-  position:sticky;top:0;background:#f8f8f8;z-index:1;
-  text-align:left;font-weight:600;font-size:var(--fs-th);
-  padding:10px;border-bottom:1px solid var(--line)
+  position:sticky;
+  top:0;
+  z-index:50;               /* keep header above rows */
+  background:#f8f8f8;
+  box-shadow:0 1px 0 var(--line);
+  text-align:left;
+  font-weight:600;
+  font-size:var(--fs-th);
+  padding:10px;
+  border-bottom:1px solid var(--line)
 }
 tbody td{
-  padding:10px;border-bottom:1px solid var(--line);
-  font-size:var(--fs-td);vertical-align:top;line-height:1.35;
-  /* allow wrapping to avoid horizontal overflow */
-  white-space:normal; word-break:break-word; overflow-wrap:break-word; hyphens:auto;
+  padding:10px;
+  border-bottom:1px solid var(--line);
+  font-size:var(--fs-td);
+  vertical-align:top;
+  line-height:1.35;
+  /* wrap everything by default so the table fits */
+  white-space:normal;
+  word-break:break-word;
+  overflow-wrap:break-word;
+  hyphens:auto;
+  position:relative; z-index:0;
 }
 tbody tr:nth-child(even){background:var(--row-alt)}
 /* Emphasis */
@@ -80,23 +93,15 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 .badge.pink{background:var(--badge-pink-bg);color:var(--badge-pink)}
 .badge.yellow{background:var(--badge-yellow-bg);color:var(--badge-yellow)}
 
-/* Keep times & Full Look Guide on a single line */
+/* Keep Event Time, Reporting, Dismissal & Full Look on single line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7),td:nth-child(8){white-space:nowrap}
 
-/* Remove any previous fixed widths that caused overflow */
-thead th:first-child,tbody td:first-child,
-td:nth-child(2), th:nth-child(2),
-td:nth-child(8), th:nth-child(8),
-td:nth-child(9), th:nth-child(9){
-  width:auto; min-width:0;
-}
-
-/* 3) Center reporting & dismissal times on desktop only */
+/* Center reporting & dismissal on desktop */
 @media (min-width:901px){
   td:nth-child(6), td:nth-child(7){text-align:center}
 }
 
-/* Mobile cards */
+/* ===== Mobile cards ===== */
 #cards{display:grid;gap:12px;margin-top:12px}
 .row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:10px}
 .row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
@@ -108,7 +113,7 @@ td:nth-child(9), th:nth-child(9){
 .remark{margin-top:8px;font-size:var(--fs-td);word-break:normal;overflow-wrap:break-word;hyphens:none}
 .chip-inline{display:inline-flex;gap:6px;flex-wrap:wrap}
 
-/* Desktop adjustments */
+/* ===== Desktop adjustments ===== */
 @media (min-width:901px){
   .container{max-width:100%;margin:32px auto;padding:0 24px}
   h1{font-size:32px;white-space:normal}
@@ -124,19 +129,22 @@ td:nth-child(9), th:nth-child(9){
   .row-grid{grid-template-columns:1fr 1fr}
 }
 
-/* ✅ Mobile-only tweaks */
+/* ===== Mobile-only tweaks ===== */
 @media (max-width:900px){
-  /* Top section two sizes smaller */
   h1{font-size:20px}
   .underline-title{font-size:12px}
   .card h3{font-size:14px}
   .muted{font-size:13px}
-
-  /* Data size one step bigger for cards */
   :root{ --fs-td:12px }
   .item .label,.remark .label{font-size:11px}
 }
-@media print{.controls,.grid,#cards{display:none}.container{max-width:unset;margin:0;padding:0}thead th,tbody td{font-size:12px;padding:8px}}
+
+/* Print */
+@media print{
+  .controls,.grid,#cards{display:none}
+  .container{max-width:unset;margin:0;padding:0}
+  thead th,tbody td{font-size:12px;padding:8px}
+}
 </style>
 </head>
 <body>
@@ -163,7 +171,9 @@ td:nth-child(9), th:nth-child(9){
     </div>
   </div>
 
-  <div class="controls"><input id="search" class="search" placeholder="Search by student's full name" aria-label="Search by student's full name"/></div>
+  <div class="controls">
+    <input id="search" class="search" placeholder="Search by student's full name" aria-label="Search by student's full name"/>
+  </div>
 
   <div class="chips" role="tablist" aria-label="Quick filters">
     <div class="chip active" data-filter="all" role="tab" aria-selected="true">⭐ All</div>
@@ -193,61 +203,95 @@ td:nth-child(9), th:nth-child(9){
 <script>
 const BASE="https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&gid=785015495";
 const COLS=['Event Type','Event Day & Date','Student Name','Event Location','Event Time','Reporting Time','Dismissal Time','Full Look Guide','Footwear','Dance Routine','Class Name','Remarks'];
-const tbody=document.getElementById('tbody'),cards=document.getElementById('cards'),msg=document.getElementById('msg'),searchEl=document.getElementById('search'),chips=[...document.querySelectorAll('.chip')];
+
+const tbody=document.getElementById('tbody');
+const cards=document.getElementById('cards');
+const msg=document.getElementById('msg');
+const searchEl=document.getElementById('search');
+const chips=[...document.querySelectorAll('.chip')];
+
 let RAW=[],FILTER='all',QUERY='';
 
-/* CSV helpers */
-function csvToRows(t){const r=[];let a=[],f="",i=0,q=!1;for(;i<t.length;){const c=t[i];if(q){if(c=='"'&&t[i+1]=='"'){f+='"';i+=2;continue}if(c=='"'){q=!1;i++;continue}f+=c;i++}else{if(c=='"'){q=!0;i++;continue}if(c==','){a.push(f);f="";i++;continue}if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;a.push(f);r.push(a);a=[];f="";i++;continue}f+=c;i++}}if(f.length||a.length){a.push(f);r.push(a)}return r}
-function csvToObjects(csv){const rows=csvToRows(csv);if(!rows.length)return[];const h=rows[0].map(x=>x.trim());return rows.slice(1).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]??"");return o})}
+/* ---------- CSV helpers ---------- */
+function csvToRows(t){
+  const r=[];let a=[],f="",i=0,q=!1;
+  for(;i<t.length;){
+    const c=t[i];
+    if(q){
+      if(c=='"'&&t[i+1]=='"'){f+='"';i+=2;continue}
+      if(c=='"'){q=!1;i++;continue}
+      f+=c;i++;
+    }else{
+      if(c=='"'){q=!0;i++;continue}
+      if(c==','){a.push(f);f="";i++;continue}
+      if(c=='\n'||c=='\r'){ if(c=='\r'&&t[i+1]=='\n')i++; a.push(f); r.push(a); a=[]; f=""; i++; continue }
+      f+=c;i++;
+    }
+  }
+  if(f.length||a.length){a.push(f);r.push(a)}
+  return r
+}
+function csvToObjects(csv){
+  const rows=csvToRows(csv); if(!rows.length) return [];
+  const h=rows[0].map(x=>x.trim());
+  return rows.slice(1).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]??"");return o})
+}
+
 const esc=s=>String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,'$1');
-function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
-function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
+function hi(t,q){
+  const s=esc(oneLine(t)); if(!q) return s;
+  const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');
+  return s.replace(re,'<mark>$1</mark>')
+}
+function linkify(text){
+  if(!text) return '';
+  const t=String(text).trim();
+  if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){
+    let href=t; if(/^www\./i.test(href)) href="https://"+href;
+    return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`
+  }
+  return esc(t).replace(/\s*\|\s*/g,'<br>')
+}
 
-/* Badge color logic (Show 1/2; In-Studio; Mediacorp; Ms Abi/Chelsea; Combined) */
+/* ---------- Badge colors ---------- */
 function badge(type){
   const clean=oneLine(type);
   const t=String(clean||'').toLowerCase();
-
   if(t.includes('show day 1')) return `<span class="badge orange">${esc(clean)}</span>`;
   if(t.includes('show day 2')) return `<span class="badge teal">${esc(clean)}</span>`;
   if(t.includes('in-studio')||t.includes('in studio')) return `<span class="badge purple">${esc(clean)}</span>`;
   if(t.includes('mediacorp')) return `<span class="badge pink">${esc(clean)}</span>`;
-  if(t.includes('rehearsal with ms abi') || t.includes('rehearsal with ms chelsea'))
-    return `<span class="badge yellow">${esc(clean)}</span>`;
+  if(t.includes('rehearsal with ms abi')||t.includes('rehearsal with ms chelsea')) return `<span class="badge yellow">${esc(clean)}</span>`;
   if(t.includes('combined rehearsal')) return `<span class="badge green">${esc(clean)}</span>`;
   return `<span class="badge blue">${esc(clean)}</span>`;
 }
 
-/* Filter logic — include Abi/Chelsea under Technical Rehearsal */
+/* ---------- Filters & search ---------- */
 function passFilter(r){
   const t=String(r['Event Type']||'').toLowerCase();
   if(FILTER==='combined') return t.includes('combined rehearsal');
-  if(FILTER==='tech')
-    return t.includes('in-studio') || t.includes('in studio') ||
-           t.includes('mediacorp') ||
-           t.includes('rehearsal with ms abi') ||
-           t.includes('rehearsal with ms chelsea');
+  if(FILTER==='tech') return t.includes('in-studio')||t.includes('in studio')||t.includes('mediacorp')||t.includes('rehearsal with ms abi')||t.includes('rehearsal with ms chelsea');
   if(FILTER==='show') return t.includes('show');
   if(FILTER==='student-leader') return t.includes('student leader');
   return true
 }
 function matchQuery(r){
-  if(!QUERY)return true;
+  if(!QUERY) return true;
   const s=QUERY.toLowerCase();
   return COLS.some(k=>String(r[k]||'').toLowerCase().includes(s))
 }
 
-/* Sorting helpers: Event Day & Date → Reporting Time (earliest→latest) */
-const DEFAULT_YEAR = 2025;
+/* ---------- Sorting ---------- */
+const DEFAULT_YEAR=2025;
 function parseDateToTS(str){
   if(!str) return Number.MAX_SAFE_INTEGER;
   let s=String(str).trim();
-  s=s.replace(/\b(\d+)(st|nd|rd|th)\b/gi,'$1'); // drop ordinals
+  s=s.replace(/\b(\d+)(st|nd|rd|th)\b/gi,'$1');          // drop ordinals
   const hasYear=/\b20\d{2}\b/.test(s);
   let ts=Date.parse(s);
   if(isNaN(ts)) ts=Date.parse(s+(hasYear?'':`, ${DEFAULT_YEAR}`));
-  return isNaN(ts)?Number.MAX_SAFE_INTEGER:ts;
+  return isNaN(ts)?Number.MAX_SAFE_INTEGER:ts
 }
 function parseTimeToMinutes(str){
   if(!str) return Number.MAX_SAFE_INTEGER;
@@ -255,30 +299,28 @@ function parseTimeToMinutes(str){
   if(!m) return Number.MAX_SAFE_INTEGER;
   let hh=parseInt(m[1],10), mm=parseInt(m[2],10);
   const ampm=m[3]?m[3].toUpperCase():null;
-  if(ampm){ if(ampm==='PM'&&hh<12) hh+=12; if(ampm==='AM&&hh===12') hh=0; }
-  return hh*60+mm;
+  if(ampm){ if(ampm==='PM'&&hh<12) hh+=12; if(ampm==='AM'&&hh===12) hh=0; }
+  return hh*60+mm
 }
 function sortRows(rows){
   return rows.slice().sort((a,b)=>{
     const dA=parseDateToTS(a['Event Day & Date']);
     const dB=parseDateToTS(b['Event Day & Date']);
     if(dA!==dB) return dA-dB;
-
     const tA=parseTimeToMinutes(a['Reporting Time']);
     const tB=parseTimeToMinutes(b['Reporting Time']);
     if(tA!==tB) return tA-tB;
-
     const etA=parseTimeToMinutes(a['Event Time']);
     const etB=parseTimeToMinutes(b['Event Time']);
     if(etA!==etB) return etA-etB;
-
     return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
-  });
+  })
 }
 
-/* Desktop table render (header order preserved) */
+/* ---------- Renderers ---------- */
 function renderTable(rows){
-  tbody.innerHTML=rows.length?rows.map(r=>`<tr>
+  tbody.innerHTML = rows.length
+    ? rows.map(r=>`<tr>
 <td>${badge(r['Event Type'])}</td>
 <td>${hi(r['Event Day & Date'],QUERY)}</td>
 <td>${hi(r['Student Name'],QUERY)}</td>
@@ -291,17 +333,17 @@ function renderTable(rows){
 <td>${hi(r['Dance Routine'],QUERY)}</td>
 <td><em>${hi(r['Class Name'],QUERY)}</em></td>
 <td>${hi(r['Remarks'],QUERY)}</td>
-</tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
+</tr>`).join('')
+    : `<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
 }
 
-/* Mobile cards render (inherits same sorted data) */
 function renderCards(rows){
-  cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
+  cards.innerHTML = rows.length
+    ? rows.map(r=>`<div class="row-card">
   <div class="row-head">
     <div class="row-title">${hi(r['Student Name'],QUERY)}</div>
     <div class="chip-inline">${badge(r['Event Type'])}</div>
   </div>
-
   <div class="row-grid" style="margin-top:8px">
     <div class="item"><span class="label">Event Day &amp; Date</span><strong>${hi(r['Event Day & Date'],QUERY)}</strong></div>
     <div class="item"><span class="label">Location</span><strong>${hi(r['Event Location'],QUERY)}</strong></div>
@@ -313,22 +355,23 @@ function renderCards(rows){
     <div class="item" style="margin-bottom:8px"><span class="label">Dance Routine</span>${hi(r['Dance Routine'],QUERY)}</div>
     <div class="item"><span class="label">Class Name</span><em>${hi(r['Class Name'],QUERY)}</em></div>
   </div>
-
   ${r['Remarks']?`<div class="remark"><span class="label">Remarks</span>${hi(r['Remarks'],QUERY)}</div>`:''}
-</div>`).join(''):`<div class="helper">No results</div>`;
+</div>`).join('')
+    : `<div class="helper">No results</div>`;
 }
 
+/* ---------- Main render ---------- */
 function render(){
   const filtered=RAW.filter(r=>passFilter(r)&&matchQuery(r));
   const rows=sortRows(filtered);
   renderTable(rows);
   renderCards(rows);
 
-  // Reveal Student Leader chip only when full-name match has SL events
+  // Show Student Leader chip only when a full-name match has SL events
   const leaderChip=document.getElementById('studentLeaderChip');
   let leaderCount=0;
 
-  if(QUERY && QUERY.trim().length>0){
+  if(QUERY && QUERY.trim()){
     const qLower=QUERY.toLowerCase().trim();
     RAW.forEach(r=>{
       const studentName=String(r['Student Name']||'').toLowerCase().trim();
@@ -354,14 +397,15 @@ function render(){
   }
 }
 
+/* ---------- Load CSV ---------- */
 async function load(){
   try{
-    msg.classList.add('hidden');msg.textContent='';
+    msg.classList.add('hidden'); msg.textContent='';
     const res=await fetch(`${BASE}&cachebust=${Date.now()}`,{cache:'no-store'});
-    if(!res.ok){const t=await res.text();throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`)}
+    if(!res.ok){const t=await res.text(); throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`)}
     const csv=await res.text();
     const objs=csvToObjects(csv);
-    RAW=objs.map(o=>{const x={};COLS.forEach(k=>x[k]=o[k]??'');return x});
+    RAW=objs.map(o=>{const x={}; COLS.forEach(k=>x[k]=o[k]??''); return x});
     render();
   }catch(e){
     console.error('Load failed',e);
@@ -372,12 +416,18 @@ async function load(){
   }
 }
 
-searchEl.addEventListener('input',e=>{QUERY=e.target.value.trim();render()});
+/* ---------- Events ---------- */
+searchEl.addEventListener('input',e=>{
+  QUERY=e.target.value.trim();
+  render();
+});
 chips.forEach(ch=>ch.addEventListener('click',()=>{
   chips.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false')});
   ch.classList.add('active');ch.setAttribute('aria-selected','true');
-  FILTER=ch.dataset.filter;render();
+  FILTER=ch.dataset.filter;
+  render();
 }));
+
 load();
 </script>
 </body>
