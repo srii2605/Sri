@@ -137,6 +137,11 @@ td:first-child .badge{
   .item .label,.remark .label{font-size:11px}
 }
 @media print{.controls,.grid,#cards{display:none}.container{max-width:unset;margin:0;padding:0}thead th,tbody td{font-size:12px;padding:8px}}
+
+/* === NEW: clickable headers + sort arrows === */
+thead th{ cursor:pointer; }
+thead th.asc::after { content:" ▲"; font-size:0.85em; color:#1e40af; }
+thead th.desc::after { content:" ▼"; font-size:0.85em; color:#1e40af; }
 </style>
 </head>
 <body>
@@ -351,6 +356,47 @@ function renderCards(rows){
 </div>`).join(''):`<div class="helper">No results</div>`;
 }
 
+/* === NEW: remember chosen header sort & apply to DOM after each render === */
+let SORT_INDEX = null;   // 0-based th index
+let SORT_ASC = true;
+
+function applySortToDOM(){
+  if(SORT_INDEX===null) return;
+  const table = document.querySelector(".table-wrap table");
+  if(!table) return;
+  const tb = table.tBodies[0];
+  const rows = Array.from(tb.rows);
+  rows.sort((a,b)=>{
+    const aText = (a.cells[SORT_INDEX]?.innerText || "").trim();
+    const bText = (b.cells[SORT_INDEX]?.innerText || "").trim();
+    const cmp = aText.localeCompare(bText, "en", { numeric:true, sensitivity:"base" });
+    return SORT_ASC ? cmp : -cmp;
+  });
+  rows.forEach(r=>tb.appendChild(r));
+
+  // update arrow classes
+  const headers = table.tHead ? table.tHead.rows[0].cells : [];
+  Array.from(headers).forEach((h,i)=>{
+    h.classList.remove("asc","desc");
+    if(i===SORT_INDEX) h.classList.add(SORT_ASC ? "asc" : "desc");
+  });
+}
+
+function wireHeaderClicks(){
+  const headers = document.querySelectorAll(".table-wrap thead th");
+  headers.forEach((th, idx)=>{
+    th.addEventListener("click", ()=>{
+      if(SORT_INDEX===idx){
+        SORT_ASC = !SORT_ASC;
+      }else{
+        SORT_INDEX = idx;
+        SORT_ASC = true;
+      }
+      applySortToDOM();
+    });
+  });
+}
+
 function render(){
   const filtered=RAW.filter(r=>passFilter(r)&&matchQuery(r));
   const rows=sortRows(filtered);
@@ -385,6 +431,9 @@ function render(){
       renderCards(ref);
     }
   }
+
+  /* === NEW: re-apply chosen header sort after every render === */
+  applySortToDOM();
 }
 
 async function load(){
@@ -411,6 +460,10 @@ chips.forEach(ch=>ch.addEventListener('click',()=>{
   ch.classList.add('active');ch.setAttribute('aria-selected','true');
   FILTER=ch.dataset.filter;render();
 }));
+
+/* === NEW: set up header click handlers once === */
+document.addEventListener('DOMContentLoaded', wireHeaderClicks);
+
 load();
 </script>
 </body>
