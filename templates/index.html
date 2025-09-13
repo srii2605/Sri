@@ -55,11 +55,8 @@ tbody td{
 }
 tbody tr:nth-child(even){background:var(--row-alt)}
 /* Emphasis */
-/* ✅ NEW: Event Day & Date bold */
 td:nth-child(2){font-weight:700}          /* Event Day & Date bold */
-
 td:nth-child(4){font-weight:700}          /* Event Location bold */
-
 td:nth-child(11){font-style:italic}       /* Class Name italic */
 
 /* Badges */
@@ -75,14 +72,14 @@ td:nth-child(11){font-style:italic}       /* Class Name italic */
 /* Keep times on one line */
 td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
 
-/* ✅ Prevent breaking words everywhere */
+/* Prevent breaking words everywhere */
 th, td, .row-card, .item, .row-title, .muted, .remark {
   word-break: keep-all;
   overflow-wrap: normal;
   hyphens: none;
 }
 
-/* ✅ Let Event Type wrap inside the pill (at spaces only) and trim its width */
+/* Let Event Type wrap inside the pill (at spaces only) and trim its width */
 td:first-child .badge{
   white-space:normal;           /* allow wrap at spaces */
   line-height:1.2;
@@ -92,14 +89,14 @@ td:first-child .badge{
   th:nth-child(1), td:nth-child(1){width:180px}   /* narrower Event Type column */
 }
 
-/* ✅ Give Footwear a bit more room so it fits one line */
+/* Give Footwear a bit more room so it fits one line */
 @media (min-width:901px){
   th:nth-child(9), td:nth-child(9){min-width:130px}
 }
 
 /* Center reporting & dismissal times on desktop only */
 @media (min-width:901px){
-  td:nth-child(5), td:nth-child(7){text-align:center}  /* ← updated (Reporting is now col 5) */
+  td:nth-child(5), td:nth-child(7){text-align:center}
 }
 
 /* Mobile cards */
@@ -130,15 +127,12 @@ td:first-child .badge{
   .row-grid{grid-template-columns:1fr 1fr}
 }
 
-/* ✅ Mobile-only tweaks */
+/* Mobile-only tweaks */
 @media (max-width:900px){
-  /* Top section two sizes smaller */
   h1{font-size:20px}
   .underline-title{font-size:12px}
   .card h3{font-size:14px}
   .muted{font-size:13px}
-
-  /* Data size one step bigger for cards */
   :root{ --fs-td:12px }
   .item .label,.remark .label{font-size:11px}
 }
@@ -176,7 +170,6 @@ td:first-child .badge{
     <div class="chip" data-filter="combined" role="tab" aria-selected="false">👥 Combined Rehearsal</div>
     <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsal</div>
     <div class="chip" data-filter="show" role="tab" aria-selected="false">🎬 Show Day</div>
-    <!-- Student Leader chip (revealed only when full-name match + SL events) -->
     <div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;">🧑‍🎓 Student Leader Schedule</div>
   </div>
 
@@ -186,7 +179,6 @@ td:first-child .badge{
     <table>
       <thead><tr>
         <th>Event Type</th><th>Event Day &amp; Date</th><th>Student Name</th><th>Event Location</th>
-        <!-- ↓ swapped order -->
         <th>Reporting Time</th><th>Event Time</th><th>Dismissal Time</th><th>Full Look Guide</th>
         <th>Footwear</th><th>Dance Routine</th><th>Class Name</th><th>Remarks</th>
       </tr></thead>
@@ -209,49 +201,61 @@ function csvToObjects(csv){const rows=csvToRows(csv);if(!rows.length)return[];co
 const esc=s=>String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,'$1');
 function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
-function linkify(text){
-  if(!text)return'';
-  const t=String(text).trim();
-  if(/^https?:\/\//i.test(t)||/^www\./i.test(t)||/\bhttps?:\/\/\S+/i.test(t)){
-    // If it's just a URL or contains a URL, show an Open link pill to keep things tidy
-    const match = t.match(/\bhttps?:\/\/\S+|^www\.\S+/i);
-    let href = match ? match[0] : t;
-    if(/^www\./i.test(href)) href="https://"+href;
-    return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`;
-  }
-  return esc(t).replace(/\s*\|\s*/g,'<br>');
+
+/* URL helpers for Class Name */
+function findFirstUrl(text){
+  if(!text) return null;
+  const t=String(text);
+  const m = t.match(/\bhttps?:\/\/\S+|\bwww\.\S+|\b[a-z0-9.-]+\.[a-z]{2,}(\/\S*)?/i); // http(s), www., or bare domain
+  return m ? m[0] : null;
 }
-/* Italicize only when not already a link */
-function emUnlessLink(html){
-  return /<a\b/i.test(html) ? html : `<em>${html}</em>`;
+function toAbsoluteUrl(u){
+  if(!u) return '';
+  let href = String(u).trim();
+  if(/^www\./i.test(href)) href = 'https://' + href;
+  if(!/^https?:\/\//i.test(href)) href = 'https://' + href; // handle bare domains
+  return href;
 }
-/* Class Name cell renderer: make links clickable, else keep italics + highlights */
+/* Render Class Name: clickable if URL present; otherwise italic text */
 function renderClassNameCell(value){
   const raw = String(value||'').trim();
-  if(/^https?:\/\//i.test(raw) || /^www\./i.test(raw) || /\bhttps?:\/\/\S+/i.test(raw)){
-    return emUnlessLink(linkify(raw)); // clickable pill (in <em> wrapper for consistency)
+  const url = findFirstUrl(raw);
+  if(url){
+    const href = toAbsoluteUrl(url);
+    // remove the URL from the label; also trim separators left behind
+    const label = raw.replace(url,'').replace(/[–—\-|:]+$/,'').trim();
+    const display = label ? hi(label,QUERY) : 'Open link';
+    return `<a href="${esc(href)}" target="_blank" rel="noopener">${display}</a>`;
   }
   return `<em>${hi(raw,QUERY)}</em>`;
 }
 
-const escAttr=s=>String(s??'').replace(/"/g,"&quot;");
+/* For Full Look Guide (unchanged) */
+function linkify(text){
+  if(!text)return'';
+  const t=String(text).trim();
+  const m = t.match(/\bhttps?:\/\/\S+|\bwww\.\S+|\b[a-z0-9.-]+\.[a-z]{2,}(\/\S*)?/i);
+  if(m){
+    const href = toAbsoluteUrl(m[0]);
+    return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`;
+  }
+  return esc(t).replace(/\s*\|\s*/g,'<br>');
+}
 
-/* Badge color logic (Show 1/2; In-Studio; Mediacorp; Ms Abi/Chelsea; Combined) */
+/* Badge color logic */
 function badge(type){
   const clean=oneLine(type);
   const t=String(clean||'').toLowerCase();
-
   if(t.includes('show day 1')) return `<span class="badge orange">${esc(clean)}</span>`;
   if(t.includes('show day 2')) return `<span class="badge teal">${esc(clean)}</span>`;
   if(t.includes('in-studio')||t.includes('in studio')) return `<span class="badge purple">${esc(clean)}</span>`;
   if(t.includes('mediacorp')) return `<span class="badge pink">${esc(clean)}</span>`;
-  if(t.includes('rehearsal with ms abi') || t.includes('rehearsal with ms chelsea'))
-    return `<span class="badge yellow">${esc(clean)}</span>`;
+  if(t.includes('rehearsal with ms abi') || t.includes('rehearsal with ms chelsea')) return `<span class="badge yellow">${esc(clean)}</span>`;
   if(t.includes('combined rehearsal')) return `<span class="badge green">${esc(clean)}</span>`;
   return `<span class="badge blue">${esc(clean)}</span>`;
 }
 
-/* Filter logic — include Abi/Chelsea under Technical Rehearsal */
+/* Filters */
 function passFilter(r){
   const t=String(r['Event Type']||'').toLowerCase();
   if(FILTER==='combined') return t.includes('combined rehearsal');
@@ -270,7 +274,7 @@ function matchQuery(r){
   return COLS.some(k=>String(r[k]||'').toLowerCase().includes(s))
 }
 
-/* Sorting helpers: Event Day & Date → Reporting Time (earliest→latest) */
+/* Sorting helpers: Event Day & Date → Reporting Time */
 const DEFAULT_YEAR = 2025;
 function parseDateToTS(str){
   if(!str) return Number.MAX_SAFE_INTEGER;
@@ -308,7 +312,7 @@ function sortRows(rows){
   });
 }
 
-/* Desktop table render — order updated (Reporting before Event) */
+/* Desktop table render */
 function renderTable(rows){
   tbody.innerHTML=rows.length?rows.map(r=>`<tr>
 <td>${badge(r['Event Type'])}</td>
@@ -326,7 +330,7 @@ function renderTable(rows){
 </tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
 }
 
-/* Mobile cards render (unchanged structure; Class Name now link-aware) */
+/* Mobile cards render (fixed key + link-aware Class Name) */
 function renderCards(rows){
   cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
   <div class="row-head">
@@ -335,7 +339,7 @@ function renderCards(rows){
   </div>
 
   <div class="row-grid" style="margin-top:8px">
-    <div class="item"><span class="label">Event Day &amp; Date</span><strong>${hi(r['Event Day &amp; Date'],QUERY)}</strong></div>
+    <div class="item"><span class="label">Event Day &amp; Date</span><strong>${hi(r['Event Day & Date'],QUERY)}</strong></div>
     <div class="item"><span class="label">Location</span><strong>${hi(r['Event Location'],QUERY)}</strong></div>
     <div class="item"><span class="label">Reporting Time</span><strong>${hi(r['Reporting Time'],QUERY)}</strong></div>
     <div class="item"><span class="label">Event Time</span>${hi(r['Event Time'],QUERY)}</div>
