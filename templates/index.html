@@ -60,10 +60,6 @@ td:nth-child(2){font-weight:700}          /* Event Day & Date bold */
 
 td:nth-child(4){font-weight:700}          /* Event Location bold */
 
-
-
-
-
 td:nth-child(11){font-style:italic}       /* Class Name italic */
 
 /* Badges */
@@ -213,7 +209,32 @@ function csvToObjects(csv){const rows=csvToRows(csv);if(!rows.length)return[];co
 const esc=s=>String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,'$1');
 function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
-function linkify(text){if(!text)return'';const t=String(text).trim();if(/^https?:\/\//i.test(t)||/^www\./i.test(t)){let href=t;if(/^www\./i.test(href))href="https://"+href;return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`}return esc(t).replace(/\s*\|\s*/g,'<br>')}
+function linkify(text){
+  if(!text)return'';
+  const t=String(text).trim();
+  if(/^https?:\/\//i.test(t)||/^www\./i.test(t)||/\bhttps?:\/\/\S+/i.test(t)){
+    // If it's just a URL or contains a URL, show an Open link pill to keep things tidy
+    const match = t.match(/\bhttps?:\/\/\S+|^www\.\S+/i);
+    let href = match ? match[0] : t;
+    if(/^www\./i.test(href)) href="https://"+href;
+    return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`;
+  }
+  return esc(t).replace(/\s*\|\s*/g,'<br>');
+}
+/* Italicize only when not already a link */
+function emUnlessLink(html){
+  return /<a\b/i.test(html) ? html : `<em>${html}</em>`;
+}
+/* Class Name cell renderer: make links clickable, else keep italics + highlights */
+function renderClassNameCell(value){
+  const raw = String(value||'').trim();
+  if(/^https?:\/\//i.test(raw) || /^www\./i.test(raw) || /\bhttps?:\/\/\S+/i.test(raw)){
+    return emUnlessLink(linkify(raw)); // clickable pill (in <em> wrapper for consistency)
+  }
+  return `<em>${hi(raw,QUERY)}</em>`;
+}
+
+const escAttr=s=>String(s??'').replace(/"/g,"&quot;");
 
 /* Badge color logic (Show 1/2; In-Studio; Mediacorp; Ms Abi/Chelsea; Combined) */
 function badge(type){
@@ -300,12 +321,12 @@ function renderTable(rows){
 <td>${linkify(r['Full Look Guide'])}</td>
 <td>${hi(r['Footwear'],QUERY)}</td>
 <td>${hi(r['Dance Routine'],QUERY)}</td>
-<td><em>${hi(r['Class Name'],QUERY)}</em></td>
+<td>${renderClassNameCell(r['Class Name'])}</td>
 <td>${hi(r['Remarks'],QUERY)}</td>
 </tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
 }
 
-/* Mobile cards render (unchanged: already shows Reporting before Event) */
+/* Mobile cards render (unchanged structure; Class Name now link-aware) */
 function renderCards(rows){
   cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
   <div class="row-head">
@@ -314,7 +335,7 @@ function renderCards(rows){
   </div>
 
   <div class="row-grid" style="margin-top:8px">
-    <div class="item"><span class="label">Event Day &amp; Date</span><strong>${hi(r['Event Day & Date'],QUERY)}</strong></div>
+    <div class="item"><span class="label">Event Day &amp; Date</span><strong>${hi(r['Event Day &amp; Date'],QUERY)}</strong></div>
     <div class="item"><span class="label">Location</span><strong>${hi(r['Event Location'],QUERY)}</strong></div>
     <div class="item"><span class="label">Reporting Time</span><strong>${hi(r['Reporting Time'],QUERY)}</strong></div>
     <div class="item"><span class="label">Event Time</span>${hi(r['Event Time'],QUERY)}</div>
@@ -322,7 +343,7 @@ function renderCards(rows){
     <div class="item"><span class="label">Full Look Guide</span>${linkify(r['Full Look Guide'])}</div>
     <div class="item"><span class="label">Footwear</span>${hi(r['Footwear'],QUERY)}</div>
     <div class="item" style="margin-bottom:8px"><span class="label">Dance Routine</span>${hi(r['Dance Routine'],QUERY)}</div>
-    <div class="item"><span class="label">Class Name</span><em>${hi(r['Class Name'],QUERY)}</em></div>
+    <div class="item"><span class="label">Class Name</span>${renderClassNameCell(r['Class Name'])}</div>
   </div>
 
   ${r['Remarks']?`<div class="remark"><span class="label">Remarks</span>${hi(r['Remarks'],QUERY)}</div>`:''}
