@@ -1,487 +1,470 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; -webkit-text-stroke: #000000; min-height: 16.0px}
-    span.s1 {font-kerning: none}
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ATJ ANNUAL RECITAL 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;
+  --badge-green-bg:#ecfdf5;--badge-green:#065f46;           /* Combined Rehearsal */
+  --badge-purple-bg:#f5f3ff;--badge-purple:#5b21b6;         /* In-Studio Tech */
+  --badge-blue-bg:#eff6ff;--badge-blue:#1e40af;             /* Fallback */
+  --badge-orange-bg:#fff7ed;--badge-orange:#c2410c;         /* Show Day 1 */
+  --badge-teal-bg:#f0fdfa;--badge-teal:#0f766e;             /* Show Day 2 */
+  --badge-pink-bg:#fdf2f8;--badge-pink:#be185d;             /* Mediacorp Tech */
+  --badge-yellow-bg:#fefce8;--badge-yellow:#854d0e;         /* Rehearsal w/ Ms Abi/Chelsea */
+  --row-alt:#fafafa;--chip-bg:#f3f4f6;--chip-on:#111827;
+  --chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;
+  --card-bg:#fff;
+  --fs-th:12px;
+  --fs-td:11px;   /* base */
+  --fs-label:11px
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+.container{max-width:100%;margin:24px auto;padding:0 12px}
+
+/* Top section */
+h1{font-size:24px;font-weight:800;margin:0 0 6px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.underline-title{font-size:14px;font-weight:700;margin:4px 0 12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;position:relative}
+.underline-title::after{content:"";display:block;height:3px;margin-top:6px;background:linear-gradient(90deg,#111827,transparent 80%);border-radius:2px}
+
+.grid{display:grid;grid-template-columns:1fr;gap:16px;margin:14px 0 10px}
+.card{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--card-bg)}
+.card h3{margin:0 0 6px;font-size:16px}
+.muted{color:var(--muted);font-size:14px;line-height:1.45}.muted div{margin:4px 0}
+
+/* Search + chips */
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:12px 0}
+.search{flex:1 1 320px;max-width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.chip{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);background:var(--chip-bg);color:var(--chip-on);border-radius:10px;padding:8px 10px;font-size:var(--fs-th);font-weight:600;cursor:pointer;user-select:none}
+.chip.active{background:var(--chip-active-bg);color:var(--chip-active);border-color:var(--chip-active-bg)}
+
+/* Table (desktop) */
+.table-wrap{display:none}
+table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:12px}
+thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}
+tbody td{
+  padding:10px;border-bottom:1px solid var(--line);
+  font-size:var(--fs-td);vertical-align:top;
+  white-space:normal;word-break:keep-all;overflow-wrap:normal;hyphens:none;
+  line-height:1.35
+}
+tbody tr:nth-child(even){background:var(--row-alt)}
+/* Emphasis */
+td:nth-child(2){font-weight:700}          /* Event Day & Date bold */
+td:nth-child(4){font-weight:700}          /* Event Location bold */
+td:nth-child(11){font-style:italic}       /* Class Name italic */
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1;white-space:nowrap}
+.badge.green{background:var(--badge-green-bg);color:var(--badge-green)}
+.badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}
+.badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}
+.badge.orange{background:var(--badge-orange-bg);color:var(--badge-orange)}
+.badge.teal{background:var(--badge-teal-bg);color:var(--badge-teal)}
+.badge.pink{background:var(--badge-pink-bg);color:var(--badge-pink)}
+.badge.yellow{background:var(--badge-yellow-bg);color:var(--badge-yellow)}
+
+/* Keep times on one line */
+td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}
+
+/* Prevent breaking words everywhere */
+th, td, .row-card, .item, .row-title, .muted, .remark {
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+/* Let Event Type wrap inside the pill (at spaces only) and trim its width */
+td:first-child .badge{
+  white-space:normal;           /* allow wrap at spaces */
+  line-height:1.2;
+  display:inline-block;
+}
+@media (min-width:901px){
+  th:nth-child(1), td:nth-child(1){width:180px}   /* narrower Event Type column */
+}
+
+/* Give Footwear a bit more room so it fits one line */
+@media (min-width:901px){
+  th:nth-child(9), td:nth-child(9){min-width:130px}
+}
+
+/* Center reporting & dismissal times on desktop only */
+@media (min-width:901px){
+  td:nth-child(5), td:nth-child(7){text-align:center}
+}
+
+/* Mobile cards */
+#cards{display:grid;gap:12px;margin-top:12px}
+.row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:10px}
+.row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.row-title{font-size:var(--fs-td);font-weight:700}
+.row-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.item{font-size:var(--fs-td)}
+.item .label,.remark .label{font-size:var(--fs-label);color:var(--muted);display:block;margin-bottom:2px}
+.times{display:grid;grid-template-columns:1fr;gap:6px}
+.remark{margin-top:8px;font-size:var(--fs-td)}
+.chip-inline{display:inline-flex;gap:6px;flex-wrap:wrap}
+
+/* Desktop adjustments */
+@media (min-width:901px){
+  .container{max-width:100%;margin:32px auto;padding:0 24px}
+  h1{font-size:32px;white-space:normal}
+  .underline-title{font-size:18px;white-space:normal;margin-bottom:20px}
+  .grid{grid-template-columns:1fr 1fr;gap:24px;margin:18px 0 12px}
+  .card{padding:16px}.card h3{font-size:18px}
+  .controls{gap:10px;margin:16px 0}.search{max-width:900px;padding:12px 14px;font-size:16px}
+  .chips{gap:8px}.chip{padding:10px 14px;font-size:15px}
+  .table-wrap{display:block}#cards{display:none}
+  :root{--fs-th:13px;--fs-td:12px;--fs-label:12px}
+  thead th{padding:12px}tbody td{padding:12px;line-height:1.35}
+  .badge{font-size:13px;padding:6px 10px}
+  .row-grid{grid-template-columns:1fr 1fr}
+}
+
+/* Mobile-only tweaks */
+@media (max-width:900px){
+  h1{font-size:20px}
+  .underline-title{font-size:12px}
+  .card h3{font-size:14px}
+  .muted{font-size:13px}
+  :root{ --fs-td:12px }
+  .item .label,.remark .label{font-size:11px}
+}
+@media print{.controls,.grid,#cards{display:none}.container{max-width:unset;margin:0;padding:0}thead th,tbody td{font-size:12px;padding:8px}}
+
+/* === NEW: clickable headers + sort arrows === */
+thead th{ cursor:pointer; }
+thead th.asc::after { content:" ▲"; font-size:0.85em; color:#1e40af; }
+thead th.desc::after { content:" ▼"; font-size:0.85em; color:#1e40af; }
+</style>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html lang="en"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;meta charset="UTF-8"/&gt;&lt;meta name="viewport" content="width=device-width, initial-scale=1"/&gt;</span></p>
-<p class="p1"><span class="s1">&lt;title&gt;ATJ ANNUAL RECITAL 2026&lt;/title&gt;</span></p>
-<p class="p1"><span class="s1">&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;style&gt;</span></p>
-<p class="p1"><span class="s1">:root{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--bg:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--badge-green-bg:#ecfdf5;--badge-green:#065f46; <span class="Apple-converted-space">          </span>/* Combined Rehearsal */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--badge-purple-bg:#f5f3ff;--badge-purple:#5b21b6; <span class="Apple-converted-space">        </span>/* In-Studio Tech */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--badge-blue-bg:#eff6ff;--badge-blue:#1e40af; <span class="Apple-converted-space">            </span>/* Fallback */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--badge-orange-bg:#fff7ed;--badge-orange:#c2410c; <span class="Apple-converted-space">        </span>/* Show Day 1 */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--badge-teal-bg:#f0fdfa;--badge-teal:#0f766e; <span class="Apple-converted-space">            </span>/* Show Day 2 */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--badge-pink-bg:#fdf2f8;--badge-pink:#be185d; <span class="Apple-converted-space">            </span>/* Mediacorp Tech */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--badge-yellow-bg:#fefce8;--badge-yellow:#854d0e; <span class="Apple-converted-space">        </span>/* Rehearsal w/ Ms Abi/Chelsea */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--row-alt:#fafafa;--chip-bg:#f3f4f6;--chip-on:#111827;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--chip-active-bg:#111827;--chip-active:#fff;--hl:#fff3bf;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--card-bg:#fff;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--fs-th:12px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--fs-td:11px; <span class="Apple-converted-space">  </span>/* base */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>--fs-label:11px</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p1"><span class="s1">*{box-sizing:border-box}</span></p>
-<p class="p1"><span class="s1">html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}</span></p>
-<p class="p1"><span class="s1">.container{max-width:100%;margin:24px auto;padding:0 12px}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Top section */</span></p>
-<p class="p1"><span class="s1">h1{font-size:24px;font-weight:800;margin:0 0 6px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</span></p>
-<p class="p1"><span class="s1">.underline-title{font-size:14px;font-weight:700;margin:4px 0 12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;position:relative}</span></p>
-<p class="p1"><span class="s1">.underline-title::after{content:"";display:block;height:3px;margin-top:6px;background:linear-gradient(90deg,#111827,transparent 80%);border-radius:2px}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">.grid{display:grid;grid-template-columns:1fr;gap:16px;margin:14px 0 10px}</span></p>
-<p class="p1"><span class="s1">.card{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--card-bg)}</span></p>
-<p class="p1"><span class="s1">.card h3{margin:0 0 6px;font-size:16px}</span></p>
-<p class="p1"><span class="s1">.muted{color:var(--muted);font-size:14px;line-height:1.45}.muted div{margin:4px 0}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Search + chips */</span></p>
-<p class="p1"><span class="s1">.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:12px 0}</span></p>
-<p class="p1"><span class="s1">.search{flex:1 1 320px;max-width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:14px}</span></p>
-<p class="p1"><span class="s1">.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}</span></p>
-<p class="p1"><span class="s1">.chip{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);background:var(--chip-bg);color:var(--chip-on);border-radius:10px;padding:8px 10px;font-size:var(--fs-th);font-weight:600;cursor:pointer;user-select:none}</span></p>
-<p class="p1"><span class="s1">.chip.active{background:var(--chip-active-bg);color:var(--chip-active);border-color:var(--chip-active-bg)}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Table (desktop) */</span></p>
-<p class="p1"><span class="s1">.table-wrap{display:none}</span></p>
-<p class="p1"><span class="s1">table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto;margin-top:12px}</span></p>
-<p class="p1"><span class="s1">thead th{position:sticky;top:0;background:#f8f8f8;z-index:1;text-align:left;font-weight:600;font-size:var(--fs-th);padding:10px;border-bottom:1px solid var(--line)}</span></p>
-<p class="p1"><span class="s1">tbody td{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>padding:10px;border-bottom:1px solid var(--line);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>font-size:var(--fs-td);vertical-align:top;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>white-space:normal;word-break:keep-all;overflow-wrap:normal;hyphens:none;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>line-height:1.35</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p1"><span class="s1">tbody tr:nth-child(even){background:var(--row-alt)}</span></p>
-<p class="p1"><span class="s1">/* Emphasis */</span></p>
-<p class="p1"><span class="s1">td:nth-child(2){font-weight:700}<span class="Apple-converted-space">          </span>/* Event Day &amp; Date bold */</span></p>
-<p class="p1"><span class="s1">td:nth-child(4){font-weight:700}<span class="Apple-converted-space">          </span>/* Event Location bold */</span></p>
-<p class="p1"><span class="s1">td:nth-child(11){font-style:italic} <span class="Apple-converted-space">      </span>/* Class Name italic */</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Badges */</span></p>
-<p class="p1"><span class="s1">.badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px;line-height:1;white-space:nowrap}</span></p>
-<p class="p1"><span class="s1">.badge.green{background:var(--badge-green-bg);color:var(--badge-green)}</span></p>
-<p class="p1"><span class="s1">.badge.purple{background:var(--badge-purple-bg);color:var(--badge-purple)}</span></p>
-<p class="p1"><span class="s1">.badge.blue{background:var(--badge-blue-bg);color:var(--badge-blue)}</span></p>
-<p class="p1"><span class="s1">.badge.orange{background:var(--badge-orange-bg);color:var(--badge-orange)}</span></p>
-<p class="p1"><span class="s1">.badge.teal{background:var(--badge-teal-bg);color:var(--badge-teal)}</span></p>
-<p class="p1"><span class="s1">.badge.pink{background:var(--badge-pink-bg);color:var(--badge-pink)}</span></p>
-<p class="p1"><span class="s1">.badge.yellow{background:var(--badge-yellow-bg);color:var(--badge-yellow)}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Keep times on one line */</span></p>
-<p class="p1"><span class="s1">td:nth-child(5),td:nth-child(6),td:nth-child(7){white-space:nowrap}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Prevent breaking words everywhere */</span></p>
-<p class="p1"><span class="s1">th, td, .row-card, .item, .row-title, .muted, .remark {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>word-break: keep-all;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>overflow-wrap: normal;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>hyphens: none;</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Let Event Type wrap inside the pill (at spaces only) and trim its width */</span></p>
-<p class="p1"><span class="s1">td:first-child .badge{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>white-space:normal; <span class="Apple-converted-space">          </span>/* allow wrap at spaces */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>line-height:1.2;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>display:inline-block;</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p1"><span class="s1">@media (min-width:901px){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>th:nth-child(1), td:nth-child(1){width:180px} <span class="Apple-converted-space">  </span>/* narrower Event Type column */</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Give Footwear a bit more room so it fits one line */</span></p>
-<p class="p1"><span class="s1">@media (min-width:901px){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>th:nth-child(9), td:nth-child(9){min-width:130px}</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Center reporting &amp; dismissal times on desktop only */</span></p>
-<p class="p1"><span class="s1">@media (min-width:901px){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>td:nth-child(5), td:nth-child(7){text-align:center}</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Mobile cards */</span></p>
-<p class="p1"><span class="s1">#cards{display:grid;gap:12px;margin-top:12px}</span></p>
-<p class="p1"><span class="s1">.row-card{border:1px solid var(--line);border-radius:14px;background:var(--card-bg);padding:10px}</span></p>
-<p class="p1"><span class="s1">.row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}</span></p>
-<p class="p1"><span class="s1">.row-title{font-size:var(--fs-td);font-weight:700}</span></p>
-<p class="p1"><span class="s1">.row-grid{display:grid;grid-template-columns:1fr;gap:8px}</span></p>
-<p class="p1"><span class="s1">.item{font-size:var(--fs-td)}</span></p>
-<p class="p1"><span class="s1">.item .label,.remark .label{font-size:var(--fs-label);color:var(--muted);display:block;margin-bottom:2px}</span></p>
-<p class="p1"><span class="s1">.times{display:grid;grid-template-columns:1fr;gap:6px}</span></p>
-<p class="p1"><span class="s1">.remark{margin-top:8px;font-size:var(--fs-td)}</span></p>
-<p class="p1"><span class="s1">.chip-inline{display:inline-flex;gap:6px;flex-wrap:wrap}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Desktop adjustments */</span></p>
-<p class="p1"><span class="s1">@media (min-width:901px){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.container{max-width:100%;margin:32px auto;padding:0 24px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>h1{font-size:32px;white-space:normal}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.underline-title{font-size:18px;white-space:normal;margin-bottom:20px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.grid{grid-template-columns:1fr 1fr;gap:24px;margin:18px 0 12px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.card{padding:16px}.card h3{font-size:18px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.controls{gap:10px;margin:16px 0}.search{max-width:900px;padding:12px 14px;font-size:16px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.chips{gap:8px}.chip{padding:10px 14px;font-size:15px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.table-wrap{display:block}#cards{display:none}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>:root{--fs-th:13px;--fs-td:12px;--fs-label:12px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>thead th{padding:12px}tbody td{padding:12px;line-height:1.35}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.badge{font-size:13px;padding:6px 10px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.row-grid{grid-template-columns:1fr 1fr}</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Mobile-only tweaks */</span></p>
-<p class="p1"><span class="s1">@media (max-width:900px){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>h1{font-size:20px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.underline-title{font-size:12px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.card h3{font-size:14px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.muted{font-size:13px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>:root{ --fs-td:12px }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.item .label,.remark .label{font-size:11px}</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p1"><span class="s1">@media print{.controls,.grid,#cards{display:none}.container{max-width:unset;margin:0;padding:0}thead th,tbody td{font-size:12px;padding:8px}}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* === NEW: clickable headers + sort arrows === */</span></p>
-<p class="p1"><span class="s1">thead th{ cursor:pointer; }</span></p>
-<p class="p1"><span class="s1">thead th.asc::after { content:" ▲"; font-size:0.85em; color:#1e40af; }</span></p>
-<p class="p1"><span class="s1">thead th.desc::after { content:" ▼"; font-size:0.85em; color:#1e40af; }</span></p>
-<p class="p1"><span class="s1">&lt;/style&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;div class="container"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;h1&gt;ATJ ANNUAL RECITAL 2025&lt;/h1&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="underline-title"&gt;REHEARSAL &amp;amp; PERFORMANCE SCHEDULE&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="grid" aria-label="Locations"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;h3&gt;Combined Rehearsals - at ATJ outlets:&lt;/h3&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="muted"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;strong&gt;Forum The Shopping Mall:&lt;/strong&gt; 583 Orchard Road, #02–05/06/07, Singapore 238884&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;strong&gt;I12 Katong:&lt;/strong&gt; 112 East Coast Road, #03–14/15, Singapore 428802&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;strong&gt;10 Winstedt Road:&lt;/strong&gt; #01–05/06/07/08, Singapore 227977&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;strong&gt;Prinsep:&lt;/strong&gt; 36 Prinsep St, Level 4, Singapore 188648&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;h3&gt;In-Studio &amp;amp; Mediacorp Technical Rehearsals:&lt;/h3&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="muted"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;strong&gt;In-Studio Tech:&lt;/strong&gt; Performance &amp;amp; Training Centre, 36 Prinsep St, 04–01, S188638&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;strong&gt;Mediacorp Tech &amp;amp; Shows:&lt;/strong&gt; The Theatre at Mediacorp, 1 Stars Ave, S138507&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="controls"&gt;&lt;input id="search" class="search" placeholder="Search by student's full name" aria-label="Search by student's full name"/&gt;&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="chips" role="tablist" aria-label="Quick filters"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="chip active" data-filter="all" role="tab" aria-selected="true"&gt;⭐ All&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="chip" data-filter="combined" role="tab" aria-selected="false"&gt;👥 Combined Rehearsal&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="chip" data-filter="tech" role="tab" aria-selected="false"&gt;🎭 Technical Rehearsal&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="chip" data-filter="show" role="tab" aria-selected="false"&gt;🎬 Show Day&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Student Leader chip (revealed only when full-name match + SL events) --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;"&gt;🧑‍🎓 Student Leader Schedule&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div id="msg" class="helper hidden"&gt;&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="table-wrap" aria-live="polite"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;table&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;thead&gt;&lt;tr&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;th&gt;Event Type&lt;/th&gt;&lt;th&gt;Event Day &amp;amp; Date&lt;/th&gt;&lt;th&gt;Student Name&lt;/th&gt;&lt;th&gt;Event Location&lt;/th&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- ↓ swapped order --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;th&gt;Reporting Time&lt;/th&gt;&lt;th&gt;Event Time&lt;/th&gt;&lt;th&gt;Dismissal Time&lt;/th&gt;&lt;th&gt;Full Look Guide&lt;/th&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;th&gt;Footwear&lt;/th&gt;&lt;th&gt;Dance Routine&lt;/th&gt;&lt;th&gt;Class Name&lt;/th&gt;&lt;th&gt;Remarks&lt;/th&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/tr&gt;&lt;/thead&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;tbody id="tbody"&gt;&lt;/tbody&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/table&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div id="cards" aria-live="polite"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">&lt;script&gt;</span></p>
-<p class="p1"><span class="s1">const BASE="https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&amp;gid=785015495";</span></p>
-<p class="p1"><span class="s1">const COLS=['Event Type','Event Day &amp; Date','Student Name','Event Location','Event Time','Reporting Time','Dismissal Time','Full Look Guide','Footwear','Dance Routine','Class Name','Remarks'];</span></p>
-<p class="p1"><span class="s1">const tbody=document.getElementById('tbody'),cards=document.getElementById('cards'),msg=document.getElementById('msg'),searchEl=document.getElementById('search'),chips=[...document.querySelectorAll('.chip')];</span></p>
-<p class="p1"><span class="s1">let RAW=[],FILTER='all',QUERY='';</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* CSV helpers */</span></p>
-<p class="p1"><span class="s1">function csvToRows(t){const r=[];let a=[],f="",i=0,q=!1;for(;i&lt;t.length;){const c=t[i];if(q){if(c=='"'&amp;&amp;t[i+1]=='"'){f+='"';i+=2;continue}if(c=='"'){q=!1;i++;continue}f+=c;i++}else{if(c=='"'){q=!0;i++;continue}if(c==','){a.push(f);f="";i++;continue}if(c=='\n'||c=='\r'){if(c=='\r'&amp;&amp;t[i+1]=='\n')i++;a.push(f);r.push(a);a=[];f="";i++;continue}f+=c;i++}}if(f.length||a.length){a.push(f);r.push(a)}return r}</span></p>
-<p class="p1"><span class="s1">function csvToObjects(csv){const rows=csvToRows(csv);if(!rows.length)return[];const h=rows[0].map(x=&gt;x.trim());return rows.slice(1).map(r=&gt;{const o={};h.forEach((k,i)=&gt;o[k]=r[i]??"");return o})}</span></p>
-<p class="p1"><span class="s1">const esc=s=&gt;String(s??'').replace(/&amp;/g,"&amp;amp;").replace(/&lt;/g,"&amp;lt;").replace(/&gt;/g,"&amp;gt;").replace(/"/g,"&amp;quot;").replace(/'/g,"&amp;#39;");</span></p>
-<p class="p1"><span class="s1">const oneLine=s=&gt;String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,'$1');</span></p>
-<p class="p1"><span class="s1">function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&amp;')+')','ig');return s.replace(re,'&lt;mark&gt;$1&lt;/mark&gt;')}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Helper: ensure URL is absolute */</span></p>
-<p class="p1"><span class="s1">function toAbsoluteUrl(u){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(!u) return '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>let href = String(u).trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(/^www\./i.test(href)) href = 'https://' + href;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(!/^https?:\/\//i.test(href)) href = 'https://' + href;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return href;</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Full Look Guide (unchanged): show pill if URL present, else text with pipes → &lt;br&gt; */</span></p>
-<p class="p1"><span class="s1">function linkify(text){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(!text)return'';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const t=String(text).trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const m = t.match(/\bhttps?:\/\/\S+|\bwww\.\S+|\b[a-z0-9.-]+\.[a-z]{2,}(\/\S*)?/i);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(m){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const href = toAbsoluteUrl(m[0]);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return `&lt;a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener"&gt;Open link&lt;/a&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return esc(t).replace(/\s*\|\s*/g,'&lt;br&gt;');</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* NEW: Remarks → if contains any URL, show a "Dropbox link" pill; else plain text */</span></p>
-<p class="p1"><span class="s1">function renderRemarksCell(text){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(!text) return '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const t = String(text).trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const m = t.match(/\bhttps?:\/\/\S+|\bwww\.\S+/i);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(m){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const href = toAbsoluteUrl(m[0]);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return `&lt;a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener"&gt;Dropbox link&lt;/a&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return hi(t, QUERY);</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Badge color logic (Show 1/2; In-Studio; Mediacorp; Ms Abi/Chelsea; Combined) */</span></p>
-<p class="p1"><span class="s1">function badge(type){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const clean=oneLine(type);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const t=String(clean||'').toLowerCase();</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(t.includes('show day 1')) return `&lt;span class="badge orange"&gt;${esc(clean)}&lt;/span&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(t.includes('show day 2')) return `&lt;span class="badge teal"&gt;${esc(clean)}&lt;/span&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(t.includes('in-studio')||t.includes('in studio')) return `&lt;span class="badge purple"&gt;${esc(clean)}&lt;/span&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(t.includes('mediacorp')) return `&lt;span class="badge pink"&gt;${esc(clean)}&lt;/span&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(t.includes('rehearsal with ms abi') || t.includes('rehearsal with ms chelsea'))</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return `&lt;span class="badge yellow"&gt;${esc(clean)}&lt;/span&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(t.includes('combined rehearsal')) return `&lt;span class="badge green"&gt;${esc(clean)}&lt;/span&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return `&lt;span class="badge blue"&gt;${esc(clean)}&lt;/span&gt;`;</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Filters (include Abi/Chelsea under tech) */</span></p>
-<p class="p1"><span class="s1">function passFilter(r){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const t=String(r['Event Type']||'').toLowerCase();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(FILTER==='combined') return t.includes('combined rehearsal');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(FILTER==='tech')</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return t.includes('in-studio') || t.includes('in studio') ||</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>t.includes('mediacorp') ||</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>t.includes('rehearsal with ms abi') ||</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>t.includes('rehearsal with ms chelsea');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(FILTER==='show') return t.includes('show');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(FILTER==='student-leader') return t.includes('student leader');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return true</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p1"><span class="s1">function matchQuery(r){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(!QUERY)return true;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const s=QUERY.toLowerCase();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return COLS.some(k=&gt;String(r[k]||'').toLowerCase().includes(s))</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Sorting: Event Day &amp; Date → Reporting Time (earliest → latest) */</span></p>
-<p class="p1"><span class="s1">const DEFAULT_YEAR = 2025;</span></p>
-<p class="p1"><span class="s1">function parseDateToTS(str){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(!str) return Number.MAX_SAFE_INTEGER;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>let s=String(str).trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>s=s.replace(/\b(\d+)(st|nd|rd|th)\b/gi,'$1'); // drop ordinals</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const hasYear=/\b20\d{2}\b/.test(s);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>let ts=Date.parse(s);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(isNaN(ts)) ts=Date.parse(s+(hasYear?'':`, ${DEFAULT_YEAR}`));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return isNaN(ts)?Number.MAX_SAFE_INTEGER:ts;</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p1"><span class="s1">function parseTimeToMinutes(str){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(!str) return Number.MAX_SAFE_INTEGER;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const m=String(str).trim().match(/(\d{1,2}):(\d{2})\s*([AP]M)?/i);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(!m) return Number.MAX_SAFE_INTEGER;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>let hh=parseInt(m[1],10), mm=parseInt(m[2],10);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const ampm=m[3]?m[3].toUpperCase():null;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(ampm){ if(ampm==='PM'&amp;&amp;hh&lt;12) hh+=12; if(ampm==='AM'&amp;&amp;hh===12) hh=0; }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return hh*60+mm;</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p1"><span class="s1">function sortRows(rows){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return rows.slice().sort((a,b)=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const dA=parseDateToTS(a['Event Day &amp; Date']);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const dB=parseDateToTS(b['Event Day &amp; Date']);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if(dA!==dB) return dA-dB;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const tA=parseTimeToMinutes(a['Reporting Time']);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const tB=parseTimeToMinutes(b['Reporting Time']);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if(tA!==tB) return tA-tB;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const etA=parseTimeToMinutes(a['Event Time']);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const etB=parseTimeToMinutes(b['Event Time']);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if(etA!==etB) return etA-etB;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>});</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Desktop table render */</span></p>
-<p class="p1"><span class="s1">function renderTable(rows){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>tbody.innerHTML=rows.length?rows.map(r=&gt;`&lt;tr&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${badge(r['Event Type'])}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${hi(r['Event Day &amp; Date'],QUERY)}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${hi(r['Student Name'],QUERY)}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;&lt;strong&gt;${hi(r['Event Location'],QUERY)}&lt;/strong&gt;&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${hi(r['Reporting Time'],QUERY)}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${hi(r['Event Time'],QUERY)}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${hi(r['Dismissal Time'],QUERY)}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${linkify(r['Full Look Guide'])}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${hi(r['Footwear'],QUERY)}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${hi(r['Dance Routine'],QUERY)}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;&lt;em&gt;${hi(r['Class Name'],QUERY)}&lt;/em&gt;&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;td&gt;${renderRemarksCell(r['Remarks'])}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/tr&gt;`).join(''):`&lt;tr&gt;&lt;td colspan="12" class="muted" style="padding:12px;"&gt;No results&lt;/td&gt;&lt;/tr&gt;`;</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* Mobile cards render */</span></p>
-<p class="p1"><span class="s1">function renderCards(rows){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>cards.innerHTML=rows.length?rows.map(r=&gt;`&lt;div class="row-card"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="row-head"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="row-title"&gt;${hi(r['Student Name'],QUERY)}&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="chip-inline"&gt;${badge(r['Event Type'])}&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="row-grid" style="margin-top:8px"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="item"&gt;&lt;span class="label"&gt;Event Day &amp;amp; Date&lt;/span&gt;&lt;strong&gt;${hi(r['Event Day &amp; Date'],QUERY)}&lt;/strong&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="item"&gt;&lt;span class="label"&gt;Location&lt;/span&gt;&lt;strong&gt;${hi(r['Event Location'],QUERY)}&lt;/strong&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="item"&gt;&lt;span class="label"&gt;Reporting Time&lt;/span&gt;&lt;strong&gt;${hi(r['Reporting Time'],QUERY)}&lt;/strong&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="item"&gt;&lt;span class="label"&gt;Event Time&lt;/span&gt;${hi(r['Event Time'],QUERY)}&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="item"&gt;&lt;span class="label"&gt;Dismissal Time&lt;/span&gt;${hi(r['Dismissal Time'],QUERY)}&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="item"&gt;&lt;span class="label"&gt;Full Look Guide&lt;/span&gt;${linkify(r['Full Look Guide'])}&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="item"&gt;&lt;span class="label"&gt;Footwear&lt;/span&gt;${hi(r['Footwear'],QUERY)}&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="item" style="margin-bottom:8px"&gt;&lt;span class="label"&gt;Dance Routine&lt;/span&gt;${hi(r['Dance Routine'],QUERY)}&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="item"&gt;&lt;span class="label"&gt;Class Name&lt;/span&gt;&lt;em&gt;${hi(r['Class Name'],QUERY)}&lt;/em&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>${r['Remarks']?`&lt;div class="remark"&gt;&lt;span class="label"&gt;Remarks&lt;/span&gt;${renderRemarksCell(r['Remarks'])}&lt;/div&gt;`:''}</span></p>
-<p class="p1"><span class="s1">&lt;/div&gt;`).join(''):`&lt;div class="helper"&gt;No results&lt;/div&gt;`;</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* === NEW: remember chosen header sort &amp; apply to DOM after each render === */</span></p>
-<p class="p1"><span class="s1">let SORT_INDEX = null; <span class="Apple-converted-space">  </span>// 0-based th index</span></p>
-<p class="p1"><span class="s1">let SORT_ASC = true;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">function applySortToDOM(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(SORT_INDEX===null) return;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const table = document.querySelector(".table-wrap table");</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(!table) return;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const tb = table.tBodies[0];</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const rows = Array.from(tb.rows);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>rows.sort((a,b)=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const aText = (a.cells[SORT_INDEX]?.innerText || "").trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const bText = (b.cells[SORT_INDEX]?.innerText || "").trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const cmp = aText.localeCompare(bText, "en", { numeric:true, sensitivity:"base" });</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return SORT_ASC ? cmp : -cmp;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>rows.forEach(r=&gt;tb.appendChild(r));</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>// update arrow classes</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const headers = table.tHead ? table.tHead.rows[0].cells : [];</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>Array.from(headers).forEach((h,i)=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>h.classList.remove("asc","desc");</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if(i===SORT_INDEX) h.classList.add(SORT_ASC ? "asc" : "desc");</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>});</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">function wireHeaderClicks(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const headers = document.querySelectorAll(".table-wrap thead th");</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>headers.forEach((th, idx)=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>th.addEventListener("click", ()=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if(SORT_INDEX===idx){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>SORT_ASC = !SORT_ASC;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}else{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>SORT_INDEX = idx;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>SORT_ASC = true;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>applySortToDOM();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>});</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">function render(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const filtered=RAW.filter(r=&gt;passFilter(r)&amp;&amp;matchQuery(r));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const rows=sortRows(filtered);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>renderTable(rows);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>renderCards(rows);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>// Reveal Student Leader chip only when full-name match has SL events</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const leaderChip=document.getElementById('studentLeaderChip');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>let leaderCount=0;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(QUERY &amp;&amp; QUERY.trim().length&gt;0){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const qLower=QUERY.toLowerCase().trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>RAW.forEach(r=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const studentName=String(r['Student Name']||'').toLowerCase().trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const isLeader=String(r['Event Type']||'').toLowerCase().includes('student leader');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if(studentName===qLower &amp;&amp; isLeader) leaderCount++;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if(leaderCount&gt;0){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>leaderChip.style.display='';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}else{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const wasActive=leaderChip.classList.contains('active');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>leaderChip.style.display='none';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if(wasActive){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>chips.forEach(c=&gt;{c.classList.remove('active');c.setAttribute('aria-selected','false')});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const allChip=document.querySelector('.chip[data-filter="all"]');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if(allChip){allChip.classList.add('active');allChip.setAttribute('aria-selected','true')}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>FILTER='all';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const ref=sortRows(RAW.filter(r=&gt;passFilter(r)&amp;&amp;matchQuery(r)));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>renderTable(ref);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>renderCards(ref);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>/* === NEW: re-apply chosen header sort after every render === */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>applySortToDOM();</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">async function load(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>try{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>msg.classList.add('hidden');msg.textContent='';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const res=await fetch(`${BASE}&amp;cachebust=${Date.now()}`,{cache:'no-store'});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if(!res.ok){const t=await res.text();throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`)}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const csv=await res.text();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const objs=csvToObjects(csv);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>RAW=objs.map(o=&gt;{const x={};COLS.forEach(k=&gt;x[k]=o[k]??'');return x});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>render();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}catch(e){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>console.error('Load failed',e);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>msg.textContent='Failed to load data. Please check the CSV link or sharing.';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>msg.classList.remove('hidden');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>tbody.innerHTML=`&lt;tr&gt;&lt;td colspan="12" class="muted" style="padding:12px;"&gt;${esc(e.message)}&lt;/td&gt;&lt;/tr&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>cards.innerHTML=`&lt;div class="helper"&gt;${esc(e.message)}&lt;/div&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
-<p class="p1"><span class="s1">}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">searchEl.addEventListener('input',e=&gt;{QUERY=e.target.value.trim();render()});</span></p>
-<p class="p1"><span class="s1">chips.forEach(ch=&gt;ch.addEventListener('click',()=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>chips.forEach(c=&gt;{c.classList.remove('active');c.setAttribute('aria-selected','false')});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>ch.classList.add('active');ch.setAttribute('aria-selected','true');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>FILTER=ch.dataset.filter;render();</span></p>
-<p class="p1"><span class="s1">}));</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">/* === NEW: set up header click handlers once === */</span></p>
-<p class="p1"><span class="s1">document.addEventListener('DOMContentLoaded', wireHeaderClicks);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">load();</span></p>
-<p class="p1"><span class="s1">&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+<div class="container">
+  <h1>ATJ ANNUAL RECITAL 2025</h1>
+  <div class="underline-title">REHEARSAL &amp; PERFORMANCE SCHEDULE</div>
+
+  <div class="grid" aria-label="Locations">
+    <div class="card">
+      <h3>Combined Rehearsals - at ATJ outlets:</h3>
+      <div class="muted">
+        <div><strong>Forum The Shopping Mall:</strong> 583 Orchard Road, #02–05/06/07, Singapore 238884</div>
+        <div><strong>I12 Katong:</strong> 112 East Coast Road, #03–14/15, Singapore 428802</div>
+        <div><strong>10 Winstedt Road:</strong> #01–05/06/07/08, Singapore 227977</div>
+        <div><strong>Prinsep:</strong> 36 Prinsep St, Level 4, Singapore 188648</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>In-Studio &amp; Mediacorp Technical Rehearsals:</h3>
+      <div class="muted">
+        <div><strong>In-Studio Tech:</strong> Performance &amp; Training Centre, 36 Prinsep St, 04–01, S188638</div>
+        <div><strong>Mediacorp Tech &amp; Shows:</strong> The Theatre at Mediacorp, 1 Stars Ave, S138507</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls"><input id="search" class="search" placeholder="Search by student's full name" aria-label="Search by student's full name"/></div>
+
+  <div class="chips" role="tablist" aria-label="Quick filters">
+    <div class="chip active" data-filter="all" role="tab" aria-selected="true">⭐ All</div>
+    <div class="chip" data-filter="combined" role="tab" aria-selected="false">👥 Combined Rehearsal</div>
+    <div class="chip" data-filter="tech" role="tab" aria-selected="false">🎭 Technical Rehearsal</div>
+    <div class="chip" data-filter="show" role="tab" aria-selected="false">🎬 Show Day</div>
+    <!-- Student Leader chip (revealed only when full-name match + SL events) -->
+    <div class="chip" data-filter="student-leader" role="tab" aria-selected="false" id="studentLeaderChip" style="display:none;">🧑‍🎓 Student Leader Schedule</div>
+  </div>
+
+  <div id="msg" class="helper hidden"></div>
+
+  <div class="table-wrap" aria-live="polite">
+    <table>
+      <thead><tr>
+        <th>Event Type</th><th>Event Day &amp; Date</th><th>Student Name</th><th>Event Location</th>
+        <!-- ↓ swapped order -->
+        <th>Reporting Time</th><th>Event Time</th><th>Dismissal Time</th><th>Full Look Guide</th>
+        <th>Footwear</th><th>Dance Routine</th><th>Class Name</th><th>Remarks</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div id="cards" aria-live="polite"></div>
+</div>
+
+<script>
+const BASE="https://docs.google.com/spreadsheets/d/1XFHNeTBRvbO9Hu3rt2Sro2vF9sHS_wW6wzH35bJtgu0/export?format=csv&gid=785015495";
+const COLS=['Event Type','Event Day & Date','Student Name','Event Location','Event Time','Reporting Time','Dismissal Time','Full Look Guide','Footwear','Dance Routine','Class Name','Remarks'];
+const tbody=document.getElementById('tbody'),cards=document.getElementById('cards'),msg=document.getElementById('msg'),searchEl=document.getElementById('search'),chips=[...document.querySelectorAll('.chip')];
+let RAW=[],FILTER='all',QUERY='';
+
+/* CSV helpers */
+function csvToRows(t){const r=[];let a=[],f="",i=0,q=!1;for(;i<t.length;){const c=t[i];if(q){if(c=='"'&&t[i+1]=='"'){f+='"';i+=2;continue}if(c=='"'){q=!1;i++;continue}f+=c;i++}else{if(c=='"'){q=!0;i++;continue}if(c==','){a.push(f);f="";i++;continue}if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;a.push(f);r.push(a);a=[];f="";i++;continue}f+=c;i++}}if(f.length||a.length){a.push(f);r.push(a)}return r}
+function csvToObjects(csv){const rows=csvToRows(csv);if(!rows.length)return[];const h=rows[0].map(x=>x.trim());return rows.slice(1).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]??"");return o})}
+const esc=s=>String(s??'').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const oneLine=s=>String(s??'').replace(/\s*[\r\n]+\s*/g,' ').replace(/^"(.*)"$/,'$1');
+function hi(t,q){const s=esc(oneLine(t));if(!q)return s;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');return s.replace(re,'<mark>$1</mark>')}
+
+/* Helper: ensure URL is absolute */
+function toAbsoluteUrl(u){
+  if(!u) return '';
+  let href = String(u).trim();
+  if(/^www\./i.test(href)) href = 'https://' + href;
+  if(!/^https?:\/\//i.test(href)) href = 'https://' + href;
+  return href;
+}
+
+/* Full Look Guide (unchanged): show pill if URL present, else text with pipes → <br> */
+function linkify(text){
+  if(!text)return'';
+  const t=String(text).trim();
+  const m = t.match(/\bhttps?:\/\/\S+|\bwww\.\S+|\b[a-z0-9.-]+\.[a-z]{2,}(\/\S*)?/i);
+  if(m){
+    const href = toAbsoluteUrl(m[0]);
+    return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Open link</a>`;
+  }
+  return esc(t).replace(/\s*\|\s*/g,'<br>');
+}
+
+/* NEW: Remarks → if contains any URL, show a "Dropbox link" pill; else plain text */
+function renderRemarksCell(text){
+  if(!text) return '';
+  const t = String(text).trim();
+  const m = t.match(/\bhttps?:\/\/\S+|\bwww\.\S+/i);
+  if(m){
+    const href = toAbsoluteUrl(m[0]);
+    return `<a class="link-pill" href="${esc(href)}" target="_blank" rel="noopener">Dropbox link</a>`;
+  }
+  return hi(t, QUERY);
+}
+
+/* Badge color logic (Show 1/2; In-Studio; Mediacorp; Ms Abi/Chelsea; Combined) */
+function badge(type){
+  const clean=oneLine(type);
+  const t=String(clean||'').toLowerCase();
+
+  if(t.includes('show day 1')) return `<span class="badge orange">${esc(clean)}</span>`;
+  if(t.includes('show day 2')) return `<span class="badge teal">${esc(clean)}</span>`;
+  if(t.includes('in-studio')||t.includes('in studio')) return `<span class="badge purple">${esc(clean)}</span>`;
+  if(t.includes('mediacorp')) return `<span class="badge pink">${esc(clean)}</span>`;
+  if(t.includes('rehearsal with ms abi') || t.includes('rehearsal with ms chelsea'))
+    return `<span class="badge yellow">${esc(clean)}</span>`;
+  if(t.includes('combined rehearsal')) return `<span class="badge green">${esc(clean)}</span>`;
+  return `<span class="badge blue">${esc(clean)}</span>`;
+}
+
+/* Filters (include Abi/Chelsea under tech) */
+function passFilter(r){
+  const t=String(r['Event Type']||'').toLowerCase();
+  if(FILTER==='combined') return t.includes('combined rehearsal');
+  if(FILTER==='tech')
+    return t.includes('in-studio') || t.includes('in studio') ||
+           t.includes('mediacorp') ||
+           t.includes('rehearsal with ms abi') ||
+           t.includes('rehearsal with ms chelsea');
+  if(FILTER==='show') return t.includes('show');
+  if(FILTER==='student-leader') return t.includes('student leader');
+  return true
+}
+function matchQuery(r){
+  if(!QUERY)return true;
+  const s=QUERY.toLowerCase();
+  return COLS.some(k=>String(r[k]||'').toLowerCase().includes(s))
+}
+
+/* Sorting: Event Day & Date → Reporting Time (earliest → latest) */
+const DEFAULT_YEAR = 2025;
+function parseDateToTS(str){
+  if(!str) return Number.MAX_SAFE_INTEGER;
+  let s=String(str).trim();
+  s=s.replace(/\b(\d+)(st|nd|rd|th)\b/gi,'$1'); // drop ordinals
+  const hasYear=/\b20\d{2}\b/.test(s);
+  let ts=Date.parse(s);
+  if(isNaN(ts)) ts=Date.parse(s+(hasYear?'':`, ${DEFAULT_YEAR}`));
+  return isNaN(ts)?Number.MAX_SAFE_INTEGER:ts;
+}
+function parseTimeToMinutes(str){
+  if(!str) return Number.MAX_SAFE_INTEGER;
+  const m=String(str).trim().match(/(\d{1,2}):(\d{2})\s*([AP]M)?/i);
+  if(!m) return Number.MAX_SAFE_INTEGER;
+  let hh=parseInt(m[1],10), mm=parseInt(m[2],10);
+  const ampm=m[3]?m[3].toUpperCase():null;
+  if(ampm){ if(ampm==='PM'&&hh<12) hh+=12; if(ampm==='AM'&&hh===12) hh=0; }
+  return hh*60+mm;
+}
+function sortRows(rows){
+  return rows.slice().sort((a,b)=>{
+    const dA=parseDateToTS(a['Event Day & Date']);
+    const dB=parseDateToTS(b['Event Day & Date']);
+    if(dA!==dB) return dA-dB;
+
+    const tA=parseTimeToMinutes(a['Reporting Time']);
+    const tB=parseTimeToMinutes(b['Reporting Time']);
+    if(tA!==tB) return tA-tB;
+
+    const etA=parseTimeToMinutes(a['Event Time']);
+    const etB=parseTimeToMinutes(b['Event Time']);
+    if(etA!==etB) return etA-etB;
+
+    return String(a['Student Name']||'').localeCompare(String(b['Student Name']||''));
+  });
+}
+
+/* Desktop table render */
+function renderTable(rows){
+  tbody.innerHTML=rows.length?rows.map(r=>`<tr>
+<td>${badge(r['Event Type'])}</td>
+<td>${hi(r['Event Day & Date'],QUERY)}</td>
+<td>${hi(r['Student Name'],QUERY)}</td>
+<td><strong>${hi(r['Event Location'],QUERY)}</strong></td>
+<td>${hi(r['Reporting Time'],QUERY)}</td>
+<td>${hi(r['Event Time'],QUERY)}</td>
+<td>${hi(r['Dismissal Time'],QUERY)}</td>
+<td>${linkify(r['Full Look Guide'])}</td>
+<td>${hi(r['Footwear'],QUERY)}</td>
+<td>${hi(r['Dance Routine'],QUERY)}</td>
+<td><em>${hi(r['Class Name'],QUERY)}</em></td>
+<td>${renderRemarksCell(r['Remarks'])}</td>
+</tr>`).join(''):`<tr><td colspan="12" class="muted" style="padding:12px;">No results</td></tr>`;
+}
+
+/* Mobile cards render */
+function renderCards(rows){
+  cards.innerHTML=rows.length?rows.map(r=>`<div class="row-card">
+  <div class="row-head">
+    <div class="row-title">${hi(r['Student Name'],QUERY)}</div>
+    <div class="chip-inline">${badge(r['Event Type'])}</div>
+  </div>
+
+  <div class="row-grid" style="margin-top:8px">
+    <div class="item"><span class="label">Event Day &amp; Date</span><strong>${hi(r['Event Day & Date'],QUERY)}</strong></div>
+    <div class="item"><span class="label">Location</span><strong>${hi(r['Event Location'],QUERY)}</strong></div>
+    <div class="item"><span class="label">Reporting Time</span><strong>${hi(r['Reporting Time'],QUERY)}</strong></div>
+    <div class="item"><span class="label">Event Time</span>${hi(r['Event Time'],QUERY)}</div>
+    <div class="item"><span class="label">Dismissal Time</span>${hi(r['Dismissal Time'],QUERY)}</div>
+    <div class="item"><span class="label">Full Look Guide</span>${linkify(r['Full Look Guide'])}</div>
+    <div class="item"><span class="label">Footwear</span>${hi(r['Footwear'],QUERY)}</div>
+    <div class="item" style="margin-bottom:8px"><span class="label">Dance Routine</span>${hi(r['Dance Routine'],QUERY)}</div>
+    <div class="item"><span class="label">Class Name</span><em>${hi(r['Class Name'],QUERY)}</em></div>
+  </div>
+
+  ${r['Remarks']?`<div class="remark"><span class="label">Remarks</span>${renderRemarksCell(r['Remarks'])}</div>`:''}
+</div>`).join(''):`<div class="helper">No results</div>`;
+}
+
+/* === NEW: remember chosen header sort & apply to DOM after each render === */
+let SORT_INDEX = null;   // 0-based th index
+let SORT_ASC = true;
+
+function applySortToDOM(){
+  if(SORT_INDEX===null) return;
+  const table = document.querySelector(".table-wrap table");
+  if(!table) return;
+  const tb = table.tBodies[0];
+  const rows = Array.from(tb.rows);
+  rows.sort((a,b)=>{
+    const aText = (a.cells[SORT_INDEX]?.innerText || "").trim();
+    const bText = (b.cells[SORT_INDEX]?.innerText || "").trim();
+    const cmp = aText.localeCompare(bText, "en", { numeric:true, sensitivity:"base" });
+    return SORT_ASC ? cmp : -cmp;
+  });
+  rows.forEach(r=>tb.appendChild(r));
+
+  // update arrow classes
+  const headers = table.tHead ? table.tHead.rows[0].cells : [];
+  Array.from(headers).forEach((h,i)=>{
+    h.classList.remove("asc","desc");
+    if(i===SORT_INDEX) h.classList.add(SORT_ASC ? "asc" : "desc");
+  });
+}
+
+function wireHeaderClicks(){
+  const headers = document.querySelectorAll(".table-wrap thead th");
+  headers.forEach((th, idx)=>{
+    th.addEventListener("click", ()=>{
+      if(SORT_INDEX===idx){
+        SORT_ASC = !SORT_ASC;
+      }else{
+        SORT_INDEX = idx;
+        SORT_ASC = true;
+      }
+      applySortToDOM();
+    });
+  });
+}
+
+function render(){
+  const filtered=RAW.filter(r=>passFilter(r)&&matchQuery(r));
+  const rows=sortRows(filtered);
+  renderTable(rows);
+  renderCards(rows);
+
+  // Reveal Student Leader chip only when full-name match has SL events
+  const leaderChip=document.getElementById('studentLeaderChip');
+  let leaderCount=0;
+
+  if(QUERY && QUERY.trim().length>0){
+    const qLower=QUERY.toLowerCase().trim();
+    RAW.forEach(r=>{
+      const studentName=String(r['Student Name']||'').toLowerCase().trim();
+      const isLeader=String(r['Event Type']||'').toLowerCase().includes('student leader');
+      if(studentName===qLower && isLeader) leaderCount++;
+    });
+  }
+
+  if(leaderCount>0){
+    leaderChip.style.display='';
+  }else{
+    const wasActive=leaderChip.classList.contains('active');
+    leaderChip.style.display='none';
+    if(wasActive){
+      chips.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false')});
+      const allChip=document.querySelector('.chip[data-filter="all"]');
+      if(allChip){allChip.classList.add('active');allChip.setAttribute('aria-selected','true')}
+      FILTER='all';
+      const ref=sortRows(RAW.filter(r=>passFilter(r)&&matchQuery(r)));
+      renderTable(ref);
+      renderCards(ref);
+    }
+  }
+
+  /* === NEW: re-apply chosen header sort after every render === */
+  applySortToDOM();
+}
+
+async function load(){
+  try{
+    msg.classList.add('hidden');msg.textContent='';
+    const res=await fetch(`${BASE}&cachebust=${Date.now()}`,{cache:'no-store'});
+    if(!res.ok){const t=await res.text();throw new Error(`HTTP ${res.status} – ${t.slice(0,200)}`)}
+    const csv=await res.text();
+    const objs=csvToObjects(csv);
+    RAW=objs.map(o=>{const x={};COLS.forEach(k=>x[k]=o[k]??'');return x});
+    render();
+  }catch(e){
+    console.error('Load failed',e);
+    msg.textContent='Failed to load data. Please check the CSV link or sharing.';
+    msg.classList.remove('hidden');
+    tbody.innerHTML=`<tr><td colspan="12" class="muted" style="padding:12px;">${esc(e.message)}</td></tr>`;
+    cards.innerHTML=`<div class="helper">${esc(e.message)}</div>`;
+  }
+}
+
+searchEl.addEventListener('input',e=>{QUERY=e.target.value.trim();render()});
+chips.forEach(ch=>ch.addEventListener('click',()=>{
+  chips.forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false')});
+  ch.classList.add('active');ch.setAttribute('aria-selected','true');
+  FILTER=ch.dataset.filter;render();
+}));
+
+/* === NEW: set up header click handlers once === */
+document.addEventListener('DOMContentLoaded', wireHeaderClicks);
+
+load();
+</script>
 </body>
 </html>
